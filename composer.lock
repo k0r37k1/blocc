@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d06fce5a31d9da3c576b967652ed06de",
+    "content-hash": "77201e57184691292a455870bf7a2499",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5087,6 +5087,65 @@
             "time": "2022-12-17T21:53:22+00:00"
         },
         {
+            "name": "spatie/color",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/color.git",
+                "reference": "bcfe1840e32af163555a832dc6225f766a05f710"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/color/zipball/bcfe1840e32af163555a832dc6225f766a05f710",
+                "reference": "bcfe1840e32af163555a832dc6225f766a05f710",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "pestphp/pest": "^3.7",
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Color\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A little library to handle color conversions",
+            "homepage": "https://github.com/spatie/color",
+            "keywords": [
+                "color",
+                "conversion",
+                "rgb",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/color/issues",
+                "source": "https://github.com/spatie/color/tree/2.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-08T22:16:42+00:00"
+        },
+        {
             "name": "spatie/invade",
             "version": "2.1.0",
             "source": {
@@ -8116,6 +8175,91 @@
                 }
             ],
             "time": "2024-11-21T01:49:47+00:00"
+        },
+        {
+            "name": "voltra/filament-svg-avatar",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Voltra/filament-svg-avatar.git",
+                "reference": "4fadb603d4b34252bc33afafc1f7ba49ebe008e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Voltra/filament-svg-avatar/zipball/4fadb603d4b34252bc33afafc1f7ba49ebe008e2",
+                "reference": "4fadb603d4b34252bc33afafc1f7ba49ebe008e2",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0||^4.0||^5.0",
+                "illuminate/contracts": "^10.0||^11.0||^12.0",
+                "php": "^8.2",
+                "spatie/color": "^1.3||^2.0",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^2.9||^3.0",
+                "laravel/facade-documenter": "dev-main",
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9||^8.0",
+                "orchestra/testbench": "^8.20||^9.2||^10.0",
+                "pestphp/pest": "^2.30||^3.0||^4.0",
+                "pestphp/pest-plugin-arch": "^2.0||^3.0||^4.0",
+                "pestphp/pest-plugin-laravel": "^2||^3.0||^4.0",
+                "pestphp/pest-plugin-watch": "^2.0||^3.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0||^2.0",
+                "phpstan/phpstan-phpunit": "^1.0||^2.0||^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentSvgAvatar": "Voltra\\FilamentSvgAvatar\\Facades\\FilamentSvgAvatar"
+                    },
+                    "providers": [
+                        "Voltra\\FilamentSvgAvatar\\FilamentSvgAvatarServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Voltra\\FilamentSvgAvatar\\": "src/",
+                    "Voltra\\FilamentSvgAvatar\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Voltra",
+                    "email": "ludwig.guerin.98@gmx.fr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Change the default avatar url provider with one for inline SVGs",
+            "homepage": "https://github.com/voltra/filament-svg-avatar",
+            "keywords": [
+                "Voltra",
+                "avatar",
+                "filament",
+                "filament-svg-avatar",
+                "laravel",
+                "laravel-filament"
+            ],
+            "support": {
+                "issues": "https://github.com/voltra/filament-svg-avatar/issues",
+                "source": "https://github.com/voltra/filament-svg-avatar"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Voltra",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-10T21:19:20+00:00"
         }
     ],
     "packages-dev": [
