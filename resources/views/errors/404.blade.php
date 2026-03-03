@@ -19,7 +19,7 @@
             Hier ist nur Salat.
         </p>
 
-        <a href="{{ url('/') }}" class="mt-6 text-accent hover:underline">
+        <a href="{{ route('blog.index') }}" class="mt-6 text-accent hover:underline">
             Zur Startseite
         </a>
 

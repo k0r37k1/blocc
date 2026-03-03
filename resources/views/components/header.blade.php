@@ -2,15 +2,15 @@
     <nav x-data="{ open: false }" class="max-w-3xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-16">
             {{-- Brand --}}
-            <a href="{{ url('/') }}" class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+            <a href="{{ route('blog.index') }}" class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
                 &#129388; Kopfsalat
             </a>
 
             {{-- Desktop nav --}}
             <div class="hidden sm:flex items-center gap-6">
-                <a href="{{ url('/') }}" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Blog</a>
-                <a href="#" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Ueber mich</a>
-                <a href="#" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Archiv</a>
+                <a href="{{ route('blog.index') }}" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Blog</a>
+                <a href="{{ route('page.show', 'ueber-mich') }}" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Ueber mich</a>
+                <a href="{{ route('archive') }}" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Archiv</a>
 
                 {{-- Dark mode toggle --}}
                 <button
@@ -71,9 +71,9 @@
 
         {{-- Mobile menu --}}
         <div x-show="open" x-transition class="sm:hidden pb-4">
-            <a href="{{ url('/') }}" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Blog</a>
-            <a href="#" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Ueber mich</a>
-            <a href="#" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Archiv</a>
+            <a href="{{ route('blog.index') }}" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Blog</a>
+            <a href="{{ route('page.show', 'ueber-mich') }}" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Ueber mich</a>
+            <a href="{{ route('archive') }}" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Archiv</a>
         </div>
     </nav>
 </header>
