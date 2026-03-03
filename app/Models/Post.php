@@ -12,6 +12,15 @@ class Post extends Model
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saving(function (Post $post): void {
+            if ($post->status === PostStatus::Published && $post->published_at === null) {
+                $post->published_at = now();
+            }
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *

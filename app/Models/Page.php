@@ -12,6 +12,15 @@ class Page extends Model
     /** @use HasFactory<\Database\Factories\PageFactory> */
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saving(function (Page $page): void {
+            if ($page->status === PostStatus::Published && $page->published_at === null) {
+                $page->published_at = now();
+            }
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
