@@ -1,3 +1,17 @@
-<x-layout :title="'Kategorie: ' . $category->name">
-    {{-- Placeholder: full implementation in 05-02 --}}
+<x-layout :title="'Kategorie: ' . $category->name . ' - Kopfsalat'">
+    <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Kategorie: {{ $category->name }}</h1>
+
+    @if($category->description)
+        <p class="mt-2 text-neutral-600 dark:text-neutral-400">{{ $category->description }}</p>
+    @endif
+
+    <div class="divide-y divide-neutral-200 dark:divide-neutral-800">
+        @forelse($posts as $post)
+            <x-post-card :post="$post" />
+        @empty
+            <p class="py-12 text-center text-neutral-500 dark:text-neutral-500">Keine Beitraege in dieser Kategorie vorhanden.</p>
+        @endforelse
+    </div>
+
+    {{ $posts->links('components.pagination') }}
 </x-layout>
