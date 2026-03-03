@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\PostStatus;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -29,6 +30,10 @@ class PostFactory extends Factory
                 ->implode(''),
             'status' => $status,
             'published_at' => $status === PostStatus::Published ? now() : null,
+            'category_id' => Category::factory(),
+            'excerpt' => null,
+            'reading_time' => 1,
+            'featured_image_alt' => null,
         ];
     }
 
