@@ -22,7 +22,7 @@ class DraftReminderWidget extends Widget
 
     public function getDrafts(): Collection
     {
-        return Post::draft()->latest('updated_at')->limit(5)->get(['id', 'title', 'updated_at']);
+        return Post::draft()->latest('updated_at')->limit(5)->get(['id', 'title', 'slug', 'updated_at']);
     }
 
     public function getEditUrl(Post $post): string

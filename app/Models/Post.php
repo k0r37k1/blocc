@@ -114,6 +114,21 @@ class Post extends Model implements HasMedia, HasRichContent
             );
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    /**
+     * Resolve route binding scoped to published posts only.
+     */
+    public function resolveRouteBinding($value, $field = null): ?self
+    {
+        return $this->published()
+            ->where($field ?? $this->getRouteKeyName(), $value)
+            ->firstOrFail();
+    }
+
     /**
      * Accessor for ToggleColumn compatibility.
      * Maps PostStatus enum to boolean.

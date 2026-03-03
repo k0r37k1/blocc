@@ -23,6 +23,11 @@ class Category extends Model
         'color',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);

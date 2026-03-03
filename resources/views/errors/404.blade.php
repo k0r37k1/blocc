@@ -32,8 +32,7 @@
                 <ul class="mt-3 space-y-2">
                     @foreach ($recentPosts as $post)
                         <li>
-                            {{-- TODO Phase 5: route('post.show', $post->slug) --}}
-                            <a href="#" class="text-accent hover:underline">
+                            <a href="{{ route('blog.show', $post) }}" class="text-accent hover:underline">
                                 {{ $post->title }}
                             </a>
                         </li>
