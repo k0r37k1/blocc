@@ -33,11 +33,13 @@ class PostsTable
                     ->label('Published')
                     ->onColor('success')
                     ->offColor('gray')
-                    ->afterStateUpdated(function ($record, $state): void {
+                    ->updateStateUsing(function ($record, $state) {
                         $record->update([
                             'status' => $state ? PostStatus::Published : PostStatus::Draft,
                             'published_at' => $state ? ($record->published_at ?? now()) : $record->published_at,
                         ]);
+
+                        return $state;
                     }),
                 TextColumn::make('published_at')
                     ->dateTime()
@@ -67,7 +69,8 @@ class PostsTable
                                 'status' => PostStatus::Published,
                                 'published_at' => $record->published_at ?? now(),
                             ]));
-                        }),
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     BulkAction::make('unpublish')
                         ->label('Unpublish')
                         ->icon('heroicon-o-x-circle')
@@ -76,7 +79,8 @@ class PostsTable
                             $records->each(fn ($record) => $record->update([
                                 'status' => PostStatus::Draft,
                             ]));
-                        }),
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ]);
