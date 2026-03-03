@@ -238,6 +238,7 @@ class PostResourceTest extends TestCase
 
         Livewire::test(ListPosts::class)
             ->assertTableColumnExists('title')
+            ->assertTableColumnExists('category.name')
             ->assertTableColumnExists('status')
             ->assertTableColumnExists('is_published');
     }

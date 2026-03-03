@@ -23,6 +23,11 @@ class PostsTable
                     ->searchable()
                     ->sortable()
                     ->limit(50),
+                TextColumn::make('category.name')
+                    ->badge()
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -47,6 +52,11 @@ class PostsTable
                     ->toggleable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('reading_time')
+                    ->label('Read Time')
+                    ->formatStateUsing(fn (int $state): string => "{$state} min")
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
