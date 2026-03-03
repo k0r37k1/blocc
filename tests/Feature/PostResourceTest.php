@@ -6,6 +6,7 @@ use App\Enums\PostStatus;
 use App\Filament\Resources\Posts\Pages\CreatePost;
 use App\Filament\Resources\Posts\Pages\EditPost;
 use App\Filament\Resources\Posts\Pages\ListPosts;
+use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -55,12 +56,15 @@ class PostResourceTest extends TestCase
     {
         $this->actingAs($this->admin);
 
+        $category = Category::factory()->create();
+
         Livewire::test(CreatePost::class)
             ->fillForm([
                 'title' => 'My Test Post',
                 'slug' => 'my-test-post',
                 'body' => '<p>This is test content.</p>',
                 'status' => 'draft',
+                'category_id' => $category->id,
             ])
             ->call('create')
             ->assertHasNoFormErrors();
@@ -69,6 +73,7 @@ class PostResourceTest extends TestCase
             'title' => 'My Test Post',
             'slug' => 'my-test-post',
             'status' => 'draft',
+            'category_id' => $category->id,
         ]);
     }
 
@@ -76,12 +81,15 @@ class PostResourceTest extends TestCase
     {
         $this->actingAs($this->admin);
 
+        $category = Category::factory()->create();
+
         Livewire::test(CreatePost::class)
             ->fillForm([
                 'title' => 'Published Post',
                 'slug' => 'published-post',
                 'body' => '<p>Published content.</p>',
                 'status' => 'published',
+                'category_id' => $category->id,
             ])
             ->call('create')
             ->assertHasNoFormErrors();
@@ -213,7 +221,12 @@ class PostResourceTest extends TestCase
         Livewire::test(CreatePost::class)
             ->assertFormFieldExists('title')
             ->assertFormFieldExists('slug')
+            ->assertFormFieldExists('category_id')
+            ->assertFormFieldExists('tags')
             ->assertFormFieldExists('body')
+            ->assertFormFieldExists('excerpt')
+            ->assertFormFieldExists('featured_image')
+            ->assertFormFieldExists('featured_image_alt')
             ->assertFormFieldExists('status');
     }
 

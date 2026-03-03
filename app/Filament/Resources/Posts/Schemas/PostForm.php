@@ -6,6 +6,8 @@ use App\Enums\PostStatus;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -38,17 +40,75 @@ class PostForm
                     ? 'Slug is locked after publishing. Edit manually if needed.'
                     : 'Auto-generated from title. Will lock after publishing.'
                 ),
+            Select::make('category_id')
+                ->relationship(name: 'category', titleAttribute: 'name')
+                ->required()
+                ->searchable()
+                ->preload()
+                ->createOptionForm([
+                    TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? ''))),
+                    TextInput::make('slug')
+                        ->required()
+                        ->maxLength(255)
+                        ->unique('categories', 'slug'),
+                ])
+                ->native(false),
+            Select::make('tags')
+                ->multiple()
+                ->relationship(titleAttribute: 'name')
+                ->searchable()
+                ->preload()
+                ->createOptionForm([
+                    TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? ''))),
+                    TextInput::make('slug')
+                        ->required()
+                        ->maxLength(255)
+                        ->unique('tags', 'slug'),
+                ])
+                ->native(false),
             RichEditor::make('body')
                 ->required()
                 ->toolbarButtons([
                     ['bold', 'italic', 'link'],
                     ['h2', 'h3'],
                     ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                    ['table'],
+                    ['table', 'attachFiles'],
                     ['undo', 'redo'],
                 ])
                 ->placeholder('Start writing...')
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
+                ->columnSpanFull(),
+            Textarea::make('excerpt')
+                ->rows(3)
+                ->maxLength(300)
+                ->helperText('Leave blank to auto-generate from the first ~160 characters of the body.')
+                ->columnSpanFull(),
+            Placeholder::make('reading_time_display')
+                ->label('Reading Time')
+                ->content(fn ($record): string => $record?->reading_time
+                    ? "{$record->reading_time} min read"
+                    : 'Calculated on save'),
+            SpatieMediaLibraryFileUpload::make('featured_image')
+                ->collection('featured-image')
+                ->image()
+                ->imageResizeMode('cover')
+                ->imageResizeTargetWidth(1200)
+                ->maxSize(5120)
+                ->columnSpanFull()
+                ->live(),
+            TextInput::make('featured_image_alt')
+                ->label('Featured Image Alt Text')
+                ->required(fn (Get $get): bool => filled($get('featured_image')))
+                ->maxLength(255)
+                ->helperText('Describe the image for accessibility. Required when a featured image is set.')
                 ->columnSpanFull(),
             Select::make('status')
                 ->options(PostStatus::class)
