@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PostStatus;
+use App\Services\PostContentProcessor;
 use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
@@ -28,17 +29,24 @@ class Post extends Model implements HasMedia, HasRichContent
     protected static function booted(): void
     {
         static::saving(function (Post $post): void {
+            // Process body through content pipeline (sanitize, highlight, anchors)
+            if ($post->isDirty('body') && filled($post->body)) {
+                $post->body_raw = $post->body;
+                $post->body = app(PostContentProcessor::class)->process($post->body);
+            }
+
             if ($post->status === PostStatus::Published && $post->published_at === null) {
                 $post->published_at = now();
             }
 
-            // Calculate reading time (200 wpm, minimum 1 minute)
-            $wordCount = str_word_count(strip_tags($post->body ?? ''));
+            // Calculate reading time from raw body (200 wpm, minimum 1 minute)
+            $sourceBody = $post->body_raw ?? $post->body ?? '';
+            $wordCount = str_word_count(strip_tags($sourceBody));
             $post->reading_time = (int) max(1, ceil($wordCount / 200));
 
             // Auto-generate excerpt if not manually set
-            if (blank($post->excerpt) && filled($post->body)) {
-                $plainText = strip_tags($post->body);
+            if (blank($post->excerpt) && filled($post->body_raw ?? $post->body)) {
+                $plainText = strip_tags($post->body_raw ?? $post->body);
                 $post->excerpt = Str::limit($plainText, 160);
             }
         });

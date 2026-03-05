@@ -50,7 +50,7 @@ return [
                 'ul', 'ol', 'li',
                 'blockquote',
                 'pre[class]', 'code[class]',
-                'img[src|alt|width|height|loading]',
+                'img[src|alt|width|height]',
                 'table', 'thead', 'tbody', 'tr', 'th', 'td',
                 'figure', 'figcaption',
                 'dl', 'dt', 'dd',

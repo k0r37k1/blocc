@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PostStatus;
+use App\Services\PostContentProcessor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,12 @@ class Page extends Model
     protected static function booted(): void
     {
         static::saving(function (Page $page): void {
+            // Process body through content pipeline (sanitize, highlight, anchors)
+            if ($page->isDirty('body') && filled($page->body)) {
+                $page->body_raw = $page->body;
+                $page->body = app(PostContentProcessor::class)->process($page->body);
+            }
+
             if ($page->status === PostStatus::Published && $page->published_at === null) {
                 $page->published_at = now();
             }

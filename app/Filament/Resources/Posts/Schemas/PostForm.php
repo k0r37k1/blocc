@@ -83,6 +83,7 @@ class PostForm
                     ['table', 'attachFiles'],
                     ['undo', 'redo'],
                 ])
+                ->afterStateHydrated(fn ($component, $record) => $component->state($record?->body_raw ?? $record?->body))
                 ->placeholder('Start writing...')
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
                 ->columnSpanFull(),
