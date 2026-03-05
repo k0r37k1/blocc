@@ -1,4 +1,4 @@
-<x-layout :title="'Kategorie: ' . $category->name . ' - Kopfsalat'">
+<x-layout :title="'Kategorie: ' . $category->name . ' - Kopfsalat'" :description="$category->description ?? 'Alle Beitraege in der Kategorie ' . $category->name">
     <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Kategorie: {{ $category->name }}</h1>
 
     @if($category->description)

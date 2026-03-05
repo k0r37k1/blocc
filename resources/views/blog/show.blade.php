@@ -1,4 +1,19 @@
-<x-layout :title="$post->title . ' - Kopfsalat'">
+<x-layout
+    :title="$post->title . ' - Kopfsalat'"
+    :description="$post->excerpt"
+    :og-title="$post->title"
+    :og-description="$post->excerpt"
+    :og-image="$post->getFirstMediaUrl('featured-image') ?: null"
+    og-type="article"
+>
+    <x-slot:meta>
+        <meta property="article:published_time" content="{{ $post->published_at->toW3cString() }}">
+        <meta property="article:modified_time" content="{{ $post->updated_at->toW3cString() }}">
+        @foreach ($post->tags as $tag)
+            <meta property="article:tag" content="{{ $tag->name }}">
+        @endforeach
+    </x-slot:meta>
+
     <article>
         <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
             {{ $post->title }}

@@ -1,4 +1,4 @@
-<x-layout title="404 - Seite nicht gefunden">
+<x-layout title="404 - Seite nicht gefunden" description="Die angeforderte Seite wurde nicht gefunden.">
     @php
         $recentPosts = \App\Models\Post::published()
             ->latest('published_at')

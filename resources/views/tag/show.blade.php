@@ -1,4 +1,4 @@
-<x-layout :title="'Tag: ' . $tag->name . ' - Kopfsalat'">
+<x-layout :title="'Tag: ' . $tag->name . ' - Kopfsalat'" :description="'Alle Beitraege mit dem Tag ' . $tag->name">
     <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Tag: {{ $tag->name }}</h1>
 
     <div class="divide-y divide-neutral-200 dark:divide-neutral-800">

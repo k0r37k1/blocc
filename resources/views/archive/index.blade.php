@@ -1,4 +1,4 @@
-<x-layout title="Archiv - Kopfsalat">
+<x-layout title="Archiv - Kopfsalat" description="Alle Beitraege chronologisch sortiert">
     <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Archiv</h1>
 
     @forelse($postsByYear as $year => $posts)
