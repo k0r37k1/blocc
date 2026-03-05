@@ -8,16 +8,13 @@ document.addEventListener('alpine:init', () => {
                 const pre = block.querySelector('pre');
                 if (!pre) return;
 
-                // Create header bar
-                const header = document.createElement('div');
-                header.className = 'code-block-header';
+                // Language badge (top-left)
+                const badge = document.createElement('span');
+                badge.className = 'code-lang-badge';
+                badge.textContent = language;
+                block.appendChild(badge);
 
-                // Language label
-                const label = document.createElement('span');
-                label.textContent = language;
-                header.appendChild(label);
-
-                // Copy button
+                // Copy button (top-right)
                 const btn = document.createElement('button');
                 btn.className = 'code-copy-btn';
                 btn.textContent = 'Kopieren';
@@ -25,11 +22,13 @@ document.addEventListener('alpine:init', () => {
                     const code = block.querySelector('code')?.textContent || pre.textContent;
                     await navigator.clipboard.writeText(code);
                     btn.textContent = 'Kopiert';
-                    setTimeout(() => { btn.textContent = 'Kopieren'; }, 2000);
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = 'Kopieren';
+                        btn.classList.remove('copied');
+                    }, 2000);
                 });
-                header.appendChild(btn);
-
-                block.insertBefore(header, pre);
+                block.appendChild(btn);
             });
         }
     }));

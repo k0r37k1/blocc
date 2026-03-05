@@ -30,13 +30,13 @@ h3[id] {
 
 /* ---- Phiki multi-theme: dark mode switches via .dark class ---- */
 .dark .phiki {
-    color: var(--phiki-dark-color);
-    background-color: var(--phiki-dark-background-color);
+    color: var(--phiki-dark-color) !important;
+    background-color: var(--phiki-dark-background-color) !important;
 }
 
 .dark .phiki span {
-    color: var(--phiki-dark-color);
-    font-style: var(--phiki-dark-font-style);
+    color: var(--phiki-dark-color) !important;
+    font-style: var(--phiki-dark-font-style) !important;
 }
 
 /* ---- Code block container ---- */
@@ -50,50 +50,57 @@ h3[id] {
 .code-block pre {
     margin: 0;
     padding: 1rem;
+    padding-top: 4rem;
     overflow-x: auto;
     font-family: var(--font-mono);
     font-size: 0.875rem;
     line-height: 1.7;
 }
 
-/* ---- Code block header bar ---- */
-.code-block-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
+/* ---- Language badge (top-left inside code block) ---- */
+.code-lang-badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.75rem;
+    font-size: 0.7rem;
     font-family: var(--font-mono);
-    background-color: #f3f4f6;
-    color: #6b7280;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.dark .code-block-header {
-    background-color: #1e1e1e;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: #9ca3af;
-    border-bottom-color: #374151;
+    pointer-events: none;
+    user-select: none;
 }
 
-/* ---- Copy button ---- */
+/* ---- Copy button (top-right inside code block) ---- */
 .code-copy-btn {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.5rem;
     cursor: pointer;
-    padding: 0.25rem 0.5rem;
+    padding: 0.2rem 0.5rem;
     border-radius: 0.25rem;
-    border: 1px solid transparent;
-    background: transparent;
-    color: inherit;
-    font-size: 0.75rem;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    background: rgba(128, 128, 128, 0.1);
+    color: #9ca3af;
+    font-size: 0.65rem;
     font-family: var(--font-mono);
     transition: all 0.15s;
+    z-index: 1;
 }
 
 .code-copy-btn:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background: rgba(128, 128, 128, 0.2);
+    color: #6b7280;
 }
 
 .dark .code-copy-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+    color: #d1d5db;
+}
+
+.code-copy-btn.copied {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
 }
 
 /* ---- Heading anchor links ---- */
@@ -115,10 +122,10 @@ h3:hover .heading-anchor,
 
 /* ---- Prose overrides for code blocks ---- */
 .prose .code-block pre {
-    background-color: transparent;
-    padding: 1rem;
+    padding: 2rem 1rem 1rem;
     color: inherit;
 }
+
 
 .prose .code-block code {
     background: none;
