@@ -53,6 +53,7 @@ class Post extends Model implements HasMedia, HasRichContent
         'title',
         'slug',
         'body',
+        'body_raw',
         'status',
         'published_at',
         'category_id',

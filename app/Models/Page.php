@@ -30,6 +30,7 @@ class Page extends Model
         'title',
         'slug',
         'body',
+        'body_raw',
         'status',
         'published_at',
     ];
