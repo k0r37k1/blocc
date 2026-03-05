@@ -33,9 +33,11 @@
             </figure>
         @endif
 
-        <x-prose class="mt-8">
-            {!! $post->body !!}
-        </x-prose>
+        <div x-data="codeBlocks">
+            <x-prose class="mt-8">
+                {!! $post->body !!}
+            </x-prose>
+        </div>
 
         @if ($post->tags->isNotEmpty())
             <div class="mt-8 flex flex-wrap gap-2">

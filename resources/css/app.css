@@ -16,3 +16,113 @@
         'Liberation Mono', 'Courier New', monospace;
     --color-accent: #16a34a;
 }
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Scroll margin so anchored headings don't hide behind sticky nav */
+h2[id],
+h3[id] {
+    scroll-margin-top: 2rem;
+}
+
+/* ---- Phiki multi-theme: dark mode switches via .dark class ---- */
+.dark .phiki {
+    color: var(--phiki-dark-color);
+    background-color: var(--phiki-dark-background-color);
+}
+
+.dark .phiki span {
+    color: var(--phiki-dark-color);
+    font-style: var(--phiki-dark-font-style);
+}
+
+/* ---- Code block container ---- */
+.code-block {
+    position: relative;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin: 1.5rem 0;
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+}
+
+/* ---- Code block header bar ---- */
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.dark .code-block-header {
+    background-color: #1e1e1e;
+    color: #9ca3af;
+    border-bottom-color: #374151;
+}
+
+/* ---- Copy button ---- */
+.code-copy-btn {
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    transition: all 0.15s;
+}
+
+.code-copy-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .code-copy-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---- Heading anchor links ---- */
+.heading-anchor {
+    opacity: 0;
+    text-decoration: none;
+    color: var(--color-accent);
+    font-weight: 400;
+    margin-left: -1.25rem;
+    padding-right: 0.25rem;
+    transition: opacity 0.15s;
+}
+
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+.heading-anchor:focus {
+    opacity: 1;
+}
+
+/* ---- Prose overrides for code blocks ---- */
+.prose .code-block pre {
+    background-color: transparent;
+    padding: 1rem;
+    color: inherit;
+}
+
+.prose .code-block code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+}
