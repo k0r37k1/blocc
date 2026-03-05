@@ -1,4 +1,21 @@
-@props(['title' => null])
+@props([
+    'title' => null,
+    'description' => null,
+    'ogTitle' => null,
+    'ogDescription' => null,
+    'ogImage' => null,
+    'ogType' => 'website',
+    'canonicalUrl' => null,
+])
+
+@php
+    $description ??= config('app.description');
+    $resolvedOgTitle = $ogTitle ?? $title ?? config('app.name');
+    $resolvedOgDescription = $ogDescription ?? $description;
+    $resolvedOgImage = $ogImage ?? asset('images/og-default.png');
+    $resolvedCanonicalUrl = $canonicalUrl ?? url()->current();
+    $twitterCard = $ogImage ? 'summary_large_image' : 'summary';
+@endphp
 
 <!DOCTYPE html>
 <html lang="de">
@@ -7,6 +24,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{{ $title ?? config('app.name') }}</title>
+
+        <meta name="description" content="{{ $description }}">
+        <link rel="canonical" href="{{ $resolvedCanonicalUrl }}">
+
+        {{-- Open Graph --}}
+        <meta property="og:title" content="{{ $resolvedOgTitle }}">
+        <meta property="og:description" content="{{ $resolvedOgDescription }}">
+        <meta property="og:url" content="{{ $resolvedCanonicalUrl }}">
+        <meta property="og:type" content="{{ $ogType }}">
+        <meta property="og:image" content="{{ $resolvedOgImage }}">
+
+        {{-- Twitter Card --}}
+        <meta name="twitter:card" content="{{ $twitterCard }}">
+        <meta name="twitter:title" content="{{ $resolvedOgTitle }}">
+        <meta name="twitter:description" content="{{ $resolvedOgDescription }}">
+        <meta name="twitter:image" content="{{ $resolvedOgImage }}">
+
+        {{-- RSS auto-discovery --}}
+        <link rel="alternate" type="application/rss+xml" title="{{ config('app.name') }}" href="{{ url('/feed') }}">
+
+        {{ $meta ?? '' }}
 
         {{-- Self-hosted fonts --}}
         <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
