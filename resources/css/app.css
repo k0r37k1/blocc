@@ -44,6 +44,11 @@ h3[id] {
     border-radius: 0.5rem;
     overflow: hidden;
     margin: 1.5rem 0;
+    border: 1px solid #e5e7eb;
+}
+
+.dark .code-block {
+    border-color: #374151;
 }
 
 .code-block pre {
