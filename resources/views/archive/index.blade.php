@@ -8,7 +8,7 @@
             <ul class="mt-3 space-y-2">
                 @foreach($posts as $post)
                     <li class="flex items-baseline gap-3">
-                        <time datetime="{{ $post->published_at->toDateString() }}" class="text-sm text-neutral-500 dark:text-neutral-500 tabular-nums shrink-0">
+                        <time datetime="{{ $post->published_at->toDateString() }}" class="text-sm text-neutral-500 dark:text-neutral-400 tabular-nums shrink-0">
                             {{ $post->published_at->translatedFormat('j. M') }}
                         </time>
                         <a href="{{ route('blog.show', $post) }}" class="text-neutral-900 dark:text-neutral-100 hover:text-accent dark:hover:text-accent">
@@ -19,6 +19,6 @@
             </ul>
         </section>
     @empty
-        <p class="mt-8 text-neutral-500 dark:text-neutral-500">Noch keine Beitraege vorhanden.</p>
+        <p class="mt-8 text-neutral-500 dark:text-neutral-400">Noch keine Beitraege vorhanden.</p>
     @endforelse
 </x-layout>

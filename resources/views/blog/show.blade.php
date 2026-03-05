@@ -19,7 +19,7 @@
             {{ $post->title }}
         </h1>
 
-        <div class="mt-3 flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-500">
+        <div class="mt-3 flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
             <time datetime="{{ $post->published_at->toDateString() }}">
                 {{ $post->published_at->translatedFormat('j. F Y') }}
             </time>
@@ -73,7 +73,7 @@
             <div>
                 @if ($previousPost)
                     <a href="{{ route('blog.show', $previousPost->slug) }}" class="group">
-                        <span class="text-xs text-neutral-500 dark:text-neutral-500">Vorheriger Beitrag</span>
+                        <span class="text-xs text-neutral-500 dark:text-neutral-400">Vorheriger Beitrag</span>
                         <p class="text-accent group-hover:underline">&larr; {{ $previousPost->title }}</p>
                     </a>
                 @endif
@@ -82,7 +82,7 @@
             <div class="text-right">
                 @if ($nextPost)
                     <a href="{{ route('blog.show', $nextPost->slug) }}" class="group">
-                        <span class="text-xs text-neutral-500 dark:text-neutral-500">N&auml;chster Beitrag</span>
+                        <span class="text-xs text-neutral-500 dark:text-neutral-400">N&auml;chster Beitrag</span>
                         <p class="text-accent group-hover:underline">{{ $nextPost->title }} &rarr;</p>
                     </a>
                 @endif

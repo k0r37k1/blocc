@@ -1,7 +1,7 @@
 @props(['post'])
 
 <article class="py-6">
-    <time datetime="{{ $post->published_at->toDateString() }}" class="text-sm text-neutral-500 dark:text-neutral-500">
+    <time datetime="{{ $post->published_at->toDateString() }}" class="text-sm text-neutral-500 dark:text-neutral-400">
         {{ $post->published_at->translatedFormat('j. F Y') }}
     </time>
 

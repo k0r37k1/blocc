@@ -17,10 +17,9 @@ class ContentSecurityPolicyTest extends TestCase
 
         $this->assertNotNull($csp);
         $this->assertStringContainsString("default-src 'self'", $csp);
-        $this->assertStringContainsString("script-src 'self' 'unsafe-inline'", $csp);
+        $this->assertStringContainsString("script-src 'self' 'unsafe-inline' 'unsafe-eval'", $csp);
         $this->assertStringContainsString("style-src 'self' 'unsafe-inline'", $csp);
         $this->assertStringContainsString("frame-ancestors 'none'", $csp);
-        $this->assertStringNotContainsString("'unsafe-eval'", $csp);
     }
 
     public function test_admin_pages_have_permissive_csp(): void

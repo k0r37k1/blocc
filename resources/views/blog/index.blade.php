@@ -3,7 +3,7 @@
         @forelse ($posts as $post)
             <x-post-card :post="$post" />
         @empty
-            <p class="py-12 text-center text-neutral-500 dark:text-neutral-500">
+            <p class="py-12 text-center text-neutral-500 dark:text-neutral-400">
                 Noch keine Beitr&auml;ge vorhanden.
             </p>
         @endforelse

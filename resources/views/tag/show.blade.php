@@ -5,7 +5,7 @@
         @forelse($posts as $post)
             <x-post-card :post="$post" />
         @empty
-            <p class="py-12 text-center text-neutral-500 dark:text-neutral-500">Keine Beitraege mit diesem Tag vorhanden.</p>
+            <p class="py-12 text-center text-neutral-500 dark:text-neutral-400">Keine Beitraege mit diesem Tag vorhanden.</p>
         @endforelse
     </div>
 
