@@ -20,15 +20,27 @@ document.addEventListener('alpine:init', () => {
 
                 const btn = document.createElement('button');
                 btn.className = 'code-copy-btn';
-                btn.innerHTML = copyIcon;
                 btn.setAttribute('aria-label', 'Kopieren');
+
+                const icon = document.createElement('span');
+                icon.innerHTML = copyIcon;
+
+                const tooltip = document.createElement('span');
+                tooltip.className = 'copy-tooltip';
+                tooltip.textContent = 'Kopieren';
+
+                btn.appendChild(icon);
+                btn.appendChild(tooltip);
+
                 btn.addEventListener('click', async () => {
                     const code = block.querySelector('code')?.textContent || pre.textContent;
                     await navigator.clipboard.writeText(code);
-                    btn.innerHTML = checkIcon;
+                    icon.innerHTML = checkIcon;
+                    tooltip.textContent = 'Kopiert';
                     btn.classList.add('copied');
                     setTimeout(() => {
-                        btn.innerHTML = copyIcon;
+                        icon.innerHTML = copyIcon;
+                        tooltip.textContent = 'Kopieren';
                         btn.classList.remove('copied');
                     }, 2000);
                 });

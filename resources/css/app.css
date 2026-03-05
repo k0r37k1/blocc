@@ -42,7 +42,6 @@ h3[id] {
 .code-block {
     position: relative;
     border-radius: 0.5rem;
-    overflow: hidden;
     margin: 1.5rem 0;
     border: 1px solid #e5e7eb;
 }
@@ -54,8 +53,9 @@ h3[id] {
 .code-block pre {
     margin: 0;
     padding: 1rem;
-    padding-top: 4rem;
+    padding-top: 2rem;
     overflow-x: auto;
+    border-radius: 0.5rem;
     font-family: var(--font-mono);
     font-size: 0.875rem;
     line-height: 1.7;
@@ -84,28 +84,46 @@ h3[id] {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.35rem;
-    border-radius: 0.25rem;
-    border: 1px solid rgba(128, 128, 128, 0.2);
-    background: rgba(128, 128, 128, 0.1);
+    padding: 0.25rem;
+    border: none;
+    background: none;
     color: #9ca3af;
-    transition: all 0.15s;
+    transition: color 0.15s;
     z-index: 1;
 }
 
 .code-copy-btn:hover {
-    background: rgba(128, 128, 128, 0.2);
-    color: #6b7280;
+    color: #4b5563;
 }
 
 .dark .code-copy-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #d1d5db;
+    color: #e5e7eb;
 }
 
 .code-copy-btn.copied {
     color: var(--color-accent);
-    border-color: var(--color-accent);
+}
+
+/* Copy tooltip */
+.code-copy-btn .copy-tooltip {
+    position: absolute;
+    bottom: calc(100% + 0.4rem);
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background: #1f2937;
+    color: #f9fafb;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.code-copy-btn:hover .copy-tooltip,
+.code-copy-btn.copied .copy-tooltip {
+    opacity: 1;
 }
 
 /* ---- Heading anchor links ---- */
