@@ -29,14 +29,13 @@ h3[id] {
 }
 
 /* ---- Phiki multi-theme: dark mode switches via .dark class ---- */
-.dark .phiki {
-    color: var(--phiki-dark-color) !important;
-    background-color: var(--phiki-dark-background-color) !important;
-}
-
+.dark .phiki,
 .dark .phiki span {
     color: var(--phiki-dark-color) !important;
+    background-color: var(--phiki-dark-background-color) !important;
     font-style: var(--phiki-dark-font-style) !important;
+    font-weight: var(--phiki-dark-font-weight) !important;
+    text-decoration: var(--phiki-dark-text-decoration) !important;
 }
 
 /* ---- Code block container ---- */
