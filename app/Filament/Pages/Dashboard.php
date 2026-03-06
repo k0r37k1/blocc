@@ -16,7 +16,7 @@ class Dashboard extends BaseDashboard
             Action::make('newPost')
                 ->label(__('New Post'))
                 ->icon(Heroicon::PlusCircle)
-                ->color('success')
+                ->color('primary')
                 ->url(PostResource::getUrl('create')),
 
             Action::make('newPage')

@@ -46,7 +46,7 @@ class ManageSettings extends Page
             Action::make('backup')
                 ->label(__('Backup'))
                 ->icon(Heroicon::ArrowDownTray)
-                ->color('info')
+                ->color('gray')
                 ->requiresConfirmation()
                 ->modalHeading(__('Create Backup'))
                 ->modalDescription(__('This will create a full backup of the database and files. This may take a moment.'))
