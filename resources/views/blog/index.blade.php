@@ -1,4 +1,4 @@
-<x-layout title="Kopfsalat" :description="config('app.description')">
+<x-layout :title="config('app.name')" :description="config('app.description')">
     <div class="space-y-2">
         @forelse ($posts as $post)
             <x-post-card :post="$post" />

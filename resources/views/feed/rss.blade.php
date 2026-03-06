@@ -4,7 +4,7 @@
         <title>{{ config('app.name') }}</title>
         <link>{{ url('/') }}</link>
         <description>{{ config('app.description', 'Thoughts served fresh') }}</description>
-        <language>de</language>
+        <language>{{ app()->getLocale() }}</language>
         <lastBuildDate>{{ $posts->first()?->published_at?->format('r') }}</lastBuildDate>
         <atom:link href="{{ url('/feed') }}" rel="self" type="application/rss+xml"/>
         @foreach ($posts as $post)

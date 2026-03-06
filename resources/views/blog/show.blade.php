@@ -1,5 +1,5 @@
 <x-layout
-    :title="$post->title . ' - Kopfsalat'"
+    :title="$post->title . ' - ' . config('app.name')"
     :description="$post->excerpt"
     :og-title="$post->title"
     :og-description="$post->excerpt"
