@@ -2,7 +2,12 @@
     <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ __('Archive') }}</h1>
 
     @forelse($postsByYear as $year => $posts)
-        <section class="mt-8">
+        <section
+            x-data
+            x-intersect.once="$el.classList.add('revealed')"
+            class="reveal mt-8"
+            style="transition-delay: {{ $loop->index * 100 }}ms"
+        >
             <h2 class="text-lg font-semibold text-neutral-700 dark:text-neutral-300">{{ $year }} <span class="text-sm font-normal text-neutral-500">({{ $posts->count() }})</span></h2>
 
             <ul class="mt-3 space-y-2">

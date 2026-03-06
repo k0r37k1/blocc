@@ -36,6 +36,16 @@
         <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     </x-slot:meta>
 
+    {{-- Reading progress bar --}}
+    <div
+        x-data="readingProgress"
+        x-on:scroll.window.throttle.50ms="update"
+        x-show="progress > 0 && progress < 100"
+        x-transition.opacity
+        class="reading-progress"
+        :style="'width: ' + progress + '%'"
+    ></div>
+
     <article>
         <h1 class="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
             {{ $post->title }}

@@ -165,3 +165,70 @@ h3:hover .heading-anchor,
     font-size: inherit;
     color: inherit;
 }
+
+/* ---- Page load fade-in ---- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* ---- Scroll-reveal (used with Alpine x-intersect) ---- */
+.reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+        opacity 0.5s ease-out,
+        transform 0.5s ease-out;
+}
+
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---- Reading progress bar ---- */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: var(--color-accent);
+    z-index: 100;
+    transition: width 0.1s linear;
+}
+
+/* ---- Dark mode toggle icon rotation ---- */
+.dark-toggle-icon {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark-toggle-icon.rotating {
+    transform: rotate(180deg);
+}
+
+/* ---- Post card hover lift ---- */
+.post-card-hover {
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background-color 0.2s;
+}
+
+.post-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgb(0 0 0 / 0.06);
+}
+
+.dark .post-card-hover:hover {
+    box-shadow: 0 4px 20px rgb(0 0 0 / 0.3);
+}

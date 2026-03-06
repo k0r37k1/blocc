@@ -7,7 +7,7 @@
 
     <div class="space-y-2">
         @forelse($posts as $post)
-            <x-post-card :post="$post" />
+            <x-post-card :post="$post" :index="$loop->index" />
         @empty
             <div class="py-12 text-center">
                 <p class="text-neutral-500 dark:text-neutral-400">{{ __('No posts in this category.') }}</p>

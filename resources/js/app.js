@@ -1,4 +1,7 @@
+import intersect from '@alpinejs/intersect'
 import Alpine from 'alpinejs'
+
+Alpine.plugin(intersect)
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('codeBlocks', () => ({
@@ -48,6 +51,27 @@ document.addEventListener('alpine:init', () => {
                 })
                 block.appendChild(btn)
             })
+        },
+    }))
+
+    // Reading progress bar (blog posts only)
+    Alpine.data('readingProgress', () => ({
+        progress: 0,
+        update() {
+            const article = document.querySelector('article')
+            if (!article) return
+            const articleTop = article.offsetTop
+            const articleHeight = article.offsetHeight
+            const windowHeight = window.innerHeight
+            const scrollY = window.scrollY
+
+            const start = articleTop
+            const end = articleTop + articleHeight - windowHeight
+            if (end <= start) {
+                this.progress = 100
+                return
+            }
+            this.progress = Math.min(100, Math.max(0, ((scrollY - start) / (end - start)) * 100))
         },
     }))
 })
