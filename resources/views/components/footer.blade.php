@@ -12,8 +12,8 @@
     ])->filter();
 @endphp
 
-<footer class="border-t border-neutral-200 dark:border-neutral-800">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 text-sm text-neutral-500 dark:text-neutral-400">
+<footer class="border-t border-neutral-200 dark:border-neutral-800" role="contentinfo">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 text-sm text-muted dark:text-muted-dark">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>&copy; {{ date('Y') }} {{ $blogName }}</p>
 
@@ -33,10 +33,10 @@
                 <span></span>
             @endif
             <div class="flex gap-4">
-                <a href="{{ route('page.show', 'impressum') }}" class="hover:text-neutral-900 dark:hover:text-neutral-100">Impressum</a>
-                <a href="{{ route('page.show', 'datenschutz') }}" class="hover:text-neutral-900 dark:hover:text-neutral-100">Datenschutz</a>
+                <a href="{{ route('page.show', 'impressum') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Imprint') }}</a>
+                <a href="{{ route('page.show', 'datenschutz') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Privacy') }}</a>
                 @guest
-                    <a href="{{ url('/admin/login') }}" class="hover:text-neutral-900 dark:hover:text-neutral-100">Anmelden</a>
+                    <a href="{{ url('/admin/login') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Login') }}</a>
                 @endguest
             </div>
         </div>

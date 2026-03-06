@@ -15,6 +15,9 @@
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
         'Liberation Mono', 'Courier New', monospace;
     --color-accent: #16a34a;
+    /* WCAG 2.2 contrast-safe secondary text */
+    --color-muted: #6b7280;
+    --color-muted-dark: #9ca3af;
 }
 
 /* Softer accent in dark mode for better readability */

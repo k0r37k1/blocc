@@ -19,7 +19,7 @@
 @endphp
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -68,9 +68,14 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-200 font-sans antialiased transition-colors duration-200">
+        {{-- Skip to content (WCAG 2.4.1) --}}
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-white focus:outline-none">
+            {{ __('Skip to content') }}
+        </a>
+
         <x-header />
 
-        <main class="max-w-3xl mx-auto px-4 py-10 sm:px-6 sm:py-12">
+        <main id="main-content" class="max-w-3xl mx-auto px-4 py-10 sm:px-6 sm:py-12">
             {{ $slot }}
         </main>
 

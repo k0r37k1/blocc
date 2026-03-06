@@ -41,7 +41,7 @@
             {{ $post->title }}
         </h1>
 
-        <div class="mt-3 flex flex-wrap items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <div class="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted dark:text-muted-dark">
             @if ($post->author)
                 <span class="font-medium text-neutral-700 dark:text-neutral-300">{{ $post->author->name }}</span>
                 <span>&middot;</span>
@@ -59,7 +59,7 @@
             @endif
 
             <span>&middot;</span>
-            <span>{{ $post->reading_time }} Min. Lesezeit</span>
+            <span>{{ __(':count min read', ['count' => $post->reading_time]) }}</span>
         </div>
 
         @if ($post->getFirstMediaUrl('featured-image'))
@@ -142,11 +142,11 @@
     @endif
 
     @if ($previousPost || $nextPost)
-        <nav class="mt-14 pt-8 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-2 gap-4">
+        <nav class="mt-14 pt-8 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-2 gap-4" aria-label="{{ __('Post navigation') }}">
             <div>
                 @if ($previousPost)
-                    <a href="{{ route('blog.show', $previousPost->slug) }}" class="group">
-                        <span class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Vorheriger Beitrag</span>
+                    <a href="{{ route('blog.show', $previousPost->slug) }}" class="group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
+                        <span class="text-xs uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Previous post') }}</span>
                         <p class="text-accent group-hover:underline underline-offset-2 decoration-1 line-clamp-2">&larr; {{ $previousPost->title }}</p>
                     </a>
                 @endif
@@ -154,8 +154,8 @@
 
             <div class="text-right">
                 @if ($nextPost)
-                    <a href="{{ route('blog.show', $nextPost->slug) }}" class="group">
-                        <span class="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">N&auml;chster Beitrag</span>
+                    <a href="{{ route('blog.show', $nextPost->slug) }}" class="group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
+                        <span class="text-xs uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Next post') }}</span>
                         <p class="text-accent group-hover:underline underline-offset-2 decoration-1 line-clamp-2">{{ $nextPost->title }} &rarr;</p>
                     </a>
                 @endif

@@ -12,7 +12,7 @@
                         class="h-5 w-5 text-warning-500"
                     />
                     <h3 class="text-base font-semibold text-gray-950 dark:text-white">
-                        You have {{ $this->getDraftCount() }} {{ Str::plural('draft', $this->getDraftCount()) }}
+                        {{ trans_choice('You have :count draft|You have :count drafts', $this->getDraftCount()) }}
                     </h3>
                 </div>
 
@@ -41,7 +41,7 @@
                     class="h-5 w-5 text-success-500"
                 />
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                    No drafts. All caught up!
+                    {{ __('No drafts. All caught up!') }}
                 </p>
             </div>
         @endif

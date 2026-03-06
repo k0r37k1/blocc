@@ -38,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->profile(EditProfile::class, isSimple: false)
             ->spa()
-            ->brandName('blocc')
+            ->brandName('blocc Admin')
             ->brandLogo(fn () => view('filament.admin.logo'))
             ->brandLogoHeight('1.5rem')
             ->colors([
@@ -59,7 +59,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('System')->collapsed(),
             ])
             ->navigationItems([
-                NavigationItem::make('Mein Profil')
+                NavigationItem::make(__('My Profile'))
                     ->icon(Heroicon::OutlinedUserCircle)
                     ->url(fn (): string => EditProfile::getUrl())
                     ->isActiveWhen(fn (): bool => original_request()->routeIs('filament.admin.auth.profile'))
@@ -92,7 +92,7 @@ class AdminPanelProvider extends PanelProvider
                 'profile' => Action::make('profile')
                     ->hidden(),
                 Action::make('visit-site')
-                    ->label('Website ansehen')
+                    ->label(__('Visit website'))
                     ->icon(Heroicon::ArrowTopRightOnSquare)
                     ->url(fn (): string => url('/'), shouldOpenInNewTab: true),
             ]);

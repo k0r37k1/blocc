@@ -15,14 +15,14 @@
     @endif
 
     <div class="@if ($post->getFirstMediaUrl('featured-image', 'thumbnail')) mt-4 @endif">
-        <div class="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <div class="flex items-center gap-2 text-sm text-muted dark:text-muted-dark">
             <time datetime="{{ $post->published_at->toDateString() }}">
                 {{ $post->published_at->translatedFormat('j. F Y') }}
             </time>
 
             @if ($post->reading_time)
                 <span>&middot;</span>
-                <span>{{ $post->reading_time }} Min.</span>
+                <span>{{ __(':count min', ['count' => $post->reading_time]) }}</span>
             @endif
 
             @if ($post->category)

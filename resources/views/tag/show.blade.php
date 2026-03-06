@@ -1,13 +1,13 @@
-<x-layout :title="'Tag: ' . $tag->name . ' - Kopfsalat'" :description="'Alle Beitraege mit dem Tag ' . $tag->name">
-    <h1 class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Tag: {{ $tag->name }}</h1>
+<x-layout :title="__('Tag: :name', ['name' => $tag->name]) . ' - ' . config('app.name')" :description="__('All posts tagged :name', ['name' => $tag->name])">
+    <h1 class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">{{ __('Tag: :name', ['name' => $tag->name]) }}</h1>
 
     <div class="space-y-2">
         @forelse($posts as $post)
             <x-post-card :post="$post" />
         @empty
             <div class="py-12 text-center">
-                <p class="text-neutral-500 dark:text-neutral-400">Keine Beitr&auml;ge mit diesem Tag vorhanden.</p>
-                <a href="{{ route('blog.index') }}" class="mt-2 inline-block text-sm text-accent hover:underline">Alle Beitr&auml;ge anzeigen &rarr;</a>
+                <p class="text-neutral-500 dark:text-neutral-400">{{ __('No posts with this tag.') }}</p>
+                <a href="{{ route('blog.index') }}" class="mt-2 inline-block text-sm text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Show all posts') }} &rarr;</a>
             </div>
         @endforelse
     </div>

@@ -44,11 +44,11 @@ class DashboardWidgetTest extends TestCase
 
         Livewire::test(BlogStatsOverview::class)
             ->assertSuccessful()
-            ->assertSee('Published Posts')
+            ->assertSee(__('Published Posts'))
             ->assertSee('3')
-            ->assertSee('Drafts')
+            ->assertSee(__('Drafts'))
             ->assertSee('2')
-            ->assertSee('Pages')
+            ->assertSee(__('Pages'))
             ->assertSee('4');
     }
 
@@ -72,7 +72,7 @@ class DashboardWidgetTest extends TestCase
 
         Livewire::test(DraftReminderWidget::class)
             ->assertSuccessful()
-            ->assertSee('You have 3 drafts');
+            ->assertSee(trans_choice('You have :count draft|You have :count drafts', 3));
     }
 
     public function test_draft_reminder_shows_no_drafts_message(): void
@@ -83,6 +83,6 @@ class DashboardWidgetTest extends TestCase
 
         Livewire::test(DraftReminderWidget::class)
             ->assertSuccessful()
-            ->assertSee('No drafts. All caught up!');
+            ->assertSee(__('No drafts. All caught up!'));
     }
 }

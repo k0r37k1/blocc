@@ -9,6 +9,14 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/locale/{locale}', function (string $locale) {
+    if (in_array($locale, \App\Http\Middleware\SetLocale::SUPPORTED_LOCALES, true)) {
+        session()->put('locale', $locale);
+    }
+
+    return redirect()->back();
+})->name('locale.switch');
+
 Route::get('/', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/kategorie/{category}', [CategoryController::class, 'show'])->name('category.show');
