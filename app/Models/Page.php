@@ -4,14 +4,22 @@ namespace App\Models;
 
 use App\Enums\PostStatus;
 use App\Services\PostContentProcessor;
+use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
+use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
+use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Page extends Model
+class Page extends Model implements HasMedia, HasRichContent
 {
     /** @use HasFactory<\Database\Factories\PageFactory> */
     use HasFactory;
+
+    use InteractsWithMedia;
+    use InteractsWithRichContent;
 
     protected static function booted(): void
     {
@@ -53,6 +61,15 @@ class Page extends Model
             'status' => PostStatus::class,
             'published_at' => 'datetime',
         ];
+    }
+
+    public function setUpRichContent(): void
+    {
+        $this->registerRichContent('body')
+            ->fileAttachmentProvider(
+                SpatieMediaLibraryFileAttachmentProvider::make()
+                    ->collection('body-attachments'),
+            );
     }
 
     public function getRouteKeyName(): string

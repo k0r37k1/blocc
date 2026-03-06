@@ -78,10 +78,12 @@ class PostForm
             RichEditor::make('body')
                 ->required()
                 ->toolbarButtons([
-                    ['bold', 'italic', 'link'],
+                    ['bold', 'italic', 'underline', 'strike', 'link'],
                     ['h2', 'h3'],
                     ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                    ['table', 'attachFiles'],
+                    ['table', 'horizontalRule', 'details'],
+                    ['highlight', 'small', 'lead'],
+                    ['attachFiles'],
                     ['undo', 'redo'],
                 ])
                 ->afterStateHydrated(fn ($component, $record) => $component->state($record?->body_raw ?? $record?->body))
