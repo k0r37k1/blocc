@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Setting extends Model
 {
@@ -40,9 +41,11 @@ class Setting extends Model
      */
     public static function setMany(array $settings): void
     {
-        foreach ($settings as $key => $value) {
-            self::updateOrCreate(['key' => $key], ['value' => $value]);
-        }
+        DB::transaction(function () use ($settings): void {
+            foreach ($settings as $key => $value) {
+                self::updateOrCreate(['key' => $key], ['value' => $value]);
+            }
+        });
 
         Cache::forget('settings');
     }
