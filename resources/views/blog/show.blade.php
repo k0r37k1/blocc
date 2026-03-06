@@ -5,7 +5,7 @@
     :og-description="$post->excerpt"
     :og-image="$post->getFirstMediaUrl('featured-image') ?: null"
     og-type="article"
-    :edit-url="url('/admin/posts/' . $post->id . '/edit')"
+    :edit-url="url('/admin/posts/' . $post->slug . '/edit')"
 >
     <x-slot:meta>
         <meta property="article:published_time" content="{{ $post->published_at->toW3cString() }}">
