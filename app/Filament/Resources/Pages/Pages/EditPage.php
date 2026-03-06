@@ -20,7 +20,7 @@ class EditPage extends EditRecord
 
         return [
             Action::make('view-on-site')
-                ->label('Auf Website ansehen')
+                ->label(__('View on website'))
                 ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
                 ->url(route('page.show', $record->slug))
                 ->openUrlInNewTab()

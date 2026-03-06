@@ -17,7 +17,7 @@ class EnsureCredentialsChanged
 
         if ($user !== null && $user->must_change_credentials && ! $request->routeIs('filament.admin.auth.profile')) {
             Notification::make()
-                ->title('Bitte ändere dein Passwort.')
+                ->title(__('Please change your password.'))
                 ->warning()
                 ->persistent()
                 ->send();

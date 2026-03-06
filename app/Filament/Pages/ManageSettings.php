@@ -149,32 +149,32 @@ class ManageSettings extends Page
                         ->columns(2)
                         ->schema([
                             TextInput::make('social_website')
-                                ->label('Website')
+                                ->label(__('Website'))
                                 ->url()
                                 ->placeholder('https://example.com')
                                 ->maxLength(255),
                             TextInput::make('social_github')
-                                ->label('GitHub')
+                                ->label(__('GitHub'))
                                 ->url()
                                 ->placeholder('https://github.com/username')
                                 ->maxLength(255),
                             TextInput::make('social_twitter')
-                                ->label('X / Twitter')
+                                ->label(__('X / Twitter'))
                                 ->url()
                                 ->placeholder('https://x.com/username')
                                 ->maxLength(255),
                             TextInput::make('social_linkedin')
-                                ->label('LinkedIn')
+                                ->label(__('LinkedIn'))
                                 ->url()
                                 ->placeholder('https://linkedin.com/in/username')
                                 ->maxLength(255),
                             TextInput::make('social_instagram')
-                                ->label('Instagram')
+                                ->label(__('Instagram'))
                                 ->url()
                                 ->placeholder('https://instagram.com/username')
                                 ->maxLength(255),
                             TextInput::make('social_bluesky')
-                                ->label('Bluesky')
+                                ->label(__('Bluesky'))
                                 ->url()
                                 ->placeholder('https://bsky.app/profile/username')
                                 ->maxLength(255),

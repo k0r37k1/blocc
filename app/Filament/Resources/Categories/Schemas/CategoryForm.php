@@ -36,7 +36,7 @@ class CategoryForm
                 ->columnSpanFull(),
             ColorPicker::make('color')
                 ->nullable()
-                ->helperText('Optional hex color for visual badges'),
+                ->helperText(__('Optional hex color for visual badges')),
         ]);
     }
 }

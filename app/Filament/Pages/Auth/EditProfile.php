@@ -27,18 +27,18 @@ class EditProfile extends BaseEditProfile
     {
         return $schema
             ->components([
-                Section::make('Persönliche Daten')
+                Section::make(__('Personal Data'))
                     ->columns(2)
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('avatar')
-                            ->label('Profilbild')
+                            ->label(__('Profile Picture'))
                             ->collection('avatar')
                             ->image()
                             ->avatar()
                             ->maxSize(1024)
                             ->columnSpanFull(),
                         TextInput::make('username')
-                            ->label('Benutzername')
+                            ->label(__('Username'))
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
@@ -46,49 +46,49 @@ class EditProfile extends BaseEditProfile
                         $this->getNameFormComponent(),
                         $this->getEmailFormComponent(),
                         Textarea::make('bio')
-                            ->label('Bio')
-                            ->helperText('Kurze Beschreibung über dich. Wird im Blog angezeigt.')
+                            ->label(__('Bio'))
+                            ->helperText(__('Short description about you. Shown on the blog.'))
                             ->rows(3)
                             ->maxLength(500)
                             ->columnSpanFull(),
                     ]),
-                Section::make('Social Links')
-                    ->description('Vollständige URLs inkl. https://')
+                Section::make(__('Social Links'))
+                    ->description(__('Full URLs including https://'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('website')
-                            ->label('Website')
+                            ->label(__('Website'))
                             ->url()
                             ->placeholder('https://example.com')
                             ->maxLength(255),
                         TextInput::make('social_github')
-                            ->label('GitHub')
+                            ->label(__('GitHub'))
                             ->url()
                             ->placeholder('https://github.com/username')
                             ->maxLength(255),
                         TextInput::make('social_twitter')
-                            ->label('X / Twitter')
+                            ->label(__('X / Twitter'))
                             ->url()
                             ->placeholder('https://x.com/username')
                             ->maxLength(255),
                         TextInput::make('social_linkedin')
-                            ->label('LinkedIn')
+                            ->label(__('LinkedIn'))
                             ->url()
                             ->placeholder('https://linkedin.com/in/username')
                             ->maxLength(255),
                         TextInput::make('social_instagram')
-                            ->label('Instagram')
+                            ->label(__('Instagram'))
                             ->url()
                             ->placeholder('https://instagram.com/username')
                             ->maxLength(255),
                         TextInput::make('social_bluesky')
-                            ->label('Bluesky')
+                            ->label(__('Bluesky'))
                             ->url()
                             ->placeholder('https://bsky.app/profile/username')
                             ->maxLength(255),
                     ]),
-                Section::make('Passwort ändern')
-                    ->description('Leer lassen um das aktuelle Passwort beizubehalten.')
+                Section::make(__('Change Password'))
+                    ->description(__('Leave blank to keep the current password.'))
                     ->columns(2)
                     ->schema([
                         $this->getPasswordFormComponent(),
@@ -103,7 +103,7 @@ class EditProfile extends BaseEditProfile
 
         if ($component instanceof TextInput) {
             $component
-                ->helperText('Min. 8 Zeichen, Groß- & Kleinbuchstaben, Zahl und Sonderzeichen.')
+                ->helperText(__('Min. 8 characters, upper & lowercase, number and special character.'))
                 ->rule(
                     Password::min(8)
                         ->mixedCase()
@@ -131,7 +131,7 @@ class EditProfile extends BaseEditProfile
             $user->update(['must_change_credentials' => false]);
 
             Notification::make()
-                ->title('Zugangsdaten erfolgreich geändert.')
+                ->title(__('Credentials changed successfully.'))
                 ->success()
                 ->send();
         }

@@ -23,15 +23,15 @@ class EditPost extends EditRecord
 
         return [
             Action::make('duplicate')
-                ->label('Duplizieren')
+                ->label(__('Duplicate'))
                 ->icon(Heroicon::OutlinedDocumentDuplicate)
                 ->color('gray')
                 ->requiresConfirmation()
-                ->modalHeading('Beitrag duplizieren')
-                ->modalDescription('Es wird eine Kopie als Entwurf erstellt.')
+                ->modalHeading(__('Duplicate post'))
+                ->modalDescription(__('A copy will be created as a draft.'))
                 ->action(function () use ($record): void {
                     $newPost = $record->replicate(['published_at']);
-                    $newPost->title = $record->title.' (Kopie)';
+                    $newPost->title = $record->title.' ('.__('Copy').')';
                     $newPost->slug = Str::slug($newPost->title);
                     $newPost->status = PostStatus::Draft; /** @phpstan-ignore assign.propertyType */
                     $newPost->save();
@@ -39,14 +39,14 @@ class EditPost extends EditRecord
                     $newPost->tags()->sync($record->tags->pluck('id'));
 
                     Notification::make()
-                        ->title('Beitrag dupliziert')
+                        ->title(__('Post duplicated'))
                         ->success()
                         ->send();
 
                     $this->redirect(PostResource::getUrl('edit', ['record' => $newPost]));
                 }),
             Action::make('view-on-site')
-                ->label('Auf Website ansehen')
+                ->label(__('View on website'))
                 ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
                 ->url(route('blog.show', $record->slug))
                 ->openUrlInNewTab()

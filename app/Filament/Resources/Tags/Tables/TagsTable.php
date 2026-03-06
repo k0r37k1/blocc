@@ -21,7 +21,7 @@ class TagsTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('posts_count')
                     ->counts('posts')
-                    ->label('Posts')
+                    ->label(__('Posts'))
                     ->sortable(),
                 TextColumn::make('updated_at')
                     ->dateTime()

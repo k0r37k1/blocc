@@ -29,12 +29,12 @@ class TagResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Tag';
+        return __('Tag');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Tags';
+        return __('Tags');
     }
 
     public static function form(Schema $schema): Schema

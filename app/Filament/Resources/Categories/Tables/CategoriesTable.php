@@ -22,7 +22,7 @@ class CategoriesTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('posts_count')
                     ->counts('posts')
-                    ->label('Posts')
+                    ->label(__('Posts'))
                     ->sortable(),
                 ColorColumn::make('color'),
                 TextColumn::make('updated_at')
