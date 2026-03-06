@@ -10,33 +10,29 @@ use Illuminate\Database\Seeder;
 class PostSeeder extends Seeder
 {
     /**
-     * Seed sample blog posts: 5 published, 2 drafts with categories and tags.
+     * Seed a single demo blog post.
      */
     public function run(): void
     {
-        $categoryIds = Category::pluck('id');
+        $category = Category::where('slug', 'allgemein')->first() ?? Category::first();
 
-        $posts = Post::factory()
-            ->count(5)
-            ->published()
-            ->sequence(fn ($sequence) => ['category_id' => $categoryIds[$sequence->index % $categoryIds->count()]])
-            ->create();
+        $post = Post::create([
+            'title' => 'Willkommen auf meinem Blog',
+            'slug' => 'willkommen-auf-meinem-blog',
+            'body' => '<p>Dies ist mein erster Blogbeitrag. Hier werde ich über Themen wie Webentwicklung, Design und Technologie schreiben.</p><p>Dieser Blog wurde mit <strong>Laravel</strong>, <strong>Filament</strong> und <strong>Tailwind CSS</strong> gebaut — ein moderner Stack für schnelle und elegante Webanwendungen.</p><p>Schau gerne öfter vorbei, es wird sich hier einiges tun!</p>',
+            'excerpt' => 'Mein erster Blogbeitrag — über Webentwicklung, Design und den Tech-Stack hinter diesem Blog.',
+            'status' => \App\Enums\PostStatus::Published,
+            'published_at' => now(),
+            'category_id' => $category?->id,
+            'reading_time' => 1,
+            'user_id' => 1,
+        ]);
 
-        $drafts = Post::factory()
-            ->count(2)
-            ->draft()
-            ->sequence(fn ($sequence) => ['category_id' => $categoryIds->random()])
-            ->create();
+        $post->tags()->attach(
+            Tag::whereIn('slug', ['demo'])->pluck('id')
+        );
 
-        $allPosts = $posts->merge($drafts);
-
-        foreach ($allPosts as $post) {
-            $post->tags()->attach(
-                Tag::inRandomOrder()->limit(random_int(1, 3))->pluck('id')
-            );
-
-            $this->attachFeaturedImage($post);
-        }
+        $this->attachFeaturedImage($post);
     }
 
     /**

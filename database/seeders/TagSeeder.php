@@ -13,16 +13,7 @@ class TagSeeder extends Seeder
     public function run(): void
     {
         $tags = [
-            ['name' => 'Performance', 'slug' => 'performance'],
-            ['name' => 'Testing', 'slug' => 'testing'],
-            ['name' => 'Security', 'slug' => 'security'],
-            ['name' => 'Docker', 'slug' => 'docker'],
-            ['name' => 'API', 'slug' => 'api'],
-            ['name' => 'Database', 'slug' => 'database'],
-            ['name' => 'Tips', 'slug' => 'tips'],
-            ['name' => 'Beginner', 'slug' => 'beginner'],
-            ['name' => 'Advanced', 'slug' => 'advanced'],
-            ['name' => 'Open Source', 'slug' => 'open-source'],
+            ['name' => 'Demo', 'slug' => 'demo'],
         ];
 
         foreach ($tags as $tag) {
