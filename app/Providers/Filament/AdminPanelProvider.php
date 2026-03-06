@@ -53,16 +53,16 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->globalSearchKeyBindings(['mod+k'])
             ->navigationGroups([
-                NavigationGroup::make('Content'),
-                NavigationGroup::make('Taxonomie'),
-                NavigationGroup::make('System')->collapsed(),
+                NavigationGroup::make(fn (): string => __('Content')),
+                NavigationGroup::make(fn (): string => __('Taxonomy')),
+                NavigationGroup::make(fn (): string => __('General'))->collapsed(),
             ])
             ->navigationItems([
-                NavigationItem::make(__('My Profile'))
+                NavigationItem::make(fn (): string => __('My Profile'))
                     ->icon(Heroicon::OutlinedUserCircle)
                     ->url(fn (): string => EditProfile::getUrl())
                     ->isActiveWhen(fn (): bool => original_request()->routeIs('filament.admin.auth.profile'))
-                    ->group('System')
+                    ->group(fn (): string => __('General'))
                     ->sort(-1),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
@@ -80,6 +80,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \App\Http\Middleware\SetLocale::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -89,7 +90,7 @@ class AdminPanelProvider extends PanelProvider
                 'profile' => Action::make('profile')
                     ->hidden(),
                 Action::make('visit-site')
-                    ->label(__('Visit website'))
+                    ->label(fn (): string => __('Visit website'))
                     ->icon(Heroicon::ArrowTopRightOnSquare)
                     ->url(fn (): string => url('/'), shouldOpenInNewTab: true),
             ]);

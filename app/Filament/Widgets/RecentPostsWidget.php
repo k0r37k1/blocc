@@ -14,21 +14,24 @@ class RecentPostsWidget extends BaseWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $heading = 'Recent Posts';
-
     public function table(Table $table): Table
     {
         return $table
+            ->heading(__('Recent Posts'))
             ->query(Post::query()->latest('updated_at')->limit(5))
             ->columns([
                 TextColumn::make('title')
+                    ->label(__('Title'))
                     ->limit(50)
                     ->url(fn (Post $record): string => PostResource::getUrl('edit', ['record' => $record])),
                 TextColumn::make('category.name')
+                    ->label(__('Category'))
                     ->badge(),
                 TextColumn::make('status')
+                    ->label(__('Status'))
                     ->badge(),
                 TextColumn::make('updated_at')
+                    ->label(__('Updated at'))
                     ->dateTime()
                     ->sortable(),
             ])

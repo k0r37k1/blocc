@@ -16,7 +16,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
-use UnitEnum;
 
 /**
  * @property-read Schema $form
@@ -25,15 +24,24 @@ class ManageSettings extends Page
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
-    protected static ?string $navigationLabel = 'Settings';
-
-    protected static ?string $title = 'Blog Settings';
-
     protected static ?string $slug = 'settings';
 
-    protected static string|UnitEnum|null $navigationGroup = 'System';
-
     protected static ?int $navigationSort = 99;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Settings');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('General');
+    }
+
+    public function getTitle(): string
+    {
+        return __('Blog Settings');
+    }
 
     protected string $view = 'filament.pages.manage-settings';
 
@@ -106,23 +114,23 @@ class ManageSettings extends Page
             ->statePath('data')
             ->components([
                 Form::make([
-                    Section::make('General')
-                        ->description('Basic blog configuration')
+                    Section::make(__('General'))
+                        ->description(__('Basic blog configuration'))
                         ->columns(2)
                         ->schema([
                             TextInput::make('blog_name')
-                                ->label('Blog Name')
+                                ->label(__('Blog Name'))
                                 ->required()
                                 ->maxLength(255),
                             Textarea::make('blog_description')
-                                ->label('Blog Description')
-                                ->helperText('Used in meta tags and RSS feed.')
+                                ->label(__('Blog Description'))
+                                ->helperText(__('Used in meta tags and RSS feed.'))
                                 ->rows(2)
                                 ->maxLength(300)
                                 ->columnSpanFull(),
                             FileUpload::make('blog_logo')
-                                ->label('Blog Logo')
-                                ->helperText('Wird im Header neben dem Blognamen angezeigt. Empfohlen: PNG oder SVG mit transparentem Hintergrund.')
+                                ->label(__('Blog Logo'))
+                                ->helperText(__('Shown in the header next to the blog name. Recommended: PNG or SVG with transparent background.'))
                                 ->image()
                                 ->disk('public')
                                 ->directory('logo')
@@ -130,14 +138,14 @@ class ManageSettings extends Page
                                 ->imagePreviewHeight('80')
                                 ->columnSpanFull(),
                             TextInput::make('posts_per_page')
-                                ->label('Posts per Page')
+                                ->label(__('Posts per Page'))
                                 ->numeric()
                                 ->minValue(1)
                                 ->maxValue(50)
                                 ->default(10),
                         ]),
-                    Section::make('Social Links')
-                        ->description('Full URLs including https://')
+                    Section::make(__('Social Links'))
+                        ->description(__('Full URLs including https://'))
                         ->columns(2)
                         ->schema([
                             TextInput::make('social_website')
@@ -171,17 +179,17 @@ class ManageSettings extends Page
                                 ->placeholder('https://bsky.app/profile/username')
                                 ->maxLength(255),
                         ]),
-                    Section::make('Footer & Scripts')
-                        ->description('Custom footer text and head scripts')
+                    Section::make(__('Footer & Scripts'))
+                        ->description(__('Custom footer text and head scripts'))
                         ->schema([
                             Textarea::make('footer_text')
-                                ->label('Footer Text')
-                                ->helperText('Additional text shown in the footer.')
+                                ->label(__('Footer Text'))
+                                ->helperText(__('Additional text shown in the footer.'))
                                 ->rows(2)
                                 ->maxLength(500),
                             Textarea::make('head_scripts')
-                                ->label('Custom Head Scripts')
-                                ->helperText('Injected into <head> on public pages. Use for analytics or custom meta tags.')
+                                ->label(__('Custom Head Scripts'))
+                                ->helperText(__('Injected into <head> on public pages. Use for analytics or custom meta tags.'))
                                 ->rows(3),
                         ]),
                 ])
@@ -189,7 +197,7 @@ class ManageSettings extends Page
                     ->footer([
                         Actions::make([
                             Action::make('save')
-                                ->label('Save Settings')
+                                ->label(__('Save Settings'))
                                 ->submit('save')
                                 ->keyBindings(['mod+s']),
                         ]),
@@ -212,7 +220,7 @@ class ManageSettings extends Page
         Setting::setMany($data);
 
         Notification::make()
-            ->title('Settings saved')
+            ->title(__('Settings saved'))
             ->success()
             ->send();
     }

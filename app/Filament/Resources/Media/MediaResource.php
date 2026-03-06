@@ -14,7 +14,6 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use UnitEnum;
 
 class MediaResource extends Resource
 {
@@ -28,9 +27,12 @@ class MediaResource extends Resource
 
     protected static ?string $modelLabel = 'Media';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content';
-
     protected static ?int $navigationSort = 3;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Content');
+    }
 
     public static function canCreate(): bool
     {
@@ -46,24 +48,24 @@ class MediaResource extends Resource
                     ->getStateUsing(fn (Media $record): string => $record->getUrl())
                     ->size(48),
                 TextColumn::make('file_name')
-                    ->label('Filename')
+                    ->label(__('Filename'))
                     ->searchable()
                     ->sortable()
                     ->wrap(),
                 TextColumn::make('collection_name')
-                    ->label('Collection')
+                    ->label(__('Collection'))
                     ->badge()
                     ->sortable(),
                 TextColumn::make('model_type')
-                    ->label('Used by')
+                    ->label(__('Used by'))
                     ->formatStateUsing(fn (string $state): string => class_basename($state))
                     ->sortable(),
                 TextColumn::make('size')
-                    ->label('Size')
+                    ->label(__('Size'))
                     ->formatStateUsing(fn (int $state): string => number_format($state / 1024, 0).' KB')
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label('Uploaded')
+                    ->label(__('Uploaded'))
                     ->since()
                     ->sortable(),
             ])

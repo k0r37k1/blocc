@@ -35,8 +35,8 @@ class PageForm
                 ->unique(ignoreRecord: true)
                 ->rules(['alpha_dash'])
                 ->helperText(fn (Get $get): string => $get('status') === PostStatus::Published->value
-                    ? 'Slug is locked after publishing. Edit manually if needed.'
-                    : 'Auto-generated from title. Will lock after publishing.'
+                    ? __('Slug is locked after publishing. Edit manually if needed.')
+                    : __('Auto-generated from title. Will lock after publishing.')
                 ),
             RichEditor::make('body')
                 ->required()
@@ -50,7 +50,7 @@ class PageForm
                     ['undo', 'redo'],
                 ])
                 ->afterStateHydrated(fn ($component, $record) => $component->state($record?->body_raw ?? $record?->body))
-                ->placeholder('Start writing...')
+                ->placeholder(__('Start writing...'))
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
                 ->columnSpanFull(),
             Select::make('status')
@@ -59,11 +59,11 @@ class PageForm
                 ->required()
                 ->native(false),
             Placeholder::make('created_at')
-                ->label('Created')
+                ->label(__('Created'))
                 ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-')
                 ->visibleOn('edit'),
             Placeholder::make('updated_at')
-                ->label('Last modified')
+                ->label(__('Last modified'))
                 ->content(fn ($record): string => $record?->updated_at?->diffForHumans() ?? '-')
                 ->visibleOn('edit'),
         ]);

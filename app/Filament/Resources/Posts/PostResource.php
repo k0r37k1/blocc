@@ -15,7 +15,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use UnitEnum;
 
 class PostResource extends Resource
 {
@@ -23,11 +22,24 @@ class PostResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content';
-
     protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Content');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Post');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Posts');
+    }
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
@@ -64,7 +76,7 @@ class PostResource extends Resource
 
     public static function getNavigationBadgeTooltip(): ?string
     {
-        return 'Drafts';
+        return __('Drafts');
     }
 
     public static function form(Schema $schema): Schema

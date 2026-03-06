@@ -13,7 +13,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class TagResource extends Resource
 {
@@ -21,9 +20,22 @@ class TagResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Taxonomie';
-
     protected static ?int $navigationSort = 2;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Taxonomy');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return 'Tag';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Tags';
+    }
 
     public static function form(Schema $schema): Schema
     {

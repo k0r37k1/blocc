@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Filament\Pages\Auth\EditProfile;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -22,5 +25,28 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Livewire::component('app.filament.pages.auth.edit-profile', EditProfile::class);
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::TOPBAR_LOGO_AFTER,
+            fn (): string => Blade::render('
+                @php
+                    $currentLocale = app()->getLocale();
+                    $targetLocale = $currentLocale === \'de\' ? \'en\' : \'de\';
+                    $switchUrl = route(\'locale.switch\', $targetLocale);
+                @endphp
+                <button
+                    onclick="window.location.href = \'{{ $switchUrl }}\'"
+                    style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.375rem 0.5rem; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500; color: #9ca3af; transition: color 0.15s;"
+                    onmouseover="this.style.color=\'#d1d5db\'"
+                    onmouseout="this.style.color=\'#9ca3af\'"
+                    title="{{ __(\'Language\') }}"
+                >
+                    <svg style="width: 1rem; height: 1rem; flex-shrink: 0;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z" />
+                    </svg>
+                    <span style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{{ $currentLocale === \'de\' ? \'EN\' : \'DE\' }}</span>
+                </button>
+            '),
+        );
     }
 }

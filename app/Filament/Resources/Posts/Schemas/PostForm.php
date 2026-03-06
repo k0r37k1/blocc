@@ -38,8 +38,8 @@ class PostForm
                 ->unique(ignoreRecord: true)
                 ->rules(['alpha_dash'])
                 ->helperText(fn (Get $get): string => $get('status') === PostStatus::Published->value
-                    ? 'Slug is locked after publishing. Edit manually if needed.'
-                    : 'Auto-generated from title. Will lock after publishing.'
+                    ? __('Slug is locked after publishing. Edit manually if needed.')
+                    : __('Auto-generated from title. Will lock after publishing.')
                 ),
             Select::make('category_id')
                 ->relationship(name: 'category', titleAttribute: 'name')
@@ -87,7 +87,7 @@ class PostForm
                     ['undo', 'redo'],
                 ])
                 ->afterStateHydrated(fn ($component, $record) => $component->state($record?->body_raw ?? $record?->body))
-                ->placeholder('Start writing...')
+                ->placeholder(__('Start writing...'))
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
                 ->columnSpanFull(),
             Textarea::make('excerpt')
@@ -95,13 +95,13 @@ class PostForm
                 ->maxLength(300)
                 ->live(onBlur: true)
                 ->hint(fn (?string $state): string => strlen($state ?? '').' / 300')
-                ->helperText('Leave blank to auto-generate from the first ~160 characters of the body.')
+                ->helperText(__('Leave blank to auto-generate from the first ~160 characters of the body.'))
                 ->columnSpanFull(),
             Placeholder::make('reading_time_display')
-                ->label('Reading Time')
+                ->label(__('Reading Time'))
                 ->content(fn ($record): string => $record?->reading_time
-                    ? "{$record->reading_time} min read"
-                    : 'Calculated on save'),
+                    ? "{$record->reading_time} ".__('min read')
+                    : __('Calculated on save')),
             SpatieMediaLibraryFileUpload::make('featured_image')
                 ->collection('featured-image')
                 ->image()
@@ -111,10 +111,10 @@ class PostForm
                 ->columnSpanFull()
                 ->live(),
             TextInput::make('featured_image_alt')
-                ->label('Featured Image Alt Text')
+                ->label(__('Featured Image Alt Text'))
                 ->required(fn (Get $get): bool => filled($get('featured_image')))
                 ->maxLength(255)
-                ->helperText('Describe the image for accessibility. Required when a featured image is set.')
+                ->helperText(__('Describe the image for accessibility. Required when a featured image is set.'))
                 ->columnSpanFull(),
             Select::make('status')
                 ->options(PostStatus::class)
@@ -122,11 +122,11 @@ class PostForm
                 ->required()
                 ->native(false),
             Placeholder::make('created_at')
-                ->label('Created')
+                ->label(__('Created'))
                 ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-')
                 ->visibleOn('edit'),
             Placeholder::make('updated_at')
-                ->label('Last modified')
+                ->label(__('Last modified'))
                 ->content(fn ($record): string => $record?->updated_at?->diffForHumans() ?? '-')
                 ->visibleOn('edit'),
         ]);

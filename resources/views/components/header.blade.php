@@ -23,20 +23,8 @@
                 {{-- Divider --}}
                 <span class="h-5 w-px bg-neutral-300 dark:bg-neutral-700" aria-hidden="true"></span>
 
-                {{-- Utility group: Language + Dark mode --}}
+                {{-- Utility group: Dark mode + Language --}}
                 <div class="flex items-center gap-1">
-                    {{-- Language switcher --}}
-                    <a
-                        href="{{ route('locale.switch', $currentLocale === 'de' ? 'en' : 'de') }}"
-                        class="flex items-center gap-1 p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                        title="{{ __('Language') }}"
-                    >
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z" />
-                        </svg>
-                        <span class="text-xs font-medium uppercase tracking-wide">{{ $currentLocale === 'de' ? 'EN' : 'DE' }}</span>
-                    </a>
-
                     {{-- Dark mode toggle --}}
                     <button
                         x-data="{ dark: document.documentElement.classList.contains('dark'), spinning: false }"
@@ -59,6 +47,18 @@
                                   d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                     </button>
+
+                    {{-- Language switcher --}}
+                    <a
+                        href="{{ route('locale.switch', $currentLocale === 'de' ? 'en' : 'de') }}"
+                        class="flex items-center gap-1 p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        title="{{ __('Language') }}"
+                    >
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z" />
+                        </svg>
+                        <span class="text-xs font-medium uppercase tracking-wide">{{ $currentLocale === 'de' ? 'EN' : 'DE' }}</span>
+                    </a>
                 </div>
             </div>
 
@@ -113,6 +113,7 @@
                 <a
                     href="{{ route('locale.switch', $currentLocale === 'de' ? 'en' : 'de') }}"
                     class="flex items-center gap-2 py-2 text-neutral-600 dark:text-neutral-400 hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
+                    title="{{ __('Language') }}"
                 >
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z" />

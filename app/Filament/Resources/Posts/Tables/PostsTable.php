@@ -36,7 +36,7 @@ class PostsTable
                     ->badge()
                     ->sortable(),
                 ToggleColumn::make('is_published')
-                    ->label('Published')
+                    ->label(__('Published'))
                     ->onColor('success')
                     ->offColor('gray')
                     ->updateStateUsing(function (Post $record, bool $state): bool {
@@ -56,7 +56,7 @@ class PostsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('reading_time')
-                    ->label('Read Time')
+                    ->label(__('Read Time'))
                     ->formatStateUsing(fn (int $state): string => "{$state} min")
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -66,7 +66,7 @@ class PostsTable
                 SelectFilter::make('status')
                     ->options(PostStatus::class),
                 SelectFilter::make('category_id')
-                    ->label('Kategorie')
+                    ->label(__('Category'))
                     ->relationship('category', 'name')
                     ->searchable()
                     ->preload(),
@@ -77,7 +77,7 @@ class PostsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('publish')
-                        ->label('Publish')
+                        ->label(__('Publish'))
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->action(function (Collection $records): void {
@@ -88,7 +88,7 @@ class PostsTable
                         })
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('unpublish')
-                        ->label('Unpublish')
+                        ->label(__('Unpublish'))
                         ->icon('heroicon-o-x-circle')
                         ->color('gray')
                         ->action(function (Collection $records): void {

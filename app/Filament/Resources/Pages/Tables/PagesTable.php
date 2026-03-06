@@ -29,7 +29,7 @@ class PagesTable
                     ->badge()
                     ->sortable(),
                 ToggleColumn::make('is_published')
-                    ->label('Published')
+                    ->label(__('Published'))
                     ->onColor('success')
                     ->offColor('gray')
                     ->updateStateUsing(function (Page $record, bool $state): bool {
@@ -55,7 +55,7 @@ class PagesTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('publish')
-                        ->label('Publish')
+                        ->label(__('Publish'))
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->action(function (Collection $records): void {
@@ -66,7 +66,7 @@ class PagesTable
                         })
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('unpublish')
-                        ->label('Unpublish')
+                        ->label(__('Unpublish'))
                         ->icon('heroicon-o-x-circle')
                         ->color('gray')
                         ->action(function (Collection $records): void {
