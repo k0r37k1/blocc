@@ -17,7 +17,7 @@ class ContentSecurityPolicy
     {
         $response = $next($request);
 
-        if (! str_contains($response->headers->get('Content-Type', ''), 'text/html')) {
+        if (! str_contains((string) $response->headers->get('Content-Type', ''), 'text/html')) {
             return $response;
         }
 

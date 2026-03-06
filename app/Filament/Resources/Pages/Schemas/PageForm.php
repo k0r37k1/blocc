@@ -58,10 +58,12 @@ class PageForm
                 ->native(false),
             Placeholder::make('created_at')
                 ->label('Created')
-                ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-')
+                ->visibleOn('edit'),
             Placeholder::make('updated_at')
                 ->label('Last modified')
-                ->content(fn ($record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                ->content(fn ($record): string => $record?->updated_at?->diffForHumans() ?? '-')
+                ->visibleOn('edit'),
         ]);
     }
 }

@@ -11,7 +11,7 @@
         <item>
             <title>{{ $post->title }}</title>
             <link>{{ route('blog.show', $post) }}</link>
-            <description><![CDATA[{!! $post->body !!}]]></description>
+            <description><![CDATA[{!! str($post->body)->sanitizeHtml() !!}]]></description>
             <pubDate>{{ $post->published_at->format('r') }}</pubDate>
             <guid isPermaLink="true">{{ route('blog.show', $post) }}</guid>
             @foreach ($post->tags as $tag)

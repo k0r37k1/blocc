@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use App\Models\Tag;
 use Illuminate\View\View;
 
@@ -11,9 +12,9 @@ class TagController extends Controller
     {
         $posts = $tag->posts()
             ->published()
-            ->with('category')
+            ->with(['category', 'media'])
             ->latest('published_at')
-            ->simplePaginate(10);
+            ->simplePaginate((int) Setting::get('posts_per_page', '10'));
 
         return view('tag.show', compact('tag', 'posts'));
     }

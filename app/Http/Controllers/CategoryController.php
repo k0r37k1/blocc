@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Setting;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -11,9 +12,9 @@ class CategoryController extends Controller
     {
         $posts = $category->posts()
             ->published()
-            ->with('category')
+            ->with(['category', 'media'])
             ->latest('published_at')
-            ->simplePaginate(10);
+            ->simplePaginate((int) Setting::get('posts_per_page', '10'));
 
         return view('category.show', compact('category', 'posts'));
     }

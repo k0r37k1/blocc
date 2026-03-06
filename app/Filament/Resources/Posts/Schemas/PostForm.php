@@ -23,6 +23,7 @@ class PostForm
                 ->required()
                 ->maxLength(255)
                 ->live(onBlur: true)
+                ->hint(fn (?string $state): string => strlen($state ?? '').' / 255')
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state): void {
                     if (
                         ($get('status') !== PostStatus::Published->value) ||
@@ -90,6 +91,8 @@ class PostForm
             Textarea::make('excerpt')
                 ->rows(3)
                 ->maxLength(300)
+                ->live(onBlur: true)
+                ->hint(fn (?string $state): string => strlen($state ?? '').' / 300')
                 ->helperText('Leave blank to auto-generate from the first ~160 characters of the body.')
                 ->columnSpanFull(),
             Placeholder::make('reading_time_display')
@@ -118,10 +121,12 @@ class PostForm
                 ->native(false),
             Placeholder::make('created_at')
                 ->label('Created')
-                ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-')
+                ->visibleOn('edit'),
             Placeholder::make('updated_at')
                 ->label('Last modified')
-                ->content(fn ($record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                ->content(fn ($record): string => $record?->updated_at?->diffForHumans() ?? '-')
+                ->visibleOn('edit'),
         ]);
     }
 }

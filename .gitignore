@@ -5,6 +5,7 @@
 .phpactor.json
 .phpunit.result.cache
 .planning/
+.junie/
 *.log
 /.fleet
 /.idea

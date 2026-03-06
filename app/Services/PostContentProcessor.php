@@ -37,7 +37,7 @@ class PostContentProcessor
      */
     public function process(string $html): string
     {
-        if (empty(trim($html))) {
+        if (trim($html) === '') {
             return $html;
         }
 
@@ -53,7 +53,10 @@ class PostContentProcessor
      */
     private function sanitize(string $html): string
     {
-        return Purify::clean($html);
+        /** @var string $cleaned */
+        $cleaned = Purify::clean($html);
+
+        return $cleaned;
     }
 
     /**
@@ -81,6 +84,11 @@ class PostContentProcessor
 
         foreach ($codeElements as $codeElement) {
             $preElement = $codeElement->parentNode;
+
+            if ($preElement === null || $preElement->parentNode === null) {
+                continue;
+            }
+
             $language = $this->extractLanguage($codeElement);
             $codeContent = $codeElement->textContent;
 
@@ -106,7 +114,7 @@ class PostContentProcessor
                 );
             }
 
-            $languageLabel = $language ?: 'text';
+            $languageLabel = $language !== '' ? $language : 'text';
             $wrapperHtml = '<div class="code-block" data-language="'.htmlspecialchars($languageLabel).'">'.$highlighted.'</div>';
 
             $fragment = $dom->createDocumentFragment();
@@ -125,7 +133,7 @@ class PostContentProcessor
      */
     private function addHeadingAnchors(string $html): string
     {
-        if (! preg_match('/<h[23][\s>]/i', $html)) {
+        if (preg_match('/<h[23][\s>]/i', $html) !== 1) {
             return $html;
         }
 
@@ -178,7 +186,7 @@ class PostContentProcessor
     {
         $class = $codeElement->getAttribute('class');
 
-        if (preg_match('/language-(\S+)/', $class, $matches)) {
+        if (preg_match('/language-(\S+)/', $class, $matches) === 1) {
             return strtolower($matches[1]);
         }
 

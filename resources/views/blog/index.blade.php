@@ -1,5 +1,5 @@
 <x-layout title="Kopfsalat" :description="config('app.description')">
-    <div class="divide-y divide-neutral-200 dark:divide-neutral-800">
+    <div class="space-y-2">
         @forelse ($posts as $post)
             <x-post-card :post="$post" />
         @empty

@@ -1,16 +1,23 @@
-<header class="border-b border-neutral-200 dark:border-neutral-800">
+@php
+    $currentRoute = request()->route()?->getName();
+@endphp
+
+<header>
     <nav x-data="{ open: false }" class="max-w-3xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-16">
             {{-- Brand --}}
-            <a href="{{ route('blog.index') }}" class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
-                &#129388; Kopfsalat
+            <a href="{{ route('blog.index') }}" class="flex items-center gap-2 text-base font-semibold tracking-wide text-neutral-900 dark:text-neutral-100">
+                @if ($logo = \App\Models\Setting::get('blog_logo'))
+                    <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('blog_name', config('app.name')) }}" class="h-8 w-auto">
+                @endif
+                <span>{{ \App\Models\Setting::get('blog_name', config('app.name')) }}</span>
             </a>
 
             {{-- Desktop nav --}}
             <div class="hidden sm:flex items-center gap-6">
-                <a href="{{ route('blog.index') }}" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Blog</a>
-                <a href="{{ route('page.show', 'ueber-mich') }}" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Ueber mich</a>
-                <a href="{{ route('archive') }}" class="text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Archiv</a>
+                <a href="{{ route('blog.index') }}" class="{{ $currentRoute === 'blog.index' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors">Blog</a>
+                <a href="{{ route('page.show', 'ueber-mich') }}" class="{{ $currentRoute === 'page.show' && request()->route('page') === 'ueber-mich' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors">Über mich</a>
+                <a href="{{ route('archive') }}" class="{{ $currentRoute === 'archive' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors">Archiv</a>
 
                 {{-- Dark mode toggle --}}
                 <button
@@ -20,7 +27,7 @@
                         document.documentElement.classList.toggle('dark', dark);
                         localStorage.theme = dark ? 'dark' : 'light';
                     "
-                    class="p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+                    class="p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
                     aria-label="Toggle dark mode"
                 >
                     {{-- Sun icon (shown in dark mode) --}}
@@ -46,7 +53,7 @@
                         document.documentElement.classList.toggle('dark', dark);
                         localStorage.theme = dark ? 'dark' : 'light';
                     "
-                    class="p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+                    class="p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
                     aria-label="Toggle dark mode"
                 >
                     <svg x-show="dark" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,7 +67,13 @@
                 </button>
 
                 {{-- Hamburger button --}}
-                <button x-on:click="open = !open" class="p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100" aria-label="Menu">
+                <button
+                    x-on:click="open = !open"
+                    :aria-expanded="open.toString()"
+                    aria-controls="mobile-menu"
+                    class="p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors"
+                    aria-label="Menu"
+                >
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -70,10 +83,10 @@
         </div>
 
         {{-- Mobile menu --}}
-        <div x-show="open" x-transition class="sm:hidden pb-4">
-            <a href="{{ route('blog.index') }}" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Blog</a>
-            <a href="{{ route('page.show', 'ueber-mich') }}" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Ueber mich</a>
-            <a href="{{ route('archive') }}" class="block py-2 text-neutral-600 hover:text-accent dark:text-neutral-400 dark:hover:text-accent">Archiv</a>
+        <div x-show="open" x-transition id="mobile-menu" class="sm:hidden pb-4">
+            <a href="{{ route('blog.index') }}" class="block py-2 {{ $currentRoute === 'blog.index' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent">Blog</a>
+            <a href="{{ route('page.show', 'ueber-mich') }}" class="block py-2 {{ $currentRoute === 'page.show' && request()->route('page') === 'ueber-mich' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent">Über mich</a>
+            <a href="{{ route('archive') }}" class="block py-2 {{ $currentRoute === 'archive' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent">Archiv</a>
         </div>
     </nav>
 </header>

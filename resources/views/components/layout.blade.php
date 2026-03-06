@@ -6,6 +6,7 @@
     'ogImage' => null,
     'ogType' => 'website',
     'canonicalUrl' => null,
+    'editUrl' => null,
 ])
 
 @php
@@ -26,6 +27,7 @@
         <title>{{ $title ?? config('app.name') }}</title>
 
         <meta name="description" content="{{ $description }}">
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
         <link rel="canonical" href="{{ $resolvedCanonicalUrl }}">
 
         {{-- Open Graph --}}
@@ -46,6 +48,10 @@
 
         {{ $meta ?? '' }}
 
+        @if ($headScripts = \App\Models\Setting::get('head_scripts'))
+            {!! $headScripts !!}
+        @endif
+
         {{-- Self-hosted fonts --}}
         <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="stylesheet" href="/css/fonts.css">
@@ -61,13 +67,16 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans antialiased transition-colors duration-200">
+    <body class="bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-200 font-sans antialiased transition-colors duration-200">
         <x-header />
 
-        <main class="max-w-3xl mx-auto px-4 py-8 sm:px-6">
+        <main class="max-w-3xl mx-auto px-4 py-10 sm:px-6 sm:py-12">
             {{ $slot }}
         </main>
 
         <x-footer />
+
+        <x-back-to-top />
+        <x-admin-bar :editUrl="$editUrl ?? null" />
     </body>
 </html>

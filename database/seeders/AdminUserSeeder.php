@@ -17,8 +17,10 @@ class AdminUserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => env('ADMIN_EMAIL', 'admin@kopfsalat.blog')],
             [
-                'name' => env('ADMIN_NAME', 'Admin'),
+                'username' => env('ADMIN_USERNAME', 'admin'),
+                'name' => env('ADMIN_NAME', 'Administrator'),
                 'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
+                'must_change_credentials' => true,
             ]
         );
     }

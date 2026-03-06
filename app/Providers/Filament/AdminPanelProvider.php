@@ -2,15 +2,20 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
+use Filament\Actions\Action;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -18,6 +23,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Voltra\FilamentSvgAvatar\FilamentSvgAvatarPlugin;
+
+use function Filament\Support\original_request;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -28,7 +35,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(Login::class)
-            ->brandName('Kopfsalat')
+            ->passwordReset()
+            ->profile(EditProfile::class, isSimple: false)
+            ->spa()
+            ->brandName('blocc')
             ->brandLogo(fn () => view('filament.admin.logo'))
             ->brandLogoHeight('1.5rem')
             ->colors([
@@ -41,6 +51,20 @@ class AdminPanelProvider extends PanelProvider
             )
             ->plugins([
                 FilamentSvgAvatarPlugin::make(),
+            ])
+            ->globalSearchKeyBindings(['mod+k'])
+            ->navigationGroups([
+                NavigationGroup::make('Content'),
+                NavigationGroup::make('Taxonomie'),
+                NavigationGroup::make('System')->collapsed(),
+            ])
+            ->navigationItems([
+                NavigationItem::make('Mein Profil')
+                    ->icon(Heroicon::OutlinedUserCircle)
+                    ->url(fn (): string => EditProfile::getUrl())
+                    ->isActiveWhen(fn (): bool => original_request()->routeIs('filament.admin.auth.profile'))
+                    ->group('System')
+                    ->sort(-1),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -62,6 +86,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                \App\Http\Middleware\EnsureCredentialsChanged::class,
+            ])
+            ->userMenuItems([
+                'profile' => Action::make('profile')
+                    ->hidden(),
+                Action::make('visit-site')
+                    ->label('Website ansehen')
+                    ->icon(Heroicon::ArrowTopRightOnSquare)
+                    ->url(fn (): string => url('/'), shouldOpenInNewTab: true),
             ]);
     }
 }

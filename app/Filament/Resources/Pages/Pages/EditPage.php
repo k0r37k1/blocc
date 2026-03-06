@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\Pages\Pages;
 
 use App\Filament\Resources\Pages\PageResource;
+use App\Models\Page;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Icons\Heroicon;
 
 class EditPage extends EditRecord
 {
@@ -12,7 +15,17 @@ class EditPage extends EditRecord
 
     protected function getHeaderActions(): array
     {
+        /** @var Page $record */
+        $record = $this->record;
+
         return [
+            Action::make('view-on-site')
+                ->label('Auf Website ansehen')
+                ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                ->url(route('page.show', $record->slug))
+                ->openUrlInNewTab()
+                ->color('gray')
+                ->visible($record->is_published),
             DeleteAction::make(),
         ];
     }

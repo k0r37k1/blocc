@@ -13,12 +13,59 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use UnitEnum;
 
 class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Content';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        /** @var Post $record */
+        $status = $record->status;
+
+        return [
+            'Status' => $status instanceof \App\Enums\PostStatus ? $status->getLabel() : (string) $status,
+            'Category' => $record->category->name ?? '-',
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'slug', 'excerpt', 'category.name', 'tags.name'];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['category', 'tags']);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $draftCount = Post::draft()->count();
+
+        return $draftCount > 0 ? (string) $draftCount : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Drafts';
+    }
 
     public static function form(Schema $schema): Schema
     {

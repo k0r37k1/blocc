@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Setting;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -11,16 +12,21 @@ class BlogController extends Controller
     {
         $posts = Post::query()
             ->published()
-            ->with('category')
+            ->with(['category', 'media', 'author.media'])
             ->latest('published_at')
-            ->simplePaginate(10);
+            ->simplePaginate((int) Setting::get('posts_per_page', '10'));
 
         return view('blog.index', compact('posts'));
     }
 
-    public function show(Post $post): View
+    public function show(string $post): View
     {
-        $post->load(['category', 'tags', 'media']);
+        $post = Post::query()
+            ->published()
+            ->where('slug', $post)
+            ->firstOrFail();
+
+        $post->load(['category', 'tags', 'media', 'author.media']);
 
         $previousPost = Post::query()
             ->published()

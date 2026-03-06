@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Posts\Tables;
 
 use App\Enums\PostStatus;
+use App\Models\Post;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -38,7 +39,7 @@ class PostsTable
                     ->label('Published')
                     ->onColor('success')
                     ->offColor('gray')
-                    ->updateStateUsing(function ($record, $state) {
+                    ->updateStateUsing(function (Post $record, bool $state): bool {
                         $record->update([
                             'status' => $state ? PostStatus::Published : PostStatus::Draft,
                             'published_at' => $state ? ($record->published_at ?? now()) : $record->published_at,
@@ -64,6 +65,11 @@ class PostsTable
             ->filters([
                 SelectFilter::make('status')
                     ->options(PostStatus::class),
+                SelectFilter::make('category_id')
+                    ->label('Kategorie')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 EditAction::make(),

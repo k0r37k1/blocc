@@ -20,6 +20,7 @@ class DraftReminderWidget extends Widget
         return Post::draft()->count();
     }
 
+    /** @return Collection<int, Post> */
     public function getDrafts(): Collection
     {
         return Post::draft()->latest('updated_at')->limit(5)->get(['id', 'title', 'slug', 'updated_at']);

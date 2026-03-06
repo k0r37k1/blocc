@@ -61,16 +61,6 @@ class Page extends Model
     }
 
     /**
-     * Resolve route binding scoped to published pages only.
-     */
-    public function resolveRouteBinding($value, $field = null): ?self
-    {
-        return $this->published()
-            ->where($field ?? $this->getRouteKeyName(), $value)
-            ->firstOrFail();
-    }
-
-    /**
      * Accessor for ToggleColumn compatibility.
      * Maps PostStatus enum to boolean.
      */
@@ -81,6 +71,9 @@ class Page extends Model
 
     /**
      * Scope: only published pages.
+     *
+     * @param  Builder<Page>  $query
+     * @return Builder<Page>
      */
     public function scopePublished(Builder $query): Builder
     {
@@ -89,6 +82,9 @@ class Page extends Model
 
     /**
      * Scope: only drafts.
+     *
+     * @param  Builder<Page>  $query
+     * @return Builder<Page>
      */
     public function scopeDraft(Builder $query): Builder
     {

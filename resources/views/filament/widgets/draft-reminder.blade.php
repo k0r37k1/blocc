@@ -1,10 +1,14 @@
+@php
+    use Filament\Support\Icons\Heroicon;
+@endphp
+
 <x-filament-widgets::widget>
     <x-filament::section>
         @if ($this->getDraftCount() > 0)
             <div class="space-y-3">
                 <div class="flex items-center gap-x-2">
                     <x-filament::icon
-                        icon="heroicon-m-pencil-square"
+                        :icon="Heroicon::PencilSquare"
                         class="h-5 w-5 text-warning-500"
                     />
                     <h3 class="text-base font-semibold text-gray-950 dark:text-white">
@@ -33,7 +37,7 @@
         @else
             <div class="flex items-center gap-x-2">
                 <x-filament::icon
-                    icon="heroicon-m-check-circle"
+                    :icon="Heroicon::CheckCircle"
                     class="h-5 w-5 text-success-500"
                 />
                 <p class="text-sm text-gray-500 dark:text-gray-400">

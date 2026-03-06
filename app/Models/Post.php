@@ -12,12 +12,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * @property \Illuminate\Support\Carbon $published_at
+ */
 class Post extends Model implements HasMedia, HasRichContent
 {
     /** @use HasFactory<\Database\Factories\PostFactory> */
@@ -28,6 +32,14 @@ class Post extends Model implements HasMedia, HasRichContent
 
     protected static function booted(): void
     {
+        static::creating(function (Post $post): void {
+            if ($post->user_id === null && Auth::check()) {
+                /** @var int<0, max> $id */
+                $id = Auth::id();
+                $post->user_id = $id;
+            }
+        });
+
         static::saving(function (Post $post): void {
             // Process body through content pipeline (sanitize, highlight, anchors)
             if ($post->isDirty('body') && filled($post->body)) {
@@ -42,7 +54,9 @@ class Post extends Model implements HasMedia, HasRichContent
             // Calculate reading time from raw body (200 wpm, minimum 1 minute)
             $sourceBody = $post->body_raw ?? $post->body ?? '';
             $wordCount = str_word_count(strip_tags($sourceBody));
-            $post->reading_time = (int) max(1, ceil($wordCount / 200));
+            /** @var int<0, max> $readingTime */
+            $readingTime = (int) max(1, ceil($wordCount / 200));
+            $post->reading_time = $readingTime;
 
             // Auto-generate excerpt if not manually set
             if (blank($post->excerpt) && filled($post->body_raw ?? $post->body)) {
@@ -65,6 +79,7 @@ class Post extends Model implements HasMedia, HasRichContent
         'status',
         'published_at',
         'category_id',
+        'user_id',
         'excerpt',
         'reading_time',
         'featured_image_alt',
@@ -84,11 +99,19 @@ class Post extends Model implements HasMedia, HasRichContent
         ];
     }
 
+    /** @return BelongsTo<User, $this> */
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /** @return BelongsTo<Category, $this> */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    /** @return BelongsToMany<Tag, $this> */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
@@ -129,16 +152,6 @@ class Post extends Model implements HasMedia, HasRichContent
     }
 
     /**
-     * Resolve route binding scoped to published posts only.
-     */
-    public function resolveRouteBinding($value, $field = null): ?self
-    {
-        return $this->published()
-            ->where($field ?? $this->getRouteKeyName(), $value)
-            ->firstOrFail();
-    }
-
-    /**
      * Accessor for ToggleColumn compatibility.
      * Maps PostStatus enum to boolean.
      */
@@ -149,6 +162,9 @@ class Post extends Model implements HasMedia, HasRichContent
 
     /**
      * Scope: only published posts.
+     *
+     * @param  Builder<Post>  $query
+     * @return Builder<Post>
      */
     public function scopePublished(Builder $query): Builder
     {
@@ -157,6 +173,9 @@ class Post extends Model implements HasMedia, HasRichContent
 
     /**
      * Scope: only drafts.
+     *
+     * @param  Builder<Post>  $query
+     * @return Builder<Post>
      */
     public function scopeDraft(Builder $query): Builder
     {

@@ -1,0 +1,27 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    paths:
+        - app/
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    excludePaths:
+        - app/Providers/
+    ignoreErrors:
+        # Spatie Media Library conversion methods are called via __call
+        - '#Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver::nonQueued#'
+        # Eloquent dynamic scopes and methods via __call
+        - '#Dynamic call to static method Illuminate\\Database\\Eloquent\\Builder<.*>::(published|draft|count|limit|latest|simplePaginate|with)\(\)#'
+        # Filament v4 accepts int for image resize despite string|null type hint
+        - identifier: argument.type
+          path: app/Filament/Resources/Posts/Schemas/PostForm.php
+          count: 1
+        # DOMDocument iteration returns DOMElement but typed as DOMNode
+        - '#DOMNameSpaceNode\|DOMNode#'
+        # Eloquent model dynamic properties accessed in Filament table closures
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$published_at#'
+        # Filament afterStateHydrated: $record is null on create pages, nullsafe is intentional
+        - identifier: nullsafe.neverNull
+          path: app/Filament/Resources/*/Schemas/*Form.php

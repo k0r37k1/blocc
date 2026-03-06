@@ -3,12 +3,14 @@
 namespace App\Filament\Resources\Pages\Tables;
 
 use App\Enums\PostStatus;
+use App\Models\Page;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -30,7 +32,7 @@ class PagesTable
                     ->label('Published')
                     ->onColor('success')
                     ->offColor('gray')
-                    ->updateStateUsing(function ($record, $state) {
+                    ->updateStateUsing(function (Page $record, bool $state): bool {
                         $record->update([
                             'status' => $state ? PostStatus::Published : PostStatus::Draft,
                             'published_at' => $state ? ($record->published_at ?? now()) : $record->published_at,
@@ -44,7 +46,8 @@ class PagesTable
             ])
             ->defaultSort('title', 'asc')
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options(PostStatus::class),
             ])
             ->recordActions([
                 EditAction::make(),

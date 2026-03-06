@@ -13,12 +13,35 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use UnitEnum;
 
 class PageResource extends Resource
 {
     protected static ?string $model = Page::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocument;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Content';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        /** @var Page $record */
+        $status = $record->status;
+
+        return [
+            'Status' => $status instanceof \App\Enums\PostStatus ? $status->getLabel() : (string) $status,
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'slug'];
+    }
 
     public static function form(Schema $schema): Schema
     {

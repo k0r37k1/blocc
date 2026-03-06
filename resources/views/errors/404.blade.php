@@ -6,7 +6,7 @@
             ->get(['title', 'slug', 'published_at']);
     @endphp
 
-    <div class="flex flex-col items-center justify-center text-center" style="min-height: 50vh;">
+    <div class="flex flex-col items-center justify-center text-center min-h-[50vh]">
         <p class="text-6xl font-bold text-neutral-300 dark:text-neutral-700 select-none">
             404
         </p>

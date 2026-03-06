@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Filament\Resources\Posts\PostResource;
 use App\Models\Page;
 use App\Models\Post;
+use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -19,22 +20,22 @@ class BlogStatsOverview extends StatsOverviewWidget
         return [
             Stat::make('Published Posts', Post::published()->count())
                 ->description('New Post')
-                ->descriptionIcon('heroicon-m-document-check')
+                ->descriptionIcon(Heroicon::DocumentCheck)
                 ->color('success')
                 ->url(PostResource::getUrl('create')),
             Stat::make('Drafts', Post::draft()->count())
                 ->description('In progress')
-                ->descriptionIcon('heroicon-m-pencil-square')
+                ->descriptionIcon(Heroicon::PencilSquare)
                 ->color('warning'),
             Stat::make('Pages', Page::count())
                 ->description('Static pages')
-                ->descriptionIcon('heroicon-m-document-duplicate')
+                ->descriptionIcon(Heroicon::DocumentDuplicate)
                 ->color('info'),
-            Stat::make('Last Published', $latestPublished?->published_at?->diffForHumans() ?? 'Never')
+            Stat::make('Last Published', $latestPublished !== null ? $latestPublished->published_at->diffForHumans() : 'Never')
                 ->description('View latest')
-                ->descriptionIcon('heroicon-m-clock')
+                ->descriptionIcon(Heroicon::Clock)
                 ->color('gray')
-                ->url($latestPublished ? PostResource::getUrl('edit', ['record' => $latestPublished]) : null),
+                ->url($latestPublished !== null ? PostResource::getUrl('edit', ['record' => $latestPublished]) : null),
         ];
     }
 }

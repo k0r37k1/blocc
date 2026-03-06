@@ -17,6 +17,11 @@
     --color-accent: #16a34a;
 }
 
+/* Softer accent in dark mode for better readability */
+.dark {
+    --color-accent: #4ade80;
+}
+
 /* Smooth scrolling for anchor links */
 html {
     scroll-behavior: smooth;

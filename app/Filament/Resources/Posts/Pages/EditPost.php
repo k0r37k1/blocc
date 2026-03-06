@@ -2,9 +2,15 @@
 
 namespace App\Filament\Resources\Posts\Pages;
 
+use App\Enums\PostStatus;
 use App\Filament\Resources\Posts\PostResource;
+use App\Models\Post;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Str;
 
 class EditPost extends EditRecord
 {
@@ -12,7 +18,40 @@ class EditPost extends EditRecord
 
     protected function getHeaderActions(): array
     {
+        /** @var Post $record */
+        $record = $this->record;
+
         return [
+            Action::make('duplicate')
+                ->label('Duplizieren')
+                ->icon(Heroicon::OutlinedDocumentDuplicate)
+                ->color('gray')
+                ->requiresConfirmation()
+                ->modalHeading('Beitrag duplizieren')
+                ->modalDescription('Es wird eine Kopie als Entwurf erstellt.')
+                ->action(function () use ($record): void {
+                    $newPost = $record->replicate(['published_at']);
+                    $newPost->title = $record->title.' (Kopie)';
+                    $newPost->slug = Str::slug($newPost->title);
+                    $newPost->status = PostStatus::Draft; /** @phpstan-ignore assign.propertyType */
+                    $newPost->save();
+
+                    $newPost->tags()->sync($record->tags->pluck('id'));
+
+                    Notification::make()
+                        ->title('Beitrag dupliziert')
+                        ->success()
+                        ->send();
+
+                    $this->redirect(PostResource::getUrl('edit', ['record' => $newPost]));
+                }),
+            Action::make('view-on-site')
+                ->label('Auf Website ansehen')
+                ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                ->url(route('blog.show', $record->slug))
+                ->openUrlInNewTab()
+                ->color('gray')
+                ->visible($record->is_published),
             DeleteAction::make(),
         ];
     }
