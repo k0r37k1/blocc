@@ -35,10 +35,11 @@
                 </ul>
             </div>
         @else
-            <div class="flex items-center gap-x-2">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
                 <x-filament::icon
                     :icon="Heroicon::CheckCircle"
                     class="h-5 w-5 text-success-500"
+                    style="flex-shrink: 0;"
                 />
                 <p class="text-sm text-gray-500 dark:text-gray-400">
                     {{ __('No drafts. All caught up!') }}
