@@ -21,6 +21,10 @@ class ContentSecurityPolicy
             return $response;
         }
 
+        if (app()->environment('local')) {
+            return $response;
+        }
+
         $csp = $request->is('admin/*') || $request->is('admin')
             ? $this->adminPolicy()
             : $this->publicPolicy();

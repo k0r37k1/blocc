@@ -19,19 +19,12 @@ class BlogStatsOverview extends StatsOverviewWidget
 
         return [
             Stat::make(__('Published Posts'), Post::published()->count())
-                ->description(__('New Post'))
-                ->descriptionIcon(Heroicon::DocumentCheck)
-                ->color('success')
-                ->url(PostResource::getUrl('create')),
+                ->color('success'),
             Stat::make(__('Drafts'), Post::draft()->count())
-                ->description(__('In progress'))
-                ->descriptionIcon(Heroicon::PencilSquare)
                 ->color('warning'),
             Stat::make(__('Pages'), Page::count())
-                ->description(__('Static pages'))
-                ->descriptionIcon(Heroicon::DocumentDuplicate)
                 ->color('info'),
-            Stat::make(__('Last Published'), $latestPublished !== null ? $latestPublished->published_at->diffForHumans() : __('Never'))
+            Stat::make(__('Last Published'), $latestPublished !== null ? $latestPublished->published_at->diffForHumans(short: true) : __('Never'))
                 ->description(__('View latest'))
                 ->descriptionIcon(Heroicon::Clock)
                 ->color('gray')

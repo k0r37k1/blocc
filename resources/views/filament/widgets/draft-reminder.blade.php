@@ -27,7 +27,7 @@
                                     {{ $draft->title }}
                                 </span>
                                 <span class="text-xs text-gray-500 dark:text-gray-400">
-                                    {{ $draft->updated_at->diffForHumans() }}
+                                    {{ $draft->updated_at->diffForHumans(short: true) }}
                                 </span>
                             </a>
                         </li>
