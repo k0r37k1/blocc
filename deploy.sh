@@ -20,11 +20,6 @@ git pull origin main
 echo "==> Installing Composer dependencies..."
 composer install --no-dev --optimize-autoloader --no-interaction
 
-# Install/update Node dependencies and build assets
-echo "==> Building frontend assets..."
-npm ci --production=false
-npm run build
-
 # Run migrations
 if [[ "$FRESH" == true ]]; then
     echo "==> Running FRESH migrations + seed..."
