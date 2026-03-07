@@ -80,6 +80,17 @@ Then seed the database:
 php artisan db:seed
 ```
 
+### Default Login
+
+After seeding, log in at `/admin` with:
+
+| Field | Value |
+|-------|-------|
+| Username | `admin` |
+| Password | `changeme` |
+
+You will be prompted to change your password on first login.
+
 ## Development
 
 ```bash
