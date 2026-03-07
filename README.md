@@ -87,7 +87,7 @@ After seeding, log in at `/admin` with:
 | Field | Value |
 |-------|-------|
 | Username | `admin` |
-| Password | `changeme` |
+| Password | `password` |
 
 You will be prompted to change your password on first login.
 

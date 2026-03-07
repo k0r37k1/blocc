@@ -16,6 +16,15 @@
     $resolvedOgImage = $ogImage ?? asset('images/og-default.png');
     $resolvedCanonicalUrl = $canonicalUrl ?? url()->current();
     $twitterCard = $ogImage ? 'summary_large_image' : 'summary';
+
+    $accentColor = \App\Models\Setting::get('accent_color', '#16a34a');
+    $accentColorDark = \App\Models\Setting::get('accent_color_dark', '#4ade80');
+    $headingFontKey = \App\Models\Setting::get('heading_font', 'Inter');
+    $bodyFontKey = \App\Models\Setting::get('body_font', 'Inter');
+    $fontStacks = config('appearance.fonts');
+    $headingFontStack = $fontStacks[$headingFontKey] ?? $fontStacks['Inter'];
+    $bodyFontStack = $fontStacks[$bodyFontKey] ?? $fontStacks['Inter'];
+    $favicon = \App\Models\Setting::get('favicon');
 @endphp
 
 <!DOCTYPE html>
@@ -43,6 +52,11 @@
         <meta name="twitter:description" content="{{ $resolvedOgDescription }}">
         <meta name="twitter:image" content="{{ $resolvedOgImage }}">
 
+        {{-- Favicon --}}
+        @if ($favicon)
+            <link rel="icon" href="{{ asset('storage/' . $favicon) }}">
+        @endif
+
         {{-- RSS auto-discovery --}}
         <link rel="alternate" type="application/rss+xml" title="{{ config('app.name') }}" href="{{ url('/feed') }}">
 
@@ -66,8 +80,20 @@
         </script>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        {{-- Dynamic appearance overrides from settings --}}
+        <style>
+            :root {
+                --color-accent: {{ $accentColor }};
+                --font-sans: {!! $bodyFontStack !!};
+                --font-heading: {!! $headingFontStack !!};
+            }
+            .dark {
+                --color-accent: {{ $accentColorDark }};
+            }
+        </style>
     </head>
-    <body class="bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-200 font-sans antialiased transition-colors duration-200">
+    <body class="text-neutral-900 dark:text-neutral-200 font-sans antialiased transition-colors duration-200" style="background-color: var(--color-bg)">
         {{-- Skip to content (WCAG 2.4.1) --}}
         <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-white focus:outline-none">
             {{ __('Skip to content') }}

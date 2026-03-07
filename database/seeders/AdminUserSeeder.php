@@ -19,8 +19,12 @@ class AdminUserSeeder extends Seeder
             [
                 'username' => env('ADMIN_USERNAME', 'admin'),
                 'name' => env('ADMIN_NAME', 'Administrator'),
-                'password' => Hash::make(env('ADMIN_PASSWORD', 'changeme')),
-                'must_change_credentials' => true,
+                'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
+                'bio' => 'Blogger, Entwickler und Salatliebhaber. Schreibt über Technik, Code und alles dazwischen.',
+                'website' => 'https://kopfsalat.blog',
+                'social_github' => 'https://github.com/kopfsalat',
+                'social_twitter' => 'https://x.com/kopfsalat',
+                'must_change_credentials' => false,
             ]
         );
     }

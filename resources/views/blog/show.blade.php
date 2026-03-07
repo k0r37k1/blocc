@@ -106,7 +106,7 @@
     </article>
 
     @if ($post->author)
-        <div class="mt-14 rounded-xl bg-neutral-100/60 p-6 dark:bg-neutral-900">
+        <div class="mt-14 rounded-xl p-6" style="background-color: var(--color-card)">
             <div class="flex flex-col sm:flex-row items-start gap-4">
                 @if ($post->author->getFirstMediaUrl('avatar'))
                     <img

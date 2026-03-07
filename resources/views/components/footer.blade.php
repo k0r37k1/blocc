@@ -2,14 +2,15 @@
     $blogName = \App\Models\Setting::get('blog_name', config('app.name'));
     $footerText = \App\Models\Setting::get('footer_text');
 
-    $socials = collect([
-        'website' => \App\Models\Setting::get('social_website'),
-        'github' => \App\Models\Setting::get('social_github'),
-        'twitter' => \App\Models\Setting::get('social_twitter'),
-        'linkedin' => \App\Models\Setting::get('social_linkedin'),
-        'instagram' => \App\Models\Setting::get('social_instagram'),
-        'bluesky' => \App\Models\Setting::get('social_bluesky'),
-    ])->filter();
+    $owner = \App\Models\User::first();
+    $socials = $owner ? collect([
+        'website' => $owner->website,
+        'github' => $owner->social_github,
+        'twitter' => $owner->social_twitter,
+        'linkedin' => $owner->social_linkedin,
+        'instagram' => $owner->social_instagram,
+        'bluesky' => $owner->social_bluesky,
+    ])->filter() : collect();
 @endphp
 
 <footer class="border-t border-neutral-200 dark:border-neutral-800" role="contentinfo">

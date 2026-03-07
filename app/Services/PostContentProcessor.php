@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Setting;
 use DOMDocument;
 use DOMXPath;
 use Illuminate\Support\Str;
@@ -81,6 +82,11 @@ class PostContentProcessor
         }
 
         $phiki = new Phiki;
+        $themeKey = Setting::get('code_theme', 'GitHub');
+        $themes = config('appearance.code_themes');
+        $pair = $themes[$themeKey] ?? $themes['GitHub'];
+        $lightTheme = Theme::from($pair[0]);
+        $darkTheme = Theme::from($pair[1]);
 
         foreach ($codeElements as $codeElement) {
             $preElement = $codeElement->parentNode;
@@ -99,8 +105,8 @@ class PostContentProcessor
                     code: $codeContent,
                     grammar: $grammar,
                     theme: [
-                        'light' => Theme::GithubLight,
-                        'dark' => Theme::GithubDark,
+                        'light' => $lightTheme,
+                        'dark' => $darkTheme,
                     ],
                 );
             } catch (\Throwable) {
@@ -108,8 +114,8 @@ class PostContentProcessor
                     code: $codeContent,
                     grammar: Grammar::Txt,
                     theme: [
-                        'light' => Theme::GithubLight,
-                        'dark' => Theme::GithubDark,
+                        'light' => $lightTheme,
+                        'dark' => $darkTheme,
                     ],
                 );
             }

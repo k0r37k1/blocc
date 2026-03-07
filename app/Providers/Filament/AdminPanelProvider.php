@@ -14,6 +14,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -40,8 +41,8 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('blocc Admin')
             ->brandLogo(fn () => view('filament.admin.logo'))
             ->brandLogoHeight('1.5rem')
-            ->colors([
-                'primary' => '#16a34a',
+            ->colors(fn () => [
+                'primary' => Color::hex(\App\Models\Setting::get('accent_color', '#16a34a')),
             ])
             ->font(
                 'Inter',

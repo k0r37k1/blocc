@@ -5,13 +5,16 @@ namespace App\Filament\Pages;
 use App\Models\Setting;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Form;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -97,12 +100,12 @@ class ManageSettings extends Page
             'blog_description' => Setting::get('blog_description', config('app.description', '')),
             'blog_logo' => filled(Setting::get('blog_logo')) ? [Setting::get('blog_logo')] : [],
             'posts_per_page' => Setting::get('posts_per_page', '10'),
-            'social_website' => Setting::get('social_website', ''),
-            'social_github' => Setting::get('social_github', ''),
-            'social_twitter' => Setting::get('social_twitter', ''),
-            'social_linkedin' => Setting::get('social_linkedin', ''),
-            'social_instagram' => Setting::get('social_instagram', ''),
-            'social_bluesky' => Setting::get('social_bluesky', ''),
+            'accent_color' => Setting::get('accent_color', '#16a34a'),
+            'accent_color_dark' => Setting::get('accent_color_dark', '#4ade80'),
+            'heading_font' => Setting::get('heading_font', 'Inter'),
+            'body_font' => Setting::get('body_font', 'Inter'),
+            'code_theme' => Setting::get('code_theme', 'GitHub'),
+            'favicon' => filled(Setting::get('favicon')) ? [Setting::get('favicon')] : [],
             'footer_text' => Setting::get('footer_text', ''),
             'head_scripts' => Setting::get('head_scripts', ''),
         ]);
@@ -116,68 +119,80 @@ class ManageSettings extends Page
                 Form::make([
                     Section::make(__('General'))
                         ->description(__('Basic blog configuration'))
-                        ->columns(2)
                         ->schema([
                             TextInput::make('blog_name')
                                 ->label(__('Blog Name'))
                                 ->required()
                                 ->maxLength(255),
+                            Grid::make(2)
+                                ->schema([
+                                    FileUpload::make('blog_logo')
+                                        ->label(__('Blog Logo'))
+                                        ->helperText(__('Shown in the header next to the blog name. Recommended: PNG or SVG with transparent background.'))
+                                        ->image()
+                                        ->disk('public')
+                                        ->directory('logo')
+                                        ->maxSize(512),
+                                    FileUpload::make('favicon')
+                                        ->label(__('Favicon'))
+                                        ->helperText(__('Browser tab icon. Recommended: 32x32px PNG or ICO.'))
+                                        ->image()
+                                        ->disk('public')
+                                        ->directory('favicon')
+                                        ->maxSize(128)
+                                        ->acceptedFileTypes(['image/png', 'image/x-icon', 'image/svg+xml', 'image/vnd.microsoft.icon'])
+                                        ->imageCropAspectRatio('1:1'),
+                                ]),
                             Textarea::make('blog_description')
                                 ->label(__('Blog Description'))
                                 ->helperText(__('Used in meta tags and RSS feed.'))
                                 ->rows(2)
-                                ->maxLength(300)
-                                ->columnSpanFull(),
-                            FileUpload::make('blog_logo')
-                                ->label(__('Blog Logo'))
-                                ->helperText(__('Shown in the header next to the blog name. Recommended: PNG or SVG with transparent background.'))
-                                ->image()
-                                ->disk('public')
-                                ->directory('logo')
-                                ->maxSize(512)
-                                ->imagePreviewHeight('80')
-                                ->columnSpanFull(),
+                                ->maxLength(300),
+                        ]),
+                    Section::make(__('Appearance'))
+                        ->description(__('Colors, fonts, and code style.'))
+                        ->columns(2)
+                        ->schema([
+                            ColorPicker::make('accent_color')
+                                ->label(__('Accent Color'))
+                                ->helperText(__('Primary color for links, buttons, and highlights (light mode).'))
+                                ->required(),
+                            ColorPicker::make('accent_color_dark')
+                                ->label(__('Accent Color (Dark Mode)'))
+                                ->helperText(__('Lighter variant used in dark mode for better readability.')),
+                            Select::make('heading_font')
+                                ->label(__('Heading Font'))
+                                ->helperText(__('Font used for headings (h1-h6).'))
+                                ->options(array_combine(
+                                    array_keys(config('appearance.fonts')),
+                                    array_keys(config('appearance.fonts')),
+                                ))
+                                ->native(false)
+                                ->required(),
+                            Select::make('body_font')
+                                ->label(__('Body Font'))
+                                ->helperText(__('Font used for body text and navigation.'))
+                                ->options(array_combine(
+                                    array_keys(config('appearance.fonts')),
+                                    array_keys(config('appearance.fonts')),
+                                ))
+                                ->native(false)
+                                ->required(),
+                            Select::make('code_theme')
+                                ->label(__('Code Theme'))
+                                ->helperText(__('Syntax highlighting theme for code blocks (light & dark).'))
+                                ->options(array_combine(
+                                    array_keys(config('appearance.code_themes')),
+                                    array_keys(config('appearance.code_themes')),
+                                ))
+                                ->native(false)
+                                ->required(),
                             TextInput::make('posts_per_page')
                                 ->label(__('Posts per Page'))
                                 ->numeric()
                                 ->minValue(1)
                                 ->maxValue(50)
                                 ->default(10),
-                        ]),
-                    Section::make(__('Social Links'))
-                        ->description(__('Full URLs including https://'))
-                        ->columns(2)
-                        ->schema([
-                            TextInput::make('social_website')
-                                ->label(__('Website'))
-                                ->url()
-                                ->placeholder('https://example.com')
-                                ->maxLength(255),
-                            TextInput::make('social_github')
-                                ->label(__('GitHub'))
-                                ->url()
-                                ->placeholder('https://github.com/username')
-                                ->maxLength(255),
-                            TextInput::make('social_twitter')
-                                ->label(__('X / Twitter'))
-                                ->url()
-                                ->placeholder('https://x.com/username')
-                                ->maxLength(255),
-                            TextInput::make('social_linkedin')
-                                ->label(__('LinkedIn'))
-                                ->url()
-                                ->placeholder('https://linkedin.com/in/username')
-                                ->maxLength(255),
-                            TextInput::make('social_instagram')
-                                ->label(__('Instagram'))
-                                ->url()
-                                ->placeholder('https://instagram.com/username')
-                                ->maxLength(255),
-                            TextInput::make('social_bluesky')
-                                ->label(__('Bluesky'))
-                                ->url()
-                                ->placeholder('https://bsky.app/profile/username')
-                                ->maxLength(255),
                         ]),
                     Section::make(__('Footer & Scripts'))
                         ->description(__('Custom footer text and head scripts'))
@@ -209,12 +224,14 @@ class ManageSettings extends Page
     {
         $data = $this->form->getState();
 
-        $logo = $data['blog_logo'] ?? [];
-        if (is_array($logo)) {
-            $first = reset($logo);
-            $data['blog_logo'] = $first !== false ? $first : null;
-        } else {
-            $data['blog_logo'] = $logo;
+        foreach (['blog_logo', 'favicon'] as $fileField) {
+            $file = $data[$fileField] ?? [];
+            if (is_array($file)) {
+                $first = reset($file);
+                $data[$fileField] = $first !== false ? $first : null;
+            } else {
+                $data[$fileField] = $file;
+            }
         }
 
         Setting::setMany($data);
