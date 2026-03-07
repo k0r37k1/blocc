@@ -19,7 +19,7 @@ class AdminUserSeeder extends Seeder
             [
                 'username' => env('ADMIN_USERNAME', 'admin'),
                 'name' => env('ADMIN_NAME', 'Administrator'),
-                'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
+                'password' => Hash::make(env('ADMIN_PASSWORD', 'changeme')),
                 'must_change_credentials' => true,
             ]
         );
