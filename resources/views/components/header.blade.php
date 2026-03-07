@@ -5,17 +5,16 @@
 
 <header>
     <nav x-data="{ open: false }" class="max-w-3xl mx-auto px-4 sm:px-6" aria-label="{{ __('Main navigation') }}">
-        <div class="flex items-center justify-between h-16">
+        <div class="flex items-center h-16">
             {{-- Brand --}}
-            <a href="{{ route('blog.index') }}" class="flex items-center gap-2 text-base font-semibold tracking-wide text-neutral-900 dark:text-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
-                @if ($logo = \App\Models\Setting::get('blog_logo'))
+            @if ($logo = \App\Models\Setting::get('blog_logo'))
+                <a href="{{ route('blog.index') }}" class="mr-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
                     <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('blog_name', config('app.name')) }}" class="h-8 w-auto">
-                @endif
-                <span>{{ \App\Models\Setting::get('blog_name', config('app.name')) }}</span>
-            </a>
+                </a>
+            @endif
 
             {{-- Desktop nav --}}
-            <div class="hidden sm:flex items-center gap-6">
+            <div class="hidden sm:flex items-center gap-6 ml-auto">
                 <a href="{{ route('blog.index') }}" class="{{ $currentRoute === 'blog.index' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Blog') }}</a>
                 <a href="{{ route('page.show', 'ueber-mich') }}" class="{{ $currentRoute === 'page.show' && request()->route('page') === 'ueber-mich' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('About me') }}</a>
                 <a href="{{ route('archive') }}" class="{{ $currentRoute === 'archive' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Archive') }}</a>
@@ -24,7 +23,7 @@
                 <span class="h-5 w-px bg-neutral-300 dark:bg-neutral-700" aria-hidden="true"></span>
 
                 {{-- Utility group: Dark mode + Language --}}
-                <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1 -ml-2">
                     {{-- Dark mode toggle --}}
                     <button
                         x-data="{ dark: document.documentElement.classList.contains('dark'), spinning: false }"
@@ -63,7 +62,7 @@
             </div>
 
             {{-- Mobile controls --}}
-            <div class="flex items-center sm:hidden gap-1">
+            <div class="flex items-center sm:hidden gap-1 ml-auto">
                 {{-- Mobile dark mode toggle --}}
                 <button
                     x-data="{ dark: document.documentElement.classList.contains('dark'), spinning: false }"
