@@ -40,22 +40,40 @@ ADMIN_PASSWORD=ein-sicheres-passwort
 
 Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
 
-| Weglassen | Grund |
-|-----------|-------|
-| `node_modules/` | Wird auf dem Server nicht gebraucht |
-| `.git/` | Versionierung |
-| `.github/` | CI/CD |
+**Muss mit:**
+
+| Ordner/Datei | Grund |
+|--------------|-------|
+| `app/` | Anwendungscode |
+| `bootstrap/` | App-Bootstrap und Cache |
+| `config/` | Konfiguration |
+| `database/database.sqlite` | Die Datenbank |
+| `lang/` | Uebersetzungen |
+| `public/` | Web-Root (inkl. `build/`) |
+| `resources/views/` | Blade-Templates |
+| `routes/` | Routen |
+| `storage/` | Logs, Cache, Uploads |
+| `vendor/` | PHP-Dependencies |
+| `.env` | Umgebungskonfiguration |
+| `artisan` | Laravel CLI |
+| `composer.json`, `composer.lock` | Dependency-Definition |
+
+**Weglassen:**
+
+| Ordner/Datei | Grund |
+|--------------|-------|
+| `node_modules/` | Build-Tool, nicht noetig |
+| `resources/css/`, `resources/js/` | Quellcode, Build ist in `public/build/` |
+| `tests/` | Nur Entwicklung |
+| `.git/`, `.github/` | Versionierung/CI |
 | `.claude/`, `.planning/`, `.junie/` | Entwicklungstools |
-| `tests/` | Nur fuer Entwicklung |
 | `docs/` | Dokumentation |
-| `.env.example` | Konfiguration ist bereits in `.env` |
-| `CLAUDE.md`, `INSTALL`, `README.md`, `LICENSE` | Dokumentation |
+| `package.json`, `package-lock.json`, `vite.config.js` | Node.js/Build |
 | `biome.json`, `phpstan.neon`, `phpunit.xml` | Dev-Konfiguration |
 | `.editorconfig`, `.gitattributes`, `.gitignore` | Dev-Konfiguration |
 | `.mcp.json`, `boost.json` | Dev-Tools |
-| `package.json`, `package-lock.json`, `vite.config.js` | Node.js/Build (nicht noetig) |
-
-Alles andere muss mit — insbesondere `vendor/`, `public/build/`, `database/database.sqlite` und `.env`.
+| `.env.example` | Vorlage, nicht noetig |
+| `CLAUDE.md`, `INSTALL`, `README.md`, `LICENSE` | Dokumentation |
 
 ### 4. Document Root
 
