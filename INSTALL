@@ -38,7 +38,17 @@ ADMIN_PASSWORD=ein-sicheres-passwort
 
 ### 3. Hochladen
 
-Kompletten Ordner per FTP/SFTP auf den Server laden.
+Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
+
+| Weglassen | Grund |
+|-----------|-------|
+| `node_modules/` | Wird auf dem Server nicht gebraucht |
+| `.git/` | Nur fuer Entwicklung |
+| `tests/` | Nur fuer Entwicklung |
+| `.env.example` | Konfiguration ist bereits in `.env` |
+| `.github/` | CI/CD, nicht relevant |
+
+Alles andere muss mit — insbesondere `vendor/`, `public/build/`, `database/database.sqlite` und `.env`.
 
 ### 4. Document Root
 
