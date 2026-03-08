@@ -1,4 +1,4 @@
-# Deployment auf Shared Hosting
+# Installation
 
 ## Voraussetzungen
 
