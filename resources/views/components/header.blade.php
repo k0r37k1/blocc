@@ -3,7 +3,7 @@
     $currentLocale = app()->getLocale();
 @endphp
 
-<header>
+<header class="border-b border-neutral-100 dark:border-neutral-900">
     <nav x-data="{ open: false }" class="max-w-3xl mx-auto px-4 sm:px-6" aria-label="{{ __('Main navigation') }}">
         <div class="flex items-center h-16">
             {{-- Brand --}}
