@@ -1,5 +1,9 @@
 @props(['post', 'index' => 0])
 
+@php
+    $commentsEnabled = \App\Models\Setting::get('comments_enabled', '1') === '1' && filled(\App\Models\Setting::get('cusdis_app_id'));
+@endphp
+
 <article
     x-data
     x-intersect.once="$el.classList.add('revealed')"
@@ -39,6 +43,19 @@
                 >
                     {{ $post->category->name }}
                 </a>
+            @endif
+
+            @if ($commentsEnabled)
+                <span
+                    x-data="commentCount('{{ \App\Models\Setting::get('cusdis_app_id') }}', '{{ $post->slug }}')"
+                    x-show="count !== null"
+                    x-cloak
+                >
+                    <span>&middot;</span>
+                    <a href="{{ route('blog.show', $post) }}#comments" class="hover:text-accent transition-colors">
+                        <span x-text="count === 1 ? '{{ __('1 comment') }}' : count + ' {{ __('comments') }}'"></span>
+                    </a>
+                </span>
             @endif
         </div>
 

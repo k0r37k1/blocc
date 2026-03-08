@@ -151,6 +151,9 @@
         </div>
     @endif
 
+    {{-- Comments --}}
+    <x-comments :post="$post" />
+
     @if ($previousPost || $nextPost)
         <nav class="mt-14 pt-8 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-2 gap-4" aria-label="{{ __('Post navigation') }}">
             <div>

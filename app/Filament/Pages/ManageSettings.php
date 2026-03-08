@@ -10,6 +10,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
@@ -106,6 +107,8 @@ class ManageSettings extends Page
             'body_font' => Setting::get('body_font', 'Inter'),
             'code_theme' => Setting::get('code_theme', 'GitHub'),
             'favicon' => filled(Setting::get('favicon')) ? [Setting::get('favicon')] : [],
+            'comments_enabled' => Setting::get('comments_enabled', '1') === '1',
+            'cusdis_app_id' => Setting::get('cusdis_app_id', ''),
             'footer_text' => Setting::get('footer_text', ''),
             'head_scripts' => Setting::get('head_scripts', ''),
         ]);
@@ -194,6 +197,19 @@ class ManageSettings extends Page
                                 ->maxValue(50)
                                 ->default(10),
                         ]),
+                    Section::make(__('Comments'))
+                        ->description(__('Enable or disable comments on blog posts.'))
+                        ->schema([
+                            Toggle::make('comments_enabled')
+                                ->label(__('Enable Comments'))
+                                ->helperText(__('When disabled, the comment section is hidden on all blog posts.'))
+                                ->live(),
+                            TextInput::make('cusdis_app_id')
+                                ->label(__('Cusdis App ID'))
+                                ->helperText(__('Your Cusdis App ID from cusdis.com. Required for comments to work.'))
+                                ->placeholder('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')
+                                ->visible(fn ($get): bool => (bool) $get('comments_enabled')),
+                        ]),
                     Section::make(__('Footer & Scripts'))
                         ->description(__('Custom footer text and head scripts'))
                         ->schema([
@@ -233,6 +249,8 @@ class ManageSettings extends Page
                 $data[$fileField] = $file;
             }
         }
+
+        $data['comments_enabled'] = $data['comments_enabled'] ? '1' : '0';
 
         Setting::setMany($data);
 

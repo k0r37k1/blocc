@@ -109,5 +109,7 @@
 
         <x-back-to-top />
         <x-admin-bar :editUrl="$editUrl ?? null" />
+
+        @stack('scripts')
     </body>
 </html>

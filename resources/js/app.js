@@ -54,6 +54,104 @@ document.addEventListener('alpine:init', () => {
         },
     }))
 
+    // Comment count for post cards
+    Alpine.data('commentCount', (appId, pageId) => ({
+        count: null,
+        async init() {
+            try {
+                const res = await fetch(
+                    `https://cusdis.com/api/open/comments?appId=${appId}&pageId=${pageId}&page=1`
+                );
+                const json = await res.json();
+                this.count = json.data.commentCount || 0;
+            } catch (e) {
+                this.count = null;
+            }
+        },
+    }))
+
+    // Comments (Cusdis API)
+    Alpine.data('comments', (appId, pageId, pageUrl, pageTitle, messages = {}) => ({
+        items: [],
+        loading: true,
+        submitting: false,
+        page: 1,
+        pageCount: 1,
+        commentCount: 0,
+        replyingTo: null,
+        successMessage: '',
+        form: { nickname: '', email: '', content: '' },
+        replyForm: { nickname: '', email: '', content: '' },
+
+        async fetchComments() {
+            this.loading = true;
+            try {
+                const res = await fetch(
+                    `https://cusdis.com/api/open/comments?appId=${appId}&pageId=${pageId}&page=${this.page}`,
+                    { headers: { 'x-timezone-offset': String(new Date().getTimezoneOffset() / -60) } }
+                );
+                const json = await res.json();
+                this.items = json.data.data || [];
+                this.pageCount = json.data.pageCount || 1;
+                this.commentCount = json.data.commentCount || 0;
+            } catch (e) {
+                this.items = [];
+            }
+            this.loading = false;
+        },
+
+        async submitComment() {
+            this.submitting = true;
+            try {
+                await fetch('https://cusdis.com/api/open/comments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        appId, pageId, pageUrl, pageTitle,
+                        nickname: this.form.nickname,
+                        email: this.form.email,
+                        content: this.form.content,
+                    }),
+                });
+                this.successMessage = messages.commentSent || 'Comment sent!';
+                this.form.content = '';
+                setTimeout(() => this.successMessage = '', 5000);
+            } catch (e) {
+                this.successMessage = '';
+            }
+            this.submitting = false;
+        },
+
+        async submitReply(parentId) {
+            this.submitting = true;
+            try {
+                await fetch('https://cusdis.com/api/open/comments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        appId, pageId, pageUrl, pageTitle,
+                        parentId,
+                        nickname: this.replyForm.nickname,
+                        email: this.replyForm.email,
+                        content: this.replyForm.content,
+                    }),
+                });
+                this.successMessage = messages.replySent || 'Reply sent!';
+                this.replyForm = { nickname: '', email: '', content: '' };
+                this.replyingTo = null;
+                setTimeout(() => this.successMessage = '', 5000);
+            } catch (e) {
+                this.successMessage = '';
+            }
+            this.submitting = false;
+        },
+
+        formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('de-DE', { day: 'numeric', month: 'short', year: 'numeric' });
+        },
+    }))
+
     // Reading progress bar (blog posts only)
     Alpine.data('readingProgress', () => ({
         progress: 0,
