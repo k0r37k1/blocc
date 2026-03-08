@@ -53,7 +53,7 @@ Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
 | `biome.json`, `phpstan.neon`, `phpunit.xml` | Dev-Konfiguration |
 | `.editorconfig`, `.gitattributes`, `.gitignore` | Dev-Konfiguration |
 | `.mcp.json`, `boost.json` | Dev-Tools |
-| `package.json`, `package-lock.json` | Node.js (nicht noetig) |
+| `package.json`, `package-lock.json`, `vite.config.js` | Node.js/Build (nicht noetig) |
 
 Alles andere muss mit — insbesondere `vendor/`, `public/build/`, `database/database.sqlite` und `.env`.
 
