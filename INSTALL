@@ -43,10 +43,17 @@ Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
 | Weglassen | Grund |
 |-----------|-------|
 | `node_modules/` | Wird auf dem Server nicht gebraucht |
-| `.git/` | Nur fuer Entwicklung |
+| `.git/` | Versionierung |
+| `.github/` | CI/CD |
+| `.claude/`, `.planning/`, `.junie/` | Entwicklungstools |
 | `tests/` | Nur fuer Entwicklung |
+| `docs/` | Dokumentation |
 | `.env.example` | Konfiguration ist bereits in `.env` |
-| `.github/` | CI/CD, nicht relevant |
+| `CLAUDE.md`, `INSTALL`, `README.md`, `LICENSE` | Dokumentation |
+| `biome.json`, `phpstan.neon`, `phpunit.xml` | Dev-Konfiguration |
+| `.editorconfig`, `.gitattributes`, `.gitignore` | Dev-Konfiguration |
+| `.mcp.json`, `boost.json` | Dev-Tools |
+| `package.json`, `package-lock.json` | Node.js (nicht noetig) |
 
 Alles andere muss mit — insbesondere `vendor/`, `public/build/`, `database/database.sqlite` und `.env`.
 
