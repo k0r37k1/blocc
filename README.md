@@ -13,7 +13,7 @@ A minimal, fast, and opinionated blog platform built with Laravel 12 and Filamen
 | Database | SQLite (default) |
 | Media | Spatie Media Library |
 | Code Style | Laravel Pint, Biome |
-| Testing | PHPUnit 11 |
+| Testing | PHPUnit 12 |
 
 ## Features
 
