@@ -9,22 +9,35 @@
                     const btn = this.$refs.trigger;
                     const rect = btn.getBoundingClientRect();
                     const pw = 288;
-                    let left = rect.left;
-                    if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+                    let left = rect.right - pw;
                     if (left < 8) left = 8;
                     this.pickerPos = { left: left + 'px', top: (rect.top - 6) + 'px' };
                 });
             }
         }
     }"
+    x-init="
+        $nextTick(() => {
+            const richEditor = $el.closest('form')?.querySelector('.fi-fo-rich-editor');
+            if (richEditor) {
+                richEditor.style.position = 'relative';
+                $el.style.position = 'absolute';
+                $el.style.top = '0.5rem';
+                $el.style.right = '0.5rem';
+                $el.style.zIndex = '40';
+                richEditor.appendChild($el);
+            }
+        })
+    "
+    style="display: inline-block;"
 >
     <button
         type="button"
         x-ref="trigger"
         x-on:click="openPicker()"
-        style="display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 0.375rem; cursor: pointer; border: 1px solid rgba(128,128,128,0.25); background: transparent; color: rgba(128,128,128,0.6); transition: color 0.15s, border-color 0.15s;"
-        onmouseover="this.style.color='rgba(128,128,128,0.9)'; this.style.borderColor='rgba(128,128,128,0.4)'"
-        onmouseout="this.style.color='rgba(128,128,128,0.6)'; this.style.borderColor='rgba(128,128,128,0.25)'"
+        style="display: inline-flex; align-items: center; justify-content: center; padding: 0.25rem; cursor: pointer; border: none; background: transparent; color: rgba(128,128,128,0.5); transition: color 0.15s;"
+        onmouseover="this.style.color='rgba(128,128,128,0.9)'"
+        onmouseout="this.style.color='rgba(128,128,128,0.5)'"
         title="{{ __('Emojis') }}"
     >
         <svg style="width: 1.25rem; height: 1.25rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
