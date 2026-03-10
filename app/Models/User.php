@@ -61,10 +61,10 @@ class User extends Authenticatable implements FilamentUser, HasMedia
 
     /**
      * Determine if the user can access the given Filament panel.
-     * Single-user blog: any authenticated user can access.
+     * Single-user blog: only the primary admin user (ID 1) can access.
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->id === 1;
     }
 }
