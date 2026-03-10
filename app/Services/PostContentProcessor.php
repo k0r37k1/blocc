@@ -175,10 +175,10 @@ class PostContentProcessor
 
             $heading->setAttribute('id', $slug);
 
-            $anchor = $dom->createElement('a', '#');
+            $anchor = $dom->createElement('a');
             $anchor->setAttribute('href', '#'.$slug);
             $anchor->setAttribute('class', 'heading-anchor');
-            $anchor->setAttribute('aria-hidden', 'true');
+            $anchor->setAttribute('aria-label', __('Link to section'));
             $heading->insertBefore($anchor, $heading->firstChild);
         }
 

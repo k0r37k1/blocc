@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 class PageSeeder extends Seeder
 {
     /**
-     * Seed static pages: About, Impressum, Datenschutz.
+     * Seed static pages: About, Impressum, Datenschutz, Barrierefreiheit.
      */
     public function run(): void
     {
@@ -28,6 +28,11 @@ class PageSeeder extends Seeder
                 'title' => 'Datenschutz',
                 'slug' => 'datenschutz',
                 'body' => '<p>Diese Datenschutzerklaerung klaert ueber die Art, den Umfang und Zweck der Verarbeitung personenbezogener Daten auf dieser Website auf.</p>',
+            ],
+            [
+                'title' => 'Barrierefreiheit',
+                'slug' => 'barrierefreiheit',
+                'body' => '',
             ],
         ];
 

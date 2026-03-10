@@ -156,17 +156,36 @@ h3[id] {
 .heading-anchor {
     opacity: 0;
     text-decoration: none;
-    color: var(--color-accent);
-    font-weight: 400;
-    margin-left: -1.25rem;
+    margin-left: -1.5rem;
     padding-right: 0.25rem;
     transition: opacity 0.15s;
+}
+
+.heading-anchor::before {
+    content: '';
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+    background-color: var(--color-muted);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
 }
 
 h2:hover .heading-anchor,
 h3:hover .heading-anchor,
 .heading-anchor:focus {
     opacity: 1;
+}
+
+h2:hover .heading-anchor::before,
+h3:hover .heading-anchor::before,
+.heading-anchor:focus::before {
+    background-color: var(--color-accent);
 }
 
 /* ---- Prose overrides for code blocks ---- */
