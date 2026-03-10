@@ -36,14 +36,15 @@ class AppServiceProvider extends ServiceProvider
                 @endphp
                 <button
                     onclick="window.location.href = \'{{ $switchUrl }}\'"
-                    style="min-width: 2.5rem; min-height: 2.5rem;"
-                    class="inline-flex items-center justify-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                    style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 500; color: var(--fi-body-text-color, #6b7280); opacity: 0.7; transition: opacity 0.15s;"
+                    onmouseover="this.style.opacity=\'1\'"
+                    onmouseout="this.style.opacity=\'0.7\'"
                     title="{{ __(\'Language\') }}"
                 >
-                    <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg style="width: 0.875rem; height: 0.875rem; flex-shrink: 0;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z" />
                     </svg>
-                    <span class="text-xs font-medium uppercase tracking-wide">{{ $currentLocale === \'de\' ? \'EN\' : \'DE\' }}</span>
+                    <span style="text-transform: uppercase; letter-spacing: 0.05em;">{{ $currentLocale === \'de\' ? \'EN\' : \'DE\' }}</span>
                 </button>
             '),
         );
