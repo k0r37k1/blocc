@@ -249,7 +249,23 @@
                 @error('email') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
             </div>
         </div>
-        <div x-data="{ showEmojis: false }" style="position: relative;">
+        <div
+            x-data="{
+                showEmojis: false,
+                insertEmoji(emoji) {
+                    const ta = $refs.content;
+                    const start = ta.selectionStart;
+                    const end = ta.selectionEnd;
+                    ta.value = ta.value.substring(0, start) + emoji + ta.value.substring(end);
+                    ta.selectionStart = ta.selectionEnd = start + emoji.length;
+                    ta.focus();
+                    ta.dispatchEvent(new Event('input'));
+                    this.showEmojis = false;
+                }
+            }"
+            x-on:keydown.escape.window="showEmojis = false"
+            style="position: relative;"
+        >
             <textarea
                 x-ref="content"
                 wire:model="content"
@@ -266,8 +282,10 @@
                 onmouseover="this.style.color='var(--color-accent)'"
                 onmouseout="this.style.color='var(--color-muted)'"
                 title="{{ __('Emojis') }}"
+                aria-label="{{ __('Emojis') }}"
+                x-bind:aria-expanded="showEmojis.toString()"
             >
-                <svg style="width: 1.25rem; height: 1.25rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <svg style="width: 1.25rem; height: 1.25rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
                 </svg>
             </button>
@@ -276,25 +294,18 @@
                 x-show="showEmojis"
                 x-on:click.outside="showEmojis = false"
                 x-transition.opacity
-                style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10; display: grid; grid-template-columns: repeat(8, 1fr); gap: 0.125rem; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-card); background: var(--color-bg); box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10; width: 18rem; display: grid; grid-template-columns: repeat(8, 1fr); gap: 0.125rem; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-card); background: var(--color-bg); box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                role="grid"
+                aria-label="{{ __('Emoji picker') }}"
             >
-                @foreach (['👍','👎','❤️','🔥','😂','😍','🤔','😮','😢','🙏','😡','🙄','😤','💀','🤦','😬','❌','🤷','✅','💯','🎯','👏','💪','⚡','💡','🚀','⭐','🎉','👀','⚠️','📌','💬'] as $emoji)
+                @foreach (config('emojis.picker') as $emoji)
                     <button
                         type="button"
                         style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
                         onmouseover="this.style.background='var(--color-card)'"
                         onmouseout="this.style.background='transparent'"
-                        x-on:click="
-                            const ta = $refs.content;
-                            const start = ta.selectionStart;
-                            const end = ta.selectionEnd;
-                            const val = ta.value;
-                            ta.value = val.substring(0, start) + '{{ $emoji }}' + val.substring(end);
-                            ta.selectionStart = ta.selectionEnd = start + '{{ $emoji }}'.length;
-                            ta.focus();
-                            ta.dispatchEvent(new Event('input'));
-                            showEmojis = false;
-                        "
+                        x-on:click="insertEmoji('{{ $emoji }}')"
+                        aria-label="{{ $emoji }}"
                     >{{ $emoji }}</button>
                 @endforeach
             </div>
