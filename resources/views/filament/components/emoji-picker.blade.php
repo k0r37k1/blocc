@@ -32,13 +32,12 @@
         type="button"
         x-ref="trigger"
         x-on:click="openPicker()"
-        style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 500; color: var(--fi-body-text-color, #6b7280); opacity: 0.7; transition: opacity 0.15s; cursor: pointer; border: 1px solid rgba(128,128,128,0.2); background: transparent;"
+        style="display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 0.375rem; cursor: pointer; border: none; background: transparent; opacity: 0.6; transition: opacity 0.15s;"
         onmouseover="this.style.opacity='1'"
-        onmouseout="this.style.opacity='0.7'"
+        onmouseout="this.style.opacity='0.6'"
         title="{{ __('Emojis') }}"
     >
-        <span style="font-size: 1rem; line-height: 1;">😊</span>
-        <span>{{ __('Emoji') }}</span>
+        <span style="font-size: 1.125rem; line-height: 1;">😊</span>
     </button>
 
     <div
