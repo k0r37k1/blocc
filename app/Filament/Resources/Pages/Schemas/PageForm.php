@@ -7,7 +7,6 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\ViewField;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -53,10 +52,6 @@ class PageForm
                 ->afterStateHydrated(fn ($component, $record) => $component->state($record?->body_raw ?? $record?->body))
                 ->placeholder(__('Start writing...'))
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
-                ->columnSpanFull(),
-            ViewField::make('emoji_picker')
-                ->view('filament.components.emoji-picker')
-                ->dehydrated(false)
                 ->columnSpanFull(),
             Select::make('status')
                 ->options(PostStatus::class)
