@@ -295,11 +295,16 @@
             </button>
             {{-- Emoji picker --}}
             <div
+                x-show="showEmojis"
                 x-on:click.outside="showEmojis = false"
-                x-bind:style="'position:absolute;right:0;bottom:100%;margin-bottom:0.25rem;z-index:10;width:20rem;display:'+(showEmojis?'grid':'none')+';grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
-                role="grid"
-                aria-label="{{ __('Emoji picker') }}"
+                x-transition.opacity
+                style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10;"
             >
+                <div
+                    x-bind:style="'width:20rem;display:grid;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
+                    role="grid"
+                    aria-label="{{ __('Emoji picker') }}"
+                >
                 @foreach (config('emojis.picker') as $emoji)
                     <button
                         type="button"
@@ -310,6 +315,7 @@
                         aria-label="{{ $emoji }}"
                     >{{ $emoji }}</button>
                 @endforeach
+                </div>
             </div>
             @error('content') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
         </div>

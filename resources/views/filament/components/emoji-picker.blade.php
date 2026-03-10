@@ -64,20 +64,26 @@
 
     <div
         x-ref="picker"
+        x-show="showEmojis"
         x-on:click.outside="showEmojis = false"
-        x-bind:style="'position:fixed;z-index:9999;width:20rem;display:'+(showEmojis?'grid':'none')+';grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);left:'+pickerPos.left+';top:'+pickerPos.top+';transform:translateY(-100%);'"
-        role="grid"
-        aria-label="{{ __('Emoji picker') }}"
+        x-transition.opacity
+        x-bind:style="'position:fixed;z-index:9999;left:'+pickerPos.left+';top:'+pickerPos.top+';transform:translateY(-100%);'"
     >
-        @foreach (config('emojis.picker') as $emoji)
-            <button
-                type="button"
-                style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
-                x-on:mouseenter="$el.style.background = hoverBg"
-                x-on:mouseleave="$el.style.background = 'transparent'"
-                x-on:click="insertEmoji('{{ $emoji }}')"
-                aria-label="{{ $emoji }}"
-            >{{ $emoji }}</button>
-        @endforeach
+        <div
+            x-bind:style="'width:20rem;display:grid;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
+            role="grid"
+            aria-label="{{ __('Emoji picker') }}"
+        >
+            @foreach (config('emojis.picker') as $emoji)
+                <button
+                    type="button"
+                    style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
+                    x-on:mouseenter="$el.style.background = hoverBg"
+                    x-on:mouseleave="$el.style.background = 'transparent'"
+                    x-on:click="insertEmoji('{{ $emoji }}')"
+                    aria-label="{{ $emoji }}"
+                >{{ $emoji }}</button>
+            @endforeach
+        </div>
     </div>
 </div>
