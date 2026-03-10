@@ -1,7 +1,11 @@
 <div
     x-data="{
         showEmojis: false,
+        isDark: document.documentElement.classList.contains('dark'),
         pickerPos: { left: '0px', top: '0px' },
+        get pickerBg() { return this.isDark ? '#27272a' : '#fff' },
+        get pickerBorder() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' },
+        get hoverBg() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' },
         openPicker() {
             this.showEmojis = !this.showEmojis;
             if (this.showEmojis) {
@@ -63,7 +67,7 @@
         x-show="showEmojis"
         x-on:click.outside="showEmojis = false"
         x-transition.opacity
-        x-bind:style="'position:fixed;z-index:9999;width:18rem;display:grid;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid rgba(128,128,128,0.2);background:var(--fi-body-bg,#fff);box-shadow:0 4px 12px rgba(0,0,0,0.15);left:'+pickerPos.left+';top:'+pickerPos.top+';transform:translateY(-100%);'"
+        x-bind:style="'position:fixed;z-index:9999;width:18rem;display:grid;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);left:'+pickerPos.left+';top:'+pickerPos.top+';transform:translateY(-100%);'"
         role="grid"
         aria-label="{{ __('Emoji picker') }}"
     >
@@ -71,8 +75,8 @@
             <button
                 type="button"
                 style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
-                onmouseover="this.style.background='rgba(128,128,128,0.15)'"
-                onmouseout="this.style.background='transparent'"
+                x-on:mouseenter="$el.style.background = hoverBg"
+                x-on:mouseleave="$el.style.background = 'transparent'"
                 x-on:click="insertEmoji('{{ $emoji }}')"
                 aria-label="{{ $emoji }}"
             >{{ $emoji }}</button>
