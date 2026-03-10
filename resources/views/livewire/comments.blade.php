@@ -252,6 +252,10 @@
         <div
             x-data="{
                 showEmojis: false,
+                isDark: document.documentElement.classList.contains('dark'),
+                get pickerBg() { return this.isDark ? '#27272a' : '#fff' },
+                get pickerBorder() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' },
+                get hoverBg() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' },
                 insertEmoji(emoji) {
                     const ta = $refs.content;
                     const start = ta.selectionStart;
@@ -294,7 +298,7 @@
                 x-show="showEmojis"
                 x-on:click.outside="showEmojis = false"
                 x-transition.opacity
-                style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10; width: 18rem; display: grid; grid-template-columns: repeat(8, 1fr); gap: 0.125rem; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--color-card); background: var(--color-bg); box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                x-bind:style="'position:absolute;right:0;bottom:100%;margin-bottom:0.25rem;z-index:10;width:18rem;display:grid;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
                 role="grid"
                 aria-label="{{ __('Emoji picker') }}"
             >
@@ -302,8 +306,8 @@
                     <button
                         type="button"
                         style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
-                        onmouseover="this.style.background='var(--color-card)'"
-                        onmouseout="this.style.background='transparent'"
+                        x-on:mouseenter="$el.style.background = hoverBg"
+                        x-on:mouseleave="$el.style.background = 'transparent'"
                         x-on:click="insertEmoji('{{ $emoji }}')"
                         aria-label="{{ $emoji }}"
                     >{{ $emoji }}</button>
