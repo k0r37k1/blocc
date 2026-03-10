@@ -291,8 +291,8 @@
                 type="button"
                 x-on:click="showEmojis = !showEmojis"
                 style="position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.25rem; color: var(--color-muted); transition: color 0.15s;"
-                onmouseover="this.style.color='var(--color-accent)'"
-                onmouseout="this.style.color='var(--color-muted)'"
+                x-on:mouseenter="$el.style.color='var(--color-accent)'"
+                x-on:mouseleave="$el.style.color='var(--color-muted)'"
                 title="{{ __('Emojis') }}"
                 aria-label="{{ __('Emojis') }}"
                 x-bind:aria-expanded="showEmojis.toString()"
@@ -308,7 +308,7 @@
                 x-on:click.outside="showEmojis = false"
                 x-transition.opacity
                 x-bind:style="'position:absolute;right:0;bottom:100%;margin-bottom:0.25rem;z-index:10;width:20rem;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
-                role="grid"
+                role="group"
                 aria-label="{{ __('Emoji picker') }}"
             >
                 @foreach (config('emojis.picker') as $emoji)

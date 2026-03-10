@@ -19,6 +19,7 @@
                 });
             }
         },
+        destroy() { this._observer?.disconnect() },
         insertEmoji(emoji) {
             const editorEl = this.$el.closest('.fi-fo-rich-editor')?.querySelector('.tiptap.ProseMirror');
             if (editorEl?.__tiptapEditor) {
@@ -53,8 +54,8 @@
         x-ref="trigger"
         x-on:click="openPicker()"
         style="display: inline-flex; align-items: center; justify-content: center; padding: 0.25rem; cursor: pointer; border: none; background: transparent; color: rgba(128,128,128,0.5); transition: color 0.15s;"
-        onmouseover="this.style.color='rgba(128,128,128,0.9)'"
-        onmouseout="this.style.color='rgba(128,128,128,0.5)'"
+        x-on:mouseenter="$el.style.color='rgba(128,128,128,0.9)'"
+        x-on:mouseleave="$el.style.color='rgba(128,128,128,0.5)'"
         title="{{ __('Emojis') }}"
         aria-label="{{ __('Emojis') }}"
         aria-expanded="false"
@@ -72,7 +73,7 @@
         x-on:click.outside="showEmojis = false"
         x-transition.opacity
         x-bind:style="'position:fixed;z-index:9999;width:20rem;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);left:'+pickerPos.left+';top:'+pickerPos.top+';transform:translateY(-100%);'"
-        role="grid"
+        role="group"
         aria-label="{{ __('Emoji picker') }}"
     >
         @foreach (config('emojis.picker') as $emoji)
