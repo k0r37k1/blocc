@@ -64,10 +64,8 @@
 
     <div
         x-ref="picker"
-        x-show="showEmojis"
         x-on:click.outside="showEmojis = false"
-        x-transition.opacity
-        x-bind:style="'position:fixed;z-index:9999;width:18rem;display:grid;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);left:'+pickerPos.left+';top:'+pickerPos.top+';transform:translateY(-100%);'"
+        x-bind:style="'position:fixed;z-index:9999;width:20rem;display:'+(showEmojis?'grid':'none')+';grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);left:'+pickerPos.left+';top:'+pickerPos.top+';transform:translateY(-100%);'"
         role="grid"
         aria-label="{{ __('Emoji picker') }}"
     >
