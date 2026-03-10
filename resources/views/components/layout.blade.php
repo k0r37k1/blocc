@@ -95,7 +95,7 @@
     </head>
     <body class="text-neutral-900 dark:text-neutral-200 font-sans antialiased transition-colors duration-200" style="background-color: var(--color-bg)">
         {{-- Skip to content (WCAG 2.4.1) --}}
-        <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-white focus:outline-none">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-accent-bg focus:px-4 focus:py-2 focus:text-white focus:outline-none">
             {{ __('Skip to content') }}
         </a>
 

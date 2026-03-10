@@ -79,7 +79,7 @@
                             <div class="mt-2 flex items-center gap-2">
                                 <button
                                     x-on:click="saveEdit({{ $comment->id }})"
-                                    class="rounded-lg bg-accent px-4 py-1.5 text-sm font-medium text-white hover:opacity-90 transition-opacity"
+                                    class="rounded-lg bg-accent-bg px-4 py-1.5 text-sm font-medium text-white hover:opacity-90 transition-opacity"
                                 >
                                     {{ __('Save') }}
                                 </button>
@@ -157,7 +157,7 @@
                                                 <div class="mt-2 flex items-center gap-2">
                                                     <button
                                                         x-on:click="saveEdit({{ $reply->id }})"
-                                                        class="rounded-lg bg-accent px-4 py-1.5 text-sm font-medium text-white hover:opacity-90 transition-opacity"
+                                                        class="rounded-lg bg-accent-bg px-4 py-1.5 text-sm font-medium text-white hover:opacity-90 transition-opacity"
                                                     >
                                                         {{ __('Save') }}
                                                     </button>
@@ -268,7 +268,7 @@
             <button
                 type="submit"
                 wire:loading.attr="disabled"
-                class="rounded-lg bg-accent px-5 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+                class="rounded-lg bg-accent-bg px-5 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-50"
             >
                 <span wire:loading.remove wire:target="submitComment">{{ $replyingTo ? __('Reply') : __('Send') }}</span>
                 <span wire:loading wire:target="submitComment">{{ __('Sending...') }}</span>

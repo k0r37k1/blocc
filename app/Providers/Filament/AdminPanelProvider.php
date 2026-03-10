@@ -16,11 +16,13 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Voltra\FilamentSvgAvatar\FilamentSvgAvatarPlugin;
 
@@ -94,6 +96,24 @@ class AdminPanelProvider extends PanelProvider
                     ->label(fn (): string => __('Visit website'))
                     ->icon(Heroicon::ArrowTopRightOnSquare)
                     ->url(fn (): string => url('/'), shouldOpenInNewTab: true),
-            ]);
+            ])
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): HtmlString => new HtmlString(
+                    '<script>
+                        document.querySelector("nav.fi-topbar")?.setAttribute("aria-label", "'.__('Top bar').'");
+                        document.querySelector("nav.fi-sidebar-nav")?.setAttribute("aria-label", "'.__('Main navigation').'");
+                    </script>'
+                ),
+            )
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): HtmlString => new HtmlString(
+                    '<style>
+                        /* WCAG 2.2 AA: match frontend accent-bg (#15803d) for consistent button contrast */
+                        .fi-bg-color-400, .dark .fi-bg-color-600 { background-color: #15803d; }
+                    </style>'
+                ),
+            );
     }
 }

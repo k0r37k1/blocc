@@ -20,6 +20,7 @@
         "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
         monospace;
     --color-accent: #16a34a;
+    --color-accent-bg: #15803d;
     --color-bg: #ffffff;
     --color-card: #f5f5f5;
     --color-card-hover: #f5f5f4;
@@ -31,6 +32,7 @@
 /* Softer accent in dark mode for better readability */
 .dark {
     --color-accent: #4ade80;
+    --color-accent-bg: #15803d;
     --color-bg: #0a0a0a;
     --color-card: #171717;
     --color-card-hover: #171717;

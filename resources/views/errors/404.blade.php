@@ -7,7 +7,7 @@
     @endphp
 
     <div class="flex flex-col items-center justify-center text-center min-h-[50vh]">
-        <p class="text-6xl font-bold text-neutral-300 dark:text-neutral-700 select-none" aria-hidden="true">
+        <p class="text-6xl font-bold text-neutral-300 dark:text-neutral-500 select-none" aria-hidden="true">
             404
         </p>
 
@@ -15,7 +15,7 @@
             {{ __('Page not found') }}
         </h1>
 
-        <p class="mt-2 text-sm text-neutral-500">
+        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
             {{ __('Nothing but lettuce here.') }}
         </p>
 
@@ -25,7 +25,7 @@
 
         @if ($recentPosts->isNotEmpty())
             <div class="mt-12 w-full max-w-sm">
-                <p class="text-xs font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-600">
+                <p class="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
                     {{ __('Recent posts') }}
                 </p>
 

@@ -6,8 +6,8 @@ A minimal, fast, and opinionated blog platform built with Laravel 12 and Filamen
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | PHP 8.2+, Laravel 12 |
-| Admin Panel | Filament 4, Livewire 3 |
+| Backend | PHP 8.4+, Laravel 12 |
+| Admin Panel | Filament 5, Livewire 4 |
 | Frontend | Blade, Alpine.js, Tailwind CSS 4 |
 | Build Tool | Vite 7 |
 | Database | SQLite (default) |
@@ -24,13 +24,16 @@ A minimal, fast, and opinionated blog platform built with Laravel 12 and Filamen
 - Auto-generated excerpts
 - Categories with color badges and tags
 - Draft / Published workflow
+- Comment system with replies, editing, and Gravatar avatars
 - RSS feed (`/feed`) and sitemap (`/sitemap.xml`)
 - Archive view
 
 ### Admin Panel
 - Dashboard with stats overview, recent posts, and draft reminders
 - Full CRUD for posts, pages, categories, tags, and media
-- Settings page (blog name, description, social links, custom scripts)
+- Comment moderation panel
+- Appearance settings (accent colors, heading/body fonts, syntax highlighting theme, favicon, logo)
+- Settings page (blog name, tagline, description, social links, custom scripts)
 - User profile with avatar and social links (GitHub, X, LinkedIn, Instagram, Bluesky)
 - Username-based login with forced password change on first login
 
@@ -47,10 +50,11 @@ A minimal, fast, and opinionated blog platform built with Laravel 12 and Filamen
 - Build output committed to repo — no Node.js required on server
 - SQLite by default — no database server needed
 - Database-backed sessions, cache, and queue
+- Shared hosting guide included (see [INSTALL](INSTALL))
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.4+
 - Composer
 - Node.js 18+ (development only)
 
@@ -71,7 +75,7 @@ Edit `.env` to set your admin credentials:
 ```env
 ADMIN_USERNAME=admin
 ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=password
+ADMIN_PASSWORD=changeme
 ```
 
 Then seed the database:
@@ -87,7 +91,7 @@ After seeding, log in at `/admin` with:
 | Field | Value |
 |-------|-------|
 | Username | `admin` |
-| Password | `password` |
+| Password | `changeme` |
 
 You will be prompted to change your password on first login.
 

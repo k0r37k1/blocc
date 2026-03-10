@@ -6,7 +6,7 @@
                     &larr; {{ __('Newer posts') }}
                 </a>
             @else
-                <span class="text-neutral-400 dark:text-neutral-600">
+                <span class="text-neutral-400 dark:text-neutral-500">
                     &larr; {{ __('Newer posts') }}
                 </span>
             @endif
@@ -18,7 +18,7 @@
                     {{ __('Older posts') }} &rarr;
                 </a>
             @else
-                <span class="text-neutral-400 dark:text-neutral-600">
+                <span class="text-neutral-400 dark:text-neutral-500">
                     {{ __('Older posts') }} &rarr;
                 </span>
             @endif
