@@ -56,8 +56,11 @@ class DashboardWidgetTest extends TestCase
     {
         $this->actingAs($this->admin);
 
-        $posts = Post::factory()->count(5)->create();
-        $latestPost = $posts->sortByDesc('updated_at')->first();
+        Post::factory()->count(4)->create();
+        $latestPost = Post::factory()->create([
+            'title' => 'Latest Test Post',
+            'updated_at' => now(),
+        ]);
 
         Livewire::test(RecentPostsWidget::class)
             ->assertSuccessful()

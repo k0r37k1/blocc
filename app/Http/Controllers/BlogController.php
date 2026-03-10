@@ -13,6 +13,7 @@ class BlogController extends Controller
         $posts = Post::query()
             ->published()
             ->with(['category', 'media', 'author.media'])
+            ->withCount('approvedComments')
             ->latest('published_at')
             ->simplePaginate((int) Setting::get('posts_per_page', '10'));
 
@@ -26,7 +27,8 @@ class BlogController extends Controller
             ->where('slug', $post)
             ->firstOrFail();
 
-        $post->load(['category', 'tags', 'media', 'author.media']);
+        $post->load(['category', 'tags', 'media', 'author.media'])
+            ->loadCount('approvedComments');
 
         $previousPost = Post::query()
             ->published()

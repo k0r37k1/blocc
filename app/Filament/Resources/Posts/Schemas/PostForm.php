@@ -9,6 +9,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -121,6 +122,10 @@ class PostForm
                 ->default(PostStatus::Draft)
                 ->required()
                 ->native(false),
+            Toggle::make('comments_enabled')
+                ->label(__('Allow Comments'))
+                ->helperText(__('Disable to hide the comment section on this post.'))
+                ->default(true),
             Placeholder::make('created_at')
                 ->label(__('Created'))
                 ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-')

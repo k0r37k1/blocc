@@ -70,6 +70,14 @@
 
             <span>&middot;</span>
             <span>{{ __(':count min read', ['count' => $post->reading_time]) }}</span>
+
+            @if (\App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled)
+                @php $commentCount = $post->approved_comments_count ?? 0; @endphp
+                <span>&middot;</span>
+                <a href="#comments" class="hover:text-accent transition-colors">
+                    {{ $commentCount > 0 ? trans_choice('{1} 1 comment|[2,*] :count comments', $commentCount, ['count' => $commentCount]) : __(':count comments', ['count' => 0]) }}
+                </a>
+            @endif
         </div>
 
         @if ($post->getFirstMediaUrl('featured-image'))
@@ -85,7 +93,7 @@
             </figure>
         @endif
 
-        <div x-data="codeBlocks">
+        <div x-data="codeBlocks" data-copy-label="{{ __('Copy code') }}" data-copied-label="{{ __('Copied!') }}">
             <x-prose class="mt-8">
                 {!! str($post->body)->sanitizeHtml() !!}
             </x-prose>
@@ -152,7 +160,9 @@
     @endif
 
     {{-- Comments --}}
-    <x-comments :post="$post" />
+    @if (\App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled)
+        <livewire:comments :post="$post" />
+    @endif
 
     @if ($previousPost || $nextPost)
         <nav class="mt-14 pt-8 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-2 gap-4" aria-label="{{ __('Post navigation') }}">

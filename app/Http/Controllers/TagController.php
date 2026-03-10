@@ -13,6 +13,7 @@ class TagController extends Controller
         $posts = $tag->posts()
             ->published()
             ->with(['category', 'media'])
+            ->withCount('approvedComments')
             ->latest('published_at')
             ->simplePaginate((int) Setting::get('posts_per_page', '10'));
 

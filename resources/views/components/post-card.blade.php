@@ -1,7 +1,8 @@
 @props(['post', 'index' => 0])
 
 @php
-    $commentsEnabled = \App\Models\Setting::get('comments_enabled', '1') === '1' && filled(\App\Models\Setting::get('cusdis_app_id'));
+    $commentsEnabled = \App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled;
+    $commentCount = $post->approved_comments_count ?? $post->approvedComments()->count();
 @endphp
 
 <article
@@ -46,16 +47,10 @@
             @endif
 
             @if ($commentsEnabled)
-                <span
-                    x-data="commentCount('{{ \App\Models\Setting::get('cusdis_app_id') }}', '{{ $post->slug }}')"
-                    x-show="count !== null"
-                    x-cloak
-                >
-                    <span>&middot;</span>
-                    <a href="{{ route('blog.show', $post) }}#comments" class="hover:text-accent transition-colors">
-                        <span x-text="count === 1 ? '{{ __('1 comment') }}' : count + ' {{ __('comments') }}'"></span>
-                    </a>
-                </span>
+                <span>&middot;</span>
+                <a href="{{ route('blog.show', $post) }}#comments" class="hover:text-accent transition-colors">
+                    {{ $commentCount > 0 ? trans_choice('{1} 1 comment|[2,*] :count comments', $commentCount, ['count' => $commentCount]) : __(':count comments', ['count' => 0]) }}
+                </a>
             @endif
         </div>
 

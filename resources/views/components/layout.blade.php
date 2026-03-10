@@ -110,6 +110,7 @@
         <x-back-to-top />
         <x-admin-bar :editUrl="$editUrl ?? null" />
 
+        @livewireScripts
         @stack('scripts')
     </body>
 </html>
