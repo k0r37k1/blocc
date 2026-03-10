@@ -254,6 +254,7 @@
                 showEmojis: false,
                 isDark: document.documentElement.classList.contains('dark'),
                 _observer: null,
+                cols: 8,
                 init() {
                     this._observer = new MutationObserver(() => {
                         this.isDark = document.documentElement.classList.contains('dark');
@@ -264,6 +265,30 @@
                 get pickerBg() { return this.isDark ? '#27272a' : '#fff' },
                 get pickerBorder() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' },
                 get hoverBg() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' },
+                openPicker() {
+                    this.showEmojis = true;
+                    $nextTick(() => {
+                        const first = $refs.emojiGrid?.querySelector('button');
+                        if (first) first.focus();
+                    });
+                },
+                closePicker() {
+                    this.showEmojis = false;
+                    $refs.emojiToggle?.focus();
+                },
+                navigate(e) {
+                    const btns = [...$refs.emojiGrid.querySelectorAll('button')];
+                    const idx = btns.indexOf(document.activeElement);
+                    if (idx === -1) return;
+                    let next = -1;
+                    if (e.key === 'ArrowRight') next = idx + 1;
+                    else if (e.key === 'ArrowLeft') next = idx - 1;
+                    else if (e.key === 'ArrowDown') next = idx + this.cols;
+                    else if (e.key === 'ArrowUp') next = idx - this.cols;
+                    else return;
+                    e.preventDefault();
+                    if (next >= 0 && next < btns.length) btns[next].focus();
+                },
                 insertEmoji(emoji) {
                     const ta = $refs.content;
                     const start = ta.selectionStart;
@@ -275,7 +300,7 @@
                     this.showEmojis = false;
                 }
             }"
-            x-on:keydown.escape.window="showEmojis = false"
+            x-on:keydown.escape.window="if (showEmojis) closePicker()"
             style="position: relative;"
         >
             <textarea
@@ -289,12 +314,14 @@
             {{-- Emoji toggle --}}
             <button
                 type="button"
-                x-on:click="showEmojis = !showEmojis"
+                x-ref="emojiToggle"
+                x-on:click="showEmojis ? closePicker() : openPicker()"
                 style="position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.25rem; color: var(--color-muted); transition: color 0.15s;"
                 x-on:mouseenter="$el.style.color='var(--color-accent)'"
                 x-on:mouseleave="$el.style.color='var(--color-muted)'"
                 title="{{ __('Emojis') }}"
                 aria-label="{{ __('Emojis') }}"
+                aria-haspopup="true"
                 x-bind:aria-expanded="showEmojis.toString()"
             >
                 <svg style="width: 1.25rem; height: 1.25rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -304,11 +331,13 @@
             {{-- Emoji picker --}}
             <div
                 x-show="showEmojis"
-                x-on:click.outside="showEmojis = false"
+                x-on:click.outside="closePicker()"
                 x-transition.opacity
                 style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10;"
             >
                 <div
+                    x-ref="emojiGrid"
+                    x-on:keydown="navigate($event)"
                     x-bind:style="'display:grid;width:20rem;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
                     role="group"
                     aria-label="{{ __('Emoji picker') }}"
