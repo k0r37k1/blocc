@@ -304,23 +304,26 @@
             {{-- Emoji picker --}}
             <div
                 x-show="showEmojis"
-                x-effect="if (showEmojis) $nextTick(() => $el.style.display = 'grid')"
                 x-on:click.outside="showEmojis = false"
                 x-transition.opacity
-                x-bind:style="'position:absolute;right:0;bottom:100%;margin-bottom:0.25rem;z-index:10;width:20rem;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
-                role="group"
-                aria-label="{{ __('Emoji picker') }}"
+                style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10;"
             >
-                @foreach (config('emojis.picker') as $emoji)
-                    <button
-                        type="button"
-                        style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
-                        x-on:mouseenter="$el.style.background = hoverBg"
-                        x-on:mouseleave="$el.style.background = 'transparent'"
-                        x-on:click="insertEmoji('{{ $emoji }}')"
-                        aria-label="{{ $emoji }}"
-                    >{{ $emoji }}</button>
-                @endforeach
+                <div
+                    x-bind:style="'display:grid;width:20rem;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
+                    role="group"
+                    aria-label="{{ __('Emoji picker') }}"
+                >
+                    @foreach (config('emojis.picker') as $emoji)
+                        <button
+                            type="button"
+                            style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
+                            x-on:mouseenter="$el.style.background = hoverBg"
+                            x-on:mouseleave="$el.style.background = 'transparent'"
+                            x-on:click="insertEmoji('{{ $emoji }}')"
+                            aria-label="{{ $emoji }}"
+                        >{{ $emoji }}</button>
+                    @endforeach
+                </div>
             </div>
             @error('content') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
         </div>
