@@ -253,6 +253,14 @@
             x-data="{
                 showEmojis: false,
                 isDark: document.documentElement.classList.contains('dark'),
+                _observer: null,
+                init() {
+                    this._observer = new MutationObserver(() => {
+                        this.isDark = document.documentElement.classList.contains('dark');
+                    });
+                    this._observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+                },
+                destroy() { this._observer?.disconnect() },
                 get pickerBg() { return this.isDark ? '#27272a' : '#fff' },
                 get pickerBorder() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' },
                 get hoverBg() { return this.isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' },
@@ -296,15 +304,13 @@
             {{-- Emoji picker --}}
             <div
                 x-show="showEmojis"
+                x-effect="if (showEmojis) $nextTick(() => $el.style.display = 'grid')"
                 x-on:click.outside="showEmojis = false"
                 x-transition.opacity
-                style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10;"
+                x-bind:style="'position:absolute;right:0;bottom:100%;margin-bottom:0.25rem;z-index:10;width:20rem;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
+                role="grid"
+                aria-label="{{ __('Emoji picker') }}"
             >
-                <div
-                    x-bind:style="'width:20rem;display:grid;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
-                    role="grid"
-                    aria-label="{{ __('Emoji picker') }}"
-                >
                 @foreach (config('emojis.picker') as $emoji)
                     <button
                         type="button"
@@ -315,7 +321,6 @@
                         aria-label="{{ $emoji }}"
                     >{{ $emoji }}</button>
                 @endforeach
-                </div>
             </div>
             @error('content') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
         </div>
