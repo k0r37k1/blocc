@@ -111,7 +111,8 @@ class AdminPanelProvider extends PanelProvider
                 fn (): HtmlString => new HtmlString(
                     '<style>
                         /* WCAG 2.2 AA: match frontend accent-bg (#15803d) for consistent button contrast */
-                        .fi-bg-color-400, .dark .fi-bg-color-600 { background-color: #15803d; }
+                        .fi-bg-color-400, .dark .fi-bg-color-600 { background-color: #15803d !important; }
+                        .fi-bg-color-400 { color: #fff !important; }
                     </style>'
                 ),
             );
