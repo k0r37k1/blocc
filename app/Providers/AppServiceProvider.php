@@ -8,6 +8,9 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +19,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->scoped(
+            HtmlSanitizerInterface::class,
+            fn (): HtmlSanitizer => new HtmlSanitizer(
+                (new HtmlSanitizerConfig)
+                    ->allowSafeElements()
+                    ->allowRelativeLinks()
+                    ->allowRelativeMedias()
+                    ->allowAttribute('class', allowedElements: '*')
+                    ->allowAttribute('data-color', allowedElements: '*')
+                    ->allowAttribute('data-from-breakpoint', allowedElements: '*')
+                    ->allowAttribute('data-type', allowedElements: '*')
+                    ->allowAttribute('style', allowedElements: '*')
+                    ->allowAttribute('width', allowedElements: 'img')
+                    ->allowAttribute('height', allowedElements: 'img')
+                    ->allowAttribute('aria-label', allowedElements: '*')
+                    ->allowAttribute('aria-hidden', allowedElements: '*')
+                    ->withMaxInputLength(500000),
+            ),
+        );
     }
 
     /**

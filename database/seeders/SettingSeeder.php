@@ -16,7 +16,7 @@ class SettingSeeder extends Seeder
             'blog_name' => 'Kopfsalat',
             'blog_description' => 'Thoughts served fresh',
             'posts_per_page' => '10',
-            'accent_color' => '#16a34a',
+            'accent_color' => '#15803d',
             'accent_color_dark' => '#4ade80',
             'heading_font' => 'Inter',
             'body_font' => 'Inter',

@@ -7,7 +7,7 @@
     @endphp
 
     <div class="flex flex-col items-center justify-center text-center min-h-[50vh]">
-        <p class="text-6xl font-bold text-neutral-300 dark:text-neutral-500 select-none" aria-hidden="true">
+        <p class="text-6xl font-bold text-neutral-500 dark:text-neutral-500 select-none" aria-hidden="true">
             404
         </p>
 

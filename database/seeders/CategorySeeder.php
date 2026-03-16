@@ -13,7 +13,7 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Allgemein', 'slug' => 'allgemein', 'description' => 'Allgemeine Beiträge.', 'color' => '#16a34a'],
+            ['name' => 'Allgemein', 'slug' => 'allgemein', 'description' => 'Allgemeine Beiträge.', 'color' => '#15803d'],
         ];
 
         foreach ($categories as $category) {

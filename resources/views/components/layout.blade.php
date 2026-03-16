@@ -17,7 +17,7 @@
     $resolvedCanonicalUrl = $canonicalUrl ?? url()->current();
     $twitterCard = $ogImage ? 'summary_large_image' : 'summary';
 
-    $accentColor = \App\Models\Setting::get('accent_color', '#16a34a');
+    $accentColor = \App\Models\Setting::get('accent_color', '#15803d');
     $accentColorDark = \App\Models\Setting::get('accent_color_dark', '#4ade80');
     $headingFontKey = \App\Models\Setting::get('heading_font', 'Inter');
     $bodyFontKey = \App\Models\Setting::get('body_font', 'Inter');
