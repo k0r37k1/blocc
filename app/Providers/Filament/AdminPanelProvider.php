@@ -40,11 +40,13 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->profile(EditProfile::class, isSimple: false)
             ->spa()
+            ->resourceCreatePageRedirect('index')
+            ->resourceEditPageRedirect('index')
             ->brandName('blocc Admin')
             ->brandLogo(fn () => view('filament.admin.logo'))
             ->brandLogoHeight('1.5rem')
             ->colors(fn () => [
-                'primary' => Color::hex(\App\Models\Setting::get('accent_color', '#16a34a')),
+                'primary' => Color::hex(\App\Models\Setting::get('accent_color', '#15803d')),
             ])
             ->font(
                 'Inter',

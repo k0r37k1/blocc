@@ -8,7 +8,9 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CategoriesTable
 {
@@ -25,13 +27,22 @@ class CategoriesTable
                     ->counts('posts')
                     ->label(__('Posts'))
                     ->sortable(),
-                ColorColumn::make('color'),
+                ColorColumn::make('color')
+                    ->placeholder('-'),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),
             ])
             ->defaultSort('name', 'asc')
+            ->filters([
+                TernaryFilter::make('has_posts')
+                    ->label(__('Has posts'))
+                    ->queries(
+                        true: fn (Builder $query) => $query->has('posts'),
+                        false: fn (Builder $query) => $query->doesntHave('posts'),
+                    ),
+            ])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

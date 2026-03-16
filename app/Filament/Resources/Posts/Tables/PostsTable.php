@@ -9,6 +9,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -21,6 +22,13 @@ class PostsTable
     {
         return $table
             ->columns([
+                SpatieMediaLibraryImageColumn::make('featured_image')
+                    ->collection('featured-image')
+                    ->conversion('thumbnail')
+                    ->label('')
+                    ->square()
+                    ->imageSize(40)
+                    ->toggleable(),
                 TextColumn::make('title')
                     ->searchable()
                     ->sortable()

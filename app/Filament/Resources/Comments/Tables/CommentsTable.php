@@ -8,6 +8,7 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -87,12 +88,34 @@ class CommentsTable
                     ->label(__('Approve'))
                     ->icon(Heroicon::Check)
                     ->color('success')
+                    ->requiresConfirmation()
                     ->visible(fn (Comment $record): bool => ! $record->is_approved)
                     ->action(function (Comment $record): void {
                         $record->update(['is_approved' => true]);
 
                         Notification::make()
                             ->title(__('Comment approved'))
+                            ->success()
+                            ->send();
+                    }),
+                Action::make('edit')
+                    ->label(__('Edit'))
+                    ->icon(Heroicon::OutlinedPencilSquare)
+                    ->color('gray')
+                    ->fillForm(fn (Comment $record): array => [
+                        'content' => $record->content,
+                    ])
+                    ->form([
+                        Textarea::make('content')
+                            ->label(__('Comment'))
+                            ->required()
+                            ->rows(4),
+                    ])
+                    ->action(function (Comment $record, array $data): void {
+                        $record->update(['content' => $data['content']]);
+
+                        Notification::make()
+                            ->title(__('Comment updated'))
                             ->success()
                             ->send();
                     }),

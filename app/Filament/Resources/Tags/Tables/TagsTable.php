@@ -7,7 +7,9 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TagsTable
 {
@@ -30,6 +32,14 @@ class TagsTable
                     ->toggleable(),
             ])
             ->defaultSort('name', 'asc')
+            ->filters([
+                TernaryFilter::make('has_posts')
+                    ->label(__('Has posts'))
+                    ->queries(
+                        true: fn (Builder $query) => $query->has('posts'),
+                        false: fn (Builder $query) => $query->doesntHave('posts'),
+                    ),
+            ])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

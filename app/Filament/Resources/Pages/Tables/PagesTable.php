@@ -45,7 +45,7 @@ class PagesTable
                     ->dateTime()
                     ->sortable(),
             ])
-            ->defaultSort('title', 'asc')
+            ->defaultSort('updated_at', 'desc')
             ->filters([
                 SelectFilter::make('status')
                     ->options(PostStatus::class),
