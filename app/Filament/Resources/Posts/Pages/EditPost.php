@@ -48,7 +48,7 @@ class EditPost extends EditRecord
             Action::make('view-on-site')
                 ->label(__('View on website'))
                 ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
-                ->url(route('blog.show', $record->slug))
+                ->url(fn (): string => route('blog.show', $record->slug))
                 ->openUrlInNewTab()
                 ->color('gray')
                 ->visible($record->is_published),
