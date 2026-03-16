@@ -15,13 +15,13 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => env('ADMIN_EMAIL', 'admin@kopfsalat.blog')],
+            ['email' => env('ADMIN_EMAIL', 'admin@kopfsalatblog.de')],
             [
                 'username' => env('ADMIN_USERNAME', 'admin'),
                 'name' => env('ADMIN_NAME', 'Administrator'),
                 'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
                 'bio' => 'Blogger, Entwickler und Salatliebhaber. Schreibt über Technik, Code und alles dazwischen.',
-                'website' => 'https://kopfsalat.blog',
+                'website' => 'https://kopfsalatblog.de',
                 'social_github' => 'https://github.com/kopfsalat',
                 'social_twitter' => 'https://x.com/kopfsalat',
                 'must_change_credentials' => false,

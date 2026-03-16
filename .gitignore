@@ -22,6 +22,7 @@
 /storage/*.key
 /storage/debugbar
 /storage/pail
+/upload
 /vendor
 /database/*.sqlite
 /database/*.sqlite-wal

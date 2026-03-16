@@ -29,10 +29,6 @@ class Login extends BaseLogin
 
         $data = $this->form->getState();
 
-        if ($this->isLoginRateLimited($data['username'])) {
-            return null;
-        }
-
         /** @var SessionGuard $authGuard */
         $authGuard = Filament::auth();
 

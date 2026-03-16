@@ -3,42 +3,14 @@
 ## Voraussetzungen
 
 - PHP 8.2+ mit `pdo_sqlite` Extension
-- Kein MySQL, kein Node.js, kein SSH noetig
+- Shared Hosting mit SSH-Zugang und Composer (empfohlen)
+- Alternativ: nur FTP (dann alles lokal vorbereiten)
 
-## Installation
+## Option A: Mit SSH auf dem Server (empfohlen)
 
-### 1. Vorbereiten (lokal)
+### 1. Hochladen
 
-```bash
-git clone https://github.com/k0r37k1/blocc.git
-cd blocc
-composer install --no-dev --optimize-autoloader
-cp .env.example .env
-php artisan key:generate
-touch database/database.sqlite
-php artisan migrate --force
-php artisan db:seed --force
-```
-
-### 2. Konfigurieren
-
-`.env` anpassen:
-
-```env
-APP_NAME="Dein Blog"
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://deine-domain.de
-APP_LOCALE=de
-
-ADMIN_USERNAME=dein-username
-ADMIN_EMAIL=dein@email.de
-ADMIN_PASSWORD=ein-sicheres-passwort
-```
-
-### 3. Hochladen
-
-Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
+Per FTP/SFTP auf den Server laden — ohne `vendor/`, `.git/` und Dev-Dateien.
 
 **Muss mit:**
 
@@ -47,14 +19,13 @@ Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
 | `app/` | Anwendungscode |
 | `bootstrap/` | App-Bootstrap und Cache |
 | `config/` | Konfiguration |
-| `database/database.sqlite` | Die Datenbank |
+| `database/` | Migrations und Seeders (ohne `.sqlite`) |
 | `lang/` | Uebersetzungen |
 | `public/` | Web-Root (inkl. `build/`) |
 | `resources/views/` | Blade-Templates |
 | `routes/` | Routen |
 | `storage/` | Logs, Cache, Uploads |
-| `vendor/` | PHP-Dependencies |
-| `.env` | Umgebungskonfiguration |
+| `.env` | Umgebungskonfiguration (`.env.production` als Vorlage) |
 | `artisan` | Laravel CLI |
 | `composer.json`, `composer.lock` | Dependency-Definition |
 
@@ -62,9 +33,13 @@ Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
 
 | Ordner/Datei | Grund |
 |--------------|-------|
+| `vendor/` | Wird per Composer auf dem Server installiert |
 | `node_modules/` | Build-Tool, nicht noetig |
 | `resources/css/`, `resources/js/` | Quellcode, Build ist in `public/build/` |
 | `tests/` | Nur Entwicklung |
+| `database/*.sqlite*` | Wird auf dem Server erstellt |
+| `storage/debugbar/`, `storage/logs/*` | Lokale Dev-Daten |
+| `public/storage` | Symlink — wird auf dem Server erstellt |
 | `.git/`, `.github/` | Versionierung/CI |
 | `.claude/`, `.planning/`, `.junie/` | Entwicklungstools |
 | `docs/` | Dokumentation |
@@ -72,8 +47,56 @@ Per FTP/SFTP auf den Server laden. **Nicht** hochladen:
 | `biome.json`, `phpstan.neon`, `phpunit.xml` | Dev-Konfiguration |
 | `.editorconfig`, `.gitattributes`, `.gitignore` | Dev-Konfiguration |
 | `.mcp.json`, `boost.json` | Dev-Tools |
-| `.env.example` | Vorlage, nicht noetig |
+| `.env.example`, `.env.production` | Vorlagen |
 | `CLAUDE.md`, `INSTALL`, `README.md`, `LICENSE` | Dokumentation |
+
+### 2. .env konfigurieren
+
+Auf dem Server die `.env` anpassen. Wichtig:
+
+```env
+APP_NAME="Dein Blog"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://deine-domain.de
+APP_LOCALE=de
+
+DB_CONNECTION=sqlite
+DB_DATABASE=/absoluter/pfad/zum/projekt/database/database.sqlite
+
+SESSION_DOMAIN=deine-domain.de
+SESSION_SECURE_COOKIE=true
+
+ADMIN_NAME=Dein Name
+ADMIN_EMAIL=dein@email.de
+ADMIN_PASSWORD=ein-sicheres-passwort
+```
+
+Den absoluten Pfad findest du mit `pwd` im Projektordner.
+
+### 3. Setup per SSH
+
+```bash
+cd /pfad/zum/projekt
+
+# PHP-Pfad herausfinden (Plesk-Hosting)
+ls /opt/plesk/php/
+# Dann die passende Version verwenden, z.B. 8.4:
+
+# Dependencies installieren (oder ueber Hosting-Panel Composer-Bereich)
+/opt/plesk/php/8.4/bin/php /usr/lib/plesk-9.0/composer.phar install --no-dev --optimize-autoloader
+
+# App-Key generieren
+/opt/plesk/php/8.4/bin/php artisan key:generate
+
+# Datenbank erstellen und einrichten
+touch database/database.sqlite
+/opt/plesk/php/8.4/bin/php artisan migrate --force
+/opt/plesk/php/8.4/bin/php artisan db:seed --force
+
+# Storage-Symlink erstellen
+/opt/plesk/php/8.4/bin/php artisan storage:link
+```
 
 ### 4. Document Root
 
@@ -95,22 +118,64 @@ Falls das nicht moeglich ist, diese `.htaccess` ins Hauptverzeichnis legen:
 
 Beim ersten Login wirst du aufgefordert, dein Passwort zu aendern.
 
-## Updates
+---
 
-Lokal pullen, Dependencies aktualisieren, migrieren, hochladen:
+## Option B: Komplett lokal vorbereiten (ohne SSH)
+
+### 1. Lokal einrichten
 
 ```bash
+git clone https://github.com/k0r37k1/blocc.git
+cd blocc
+composer install --no-dev --optimize-autoloader
+cp .env.production .env
+# .env anpassen (APP_URL, DB_DATABASE, ADMIN_* Werte setzen)
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate --force
+php artisan db:seed --force
+```
+
+### 2. Hochladen
+
+Alles hochladen inkl. `vendor/` und `database/database.sqlite`.
+
+**Wichtig:** Den Ordner `public/storage` NICHT hochladen — das ist ein
+lokaler Symlink der auf dem Server nicht funktioniert.
+
+### 3. Auf dem Server
+
+- Document Root auf `public/` setzen
+- `DB_DATABASE` in `.env` auf den absoluten Server-Pfad aendern
+- Falls moeglich: `php artisan storage:link` ausfuehren
+- Falls kein SSH: Ordner `public/storage/` manuell als Symlink auf
+  `../storage/app/public` anlegen, oder Dateien manuell kopieren
+
+---
+
+## Updates
+
+```bash
+# Lokal
 git pull
 composer install --no-dev --optimize-autoloader
 php artisan migrate --force
 ```
 
-Dann die geaenderten Dateien per FTP ersetzen.
+Geaenderte Dateien per FTP ersetzen. Bei SSH auf dem Server zusaetzlich:
+
+```bash
+/opt/plesk/php/8.4/bin/php artisan migrate --force
+```
 
 ## Troubleshooting
 
 | Problem | Loesung |
 |---------|---------|
-| 500 Error | `storage/logs/laravel.log` pruefen, Berechtigungen von `storage/` und `bootstrap/cache/` auf 775 setzen |
-| Bilder fehlen | Symlink `public/storage` -> `storage/app/public` erstellen (`php artisan storage:link`) oder manuell kopieren |
+| 500 Error | `storage/logs/laravel.log` pruefen |
+| 500 "No encryption key" | `php artisan key:generate` ausfuehren |
+| Berechtigungsfehler | `storage/` und `bootstrap/cache/` auf 775 setzen |
+| Bilder fehlen | `public/storage` ist kein Symlink — loeschen und `php artisan storage:link` ausfuehren |
 | SQLite-Fehler | `pdo_sqlite` im Hosting-Panel aktivieren |
+| Login-Seite 500 | Composer-Dependencies pruefen, `composer install` wiederholen |
+| Falscher PHP-Pfad | `ls /opt/plesk/php/` fuer verfuegbare Versionen |
