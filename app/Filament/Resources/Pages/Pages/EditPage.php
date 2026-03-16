@@ -22,7 +22,7 @@ class EditPage extends EditRecord
             Action::make('view-on-site')
                 ->label(__('View on website'))
                 ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
-                ->url(route('page.show', $record->slug))
+                ->url(fn (): string => route('page.show', $record->slug))
                 ->openUrlInNewTab()
                 ->color('gray')
                 ->visible($record->is_published),
