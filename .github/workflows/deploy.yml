@@ -1,0 +1,55 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install & Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .env
+            .env.*
+            vendor/**
+            node_modules/**
+            storage/**
+            database/*.sqlite
+            database/*.sqlite-wal
+            database/*.sqlite-shm
+            tests/**
+            test-results/**
+            playwright-report/**
+            playwright.config.ts
+            upload/**
+            .phpunit.cache/**
+            .planning/**
+            .junie/**
+            .DS_Store
+            public/storage
+            public/hot
+            deploy.sh
