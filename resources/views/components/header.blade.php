@@ -7,11 +7,13 @@
     <nav x-data="{ open: false }" class="max-w-3xl mx-auto px-4 sm:px-6" aria-label="{{ __('Main navigation') }}">
         <div class="flex items-center h-16">
             {{-- Brand --}}
-            @if ($logo = \App\Models\Setting::get('blog_logo'))
-                <a href="{{ route('blog.index') }}" class="mr-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
+            <a href="{{ route('blog.index') }}" class="mr-auto text-lg font-bold text-neutral-900 dark:text-neutral-100 hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
+                @if ($logo = \App\Models\Setting::get('blog_logo'))
                     <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('blog_name', config('app.name')) }}" class="h-8 w-auto">
-                </a>
-            @endif
+                @else
+                    {{ \App\Models\Setting::get('blog_name', config('app.name')) }}
+                @endif
+            </a>
 
             {{-- Desktop nav --}}
             <div class="hidden sm:flex items-center gap-6 ml-auto">
