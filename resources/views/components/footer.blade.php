@@ -1,6 +1,7 @@
 @php
     $blogName = \App\Models\Setting::get('blog_name', config('app.name'));
     $footerText = \App\Models\Setting::get('footer_text');
+    $newsletterEnabled = \App\Models\Setting::get('newsletter_enabled', '0') === '1';
 
     $owner = \App\Models\User::first();
     $socials = $owner ? collect([
@@ -15,6 +16,12 @@
 
 <footer class="border-t border-neutral-100 dark:border-neutral-900" role="contentinfo">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 text-sm text-muted dark:text-muted-dark">
+        @if ($newsletterEnabled)
+            <div class="mb-8 pb-8 border-b border-neutral-100 dark:border-neutral-900">
+                <p class="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-3">{{ __('Newsletter') }}</p>
+                <livewire:newsletter-subscribe />
+            </div>
+        @endif
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>&copy; {{ date('Y') }} {{ $blogName }}</p>
 

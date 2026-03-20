@@ -18,6 +18,7 @@ use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\IconSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
 
@@ -110,6 +111,9 @@ class ManageSettings extends Page
             'comments_enabled' => Setting::get('comments_enabled', '1') === '1',
             'footer_text' => Setting::get('footer_text', ''),
             'head_scripts' => Setting::get('head_scripts', ''),
+            'newsletter_enabled' => Setting::get('newsletter_enabled', '0') === '1',
+            'brevo_list_id' => Setting::get('brevo_list_id', ''),
+            'brevo_doi_template_id' => Setting::get('brevo_doi_template_id', ''),
         ]);
     }
 
@@ -203,6 +207,29 @@ class ManageSettings extends Page
                                 ->label(__('Enable Comments'))
                                 ->helperText(__('When disabled, the comment section is hidden on all blog posts. Individual posts can also disable comments.')),
                         ]),
+                    Section::make(__('Newsletter'))
+                        ->description(__('Show a newsletter subscription form in the footer.'))
+                        ->schema([
+                            Toggle::make('newsletter_enabled')
+                                ->label(__('Enable Newsletter'))
+                                ->helperText(__('When enabled, a subscription form appears in the footer.')),
+                            TextInput::make('brevo_list_id')
+                                ->label(__('Brevo List ID'))
+                                ->helperText(__('The ID of the Brevo contact list subscribers are added to.'))
+                                ->numeric()
+                                ->placeholder('3'),
+                            TextInput::make('brevo_doi_template_id')
+                                ->label(__('Brevo DOI Template ID'))
+                                ->helperText(__('The ID of the double opt-in confirmation email template in Brevo.'))
+                                ->numeric()
+                                ->placeholder('2'),
+                            Action::make('openBrevo')
+                                ->label(__('Open Brevo Dashboard'))
+                                ->icon(Heroicon::ArrowTopRightOnSquare)
+                                ->iconSize(IconSize::Small)
+                                ->color('gray')
+                                ->url('https://app.brevo.com', shouldOpenInNewTab: true),
+                        ]),
                     Section::make(__('Footer & Scripts'))
                         ->description(__('Custom footer text and head scripts'))
                         ->schema([
@@ -244,6 +271,7 @@ class ManageSettings extends Page
         }
 
         $data['comments_enabled'] = $data['comments_enabled'] ? '1' : '0';
+        $data['newsletter_enabled'] = $data['newsletter_enabled'] ? '1' : '0';
 
         Setting::setMany($data);
 

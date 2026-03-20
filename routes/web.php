@@ -25,3 +25,4 @@ Route::get('/archiv', [ArchiveController::class, 'index'])->name('archive');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/feed', FeedController::class)->name('feed');
 Route::get('/seite/{page}', [PageController::class, 'show'])->name('page.show');
+Route::get('/newsletter/bestaetigt', fn () => view('newsletter.confirmed'))->name('newsletter.confirmed');
