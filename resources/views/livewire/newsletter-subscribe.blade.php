@@ -10,24 +10,18 @@
                 <input type="text" wire:model="website" name="website" tabindex="-1" autocomplete="off">
             </div>
 
-            <div class="flex items-center gap-4">
-                <span class="shrink-0 text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ __('Newsletter') }}</span>
+            <p class="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2">{{ __('Newsletter') }}</p>
 
-                <div class="flex-1 min-w-0">
-                    <label for="newsletter-email" class="sr-only">{{ __('Email address') }}</label>
-                    <input
-                        id="newsletter-email"
-                        type="email"
-                        wire:model="email"
-                        placeholder="{{ __('your@email.com') }}"
-                        autocomplete="email"
-                        class="w-full bg-transparent text-xs text-neutral-700 dark:text-neutral-300 placeholder-muted dark:placeholder-muted-dark focus:outline-none focus:placeholder-transparent border-b border-neutral-200 dark:border-neutral-700 focus:border-accent dark:focus:border-accent pb-0.5 transition-colors"
-                    >
-                    @error('email')
-                        <p class="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">{{ $message }}</p>
-                    @enderror
-                </div>
-
+            <div class="flex items-center gap-2">
+                <label for="newsletter-email" class="sr-only">{{ __('Email address') }}</label>
+                <input
+                    id="newsletter-email"
+                    type="email"
+                    wire:model="email"
+                    placeholder="{{ __('your@email.com') }}"
+                    autocomplete="email"
+                    class="min-w-0 flex-1 bg-transparent text-xs text-neutral-700 dark:text-neutral-300 placeholder-muted dark:placeholder-muted-dark border-b border-neutral-200 dark:border-neutral-700 focus:border-accent dark:focus:border-accent focus:outline-none focus:placeholder-transparent pb-0.5 transition-colors"
+                >
                 <button
                     type="submit"
                     wire:loading.attr="disabled"
@@ -37,6 +31,10 @@
                     <span wire:loading class="text-muted dark:text-muted-dark">{{ __('Sending…') }}</span>
                 </button>
             </div>
+
+            @error('email')
+                <p class="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">{{ $message }}</p>
+            @enderror
 
             <div class="mt-1.5 flex items-start gap-1.5">
                 <input

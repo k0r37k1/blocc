@@ -18,8 +18,10 @@
     <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 text-sm text-muted dark:text-muted-dark">
 
         @if ($newsletterEnabled)
-            <div class="mb-6 pb-6 border-b border-neutral-100 dark:border-neutral-900">
-                <livewire:newsletter-subscribe />
+            <div class="flex justify-end mb-6 pb-6 border-b border-neutral-100 dark:border-neutral-900">
+                <div class="w-full sm:w-72">
+                    <livewire:newsletter-subscribe />
+                </div>
             </div>
         @endif
 
