@@ -17,8 +17,7 @@
 <footer class="border-t border-neutral-100 dark:border-neutral-900" role="contentinfo">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 text-sm text-muted dark:text-muted-dark">
         @if ($newsletterEnabled)
-            <div class="mb-8 pb-8 border-b border-neutral-100 dark:border-neutral-900">
-                <p class="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-3">{{ __('Newsletter') }}</p>
+            <div class="mb-6 pb-6 border-b border-neutral-100 dark:border-neutral-900">
                 <livewire:newsletter-subscribe />
             </div>
         @endif
