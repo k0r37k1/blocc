@@ -30,7 +30,7 @@ class NewsletterSubscribeTest extends TestCase
     {
         Livewire::test(NewsletterSubscribe::class)
             ->assertSee(__('Subscribe'))
-            ->assertSee(__('Privacy Policy'));
+            ->assertSee(__('Newsletter'));
     }
 
     #[Test]
