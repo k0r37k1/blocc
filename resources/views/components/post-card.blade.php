@@ -4,6 +4,12 @@
     $commentsEnabled = \App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled;
     $commentCount = $post->approved_comments_count ?? $post->approvedComments()->count();
     $hasImage = $post->getFirstMediaUrl('featured-image', 'thumbnail');
+    $postTitleClass = match(\App\Models\Setting::get('post_title_size', 'M')) {
+        'S' => 'text-lg',
+        'L' => 'text-2xl',
+        'XL' => 'text-3xl',
+        default => 'text-xl',
+    };
 @endphp
 
 <article
@@ -56,7 +62,7 @@
             @endif
         </div>
 
-        <h2 class="mt-1.5 text-xl font-bold tracking-tight">
+        <h2 class="mt-1.5 {{ $postTitleClass }} font-bold tracking-tight">
             <a href="{{ route('blog.show', $post) }}" class="text-neutral-900 dark:text-neutral-100 hover:text-accent dark:hover:text-accent transition-colors">
                 {{ $post->title }}
             </a>

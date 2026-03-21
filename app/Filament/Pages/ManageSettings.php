@@ -104,6 +104,9 @@ class ManageSettings extends Page
             'posts_per_page' => Setting::get('posts_per_page', '10'),
             'accent_color' => Setting::get('accent_color', '#16a34a'),
             'accent_color_dark' => Setting::get('accent_color_dark', '#4ade80'),
+            'hero_title_size' => Setting::get('hero_title_size', 'L'),
+            'hero_subtitle_size' => Setting::get('hero_subtitle_size', 'M'),
+            'post_title_size' => Setting::get('post_title_size', 'M'),
             'heading_font' => Setting::get('heading_font', 'Inter'),
             'body_font' => Setting::get('body_font', 'Inter'),
             'code_theme' => Setting::get('code_theme', 'GitHub'),
@@ -166,6 +169,39 @@ class ManageSettings extends Page
                             ColorPicker::make('accent_color_dark')
                                 ->label(__('Accent Color (Dark Mode)'))
                                 ->helperText(__('Lighter variant used in dark mode for better readability.')),
+                            Select::make('hero_title_size')
+                                ->label(__('Hero Title Size'))
+                                ->helperText(__('Font size of the blog title on the homepage.'))
+                                ->options([
+                                    'S' => __('Small'),
+                                    'M' => __('Medium'),
+                                    'L' => __('Large'),
+                                    'XL' => __('Extra Large'),
+                                ])
+                                ->native(false)
+                                ->required(),
+                            Select::make('hero_subtitle_size')
+                                ->label(__('Hero Subtitle Size'))
+                                ->helperText(__('Font size of the blog description on the homepage.'))
+                                ->options([
+                                    'S' => __('Small'),
+                                    'M' => __('Medium'),
+                                    'L' => __('Large'),
+                                    'XL' => __('Extra Large'),
+                                ])
+                                ->native(false)
+                                ->required(),
+                            Select::make('post_title_size')
+                                ->label(__('Post Title Size'))
+                                ->helperText(__('Font size of post titles in the blog list.'))
+                                ->options([
+                                    'S' => __('Small'),
+                                    'M' => __('Medium'),
+                                    'L' => __('Large'),
+                                    'XL' => __('Extra Large'),
+                                ])
+                                ->native(false)
+                                ->required(),
                             Select::make('heading_font')
                                 ->label(__('Heading Font'))
                                 ->helperText(__('Font used for headings (h1-h6).'))
