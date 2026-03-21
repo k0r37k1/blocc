@@ -25,7 +25,7 @@
         </a>
     @endif
 
-    <div class="{{ $hasImage ? 'mt-4' : '-mx-4 px-4 py-4 rounded-lg group-hover:bg-[var(--color-card-hover)]' }}">
+    <div class="{{ $hasImage ? 'mt-6' : '-mx-4 px-4 py-4 rounded-lg group-hover:bg-[var(--color-card-hover)]' }}">
         <div class="flex items-center gap-2 text-sm text-muted dark:text-muted-dark">
             <time datetime="{{ $post->published_at->toDateString() }}">
                 <span class="sm:hidden">{{ $post->published_at->format('d.m.Y') }}</span>

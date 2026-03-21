@@ -333,12 +333,27 @@
                 x-show="showEmojis"
                 x-on:click.outside="closePicker()"
                 x-transition.opacity
-                style="position: absolute; right: 0; bottom: 100%; margin-bottom: 0.25rem; z-index: 10;"
+                style="position: fixed; bottom: auto; right: auto; z-index: 50;"
+                x-init="
+                    $watch('showEmojis', val => {
+                        if (val) {
+                            $nextTick(() => {
+                                const btn = $refs.emojiToggle;
+                                const picker = $el;
+                                const rect = btn.getBoundingClientRect();
+                                const pickerW = 320;
+                                const left = Math.min(rect.right - pickerW, window.innerWidth - pickerW - 8);
+                                picker.style.left = Math.max(8, left) + 'px';
+                                picker.style.top = (rect.top - picker.offsetHeight - 4) + 'px';
+                            });
+                        }
+                    })
+                "
             >
                 <div
                     x-ref="emojiGrid"
                     x-on:keydown="navigate($event)"
-                    x-bind:style="'display:grid;width:20rem;grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
+                    x-bind:style="'display:grid;width:min(20rem,90vw);grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
                     role="group"
                     aria-label="{{ __('Emoji picker') }}"
                 >
