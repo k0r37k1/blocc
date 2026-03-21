@@ -7,6 +7,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -53,6 +54,12 @@ class PageForm
                 ->placeholder(__('Start writing...'))
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
                 ->columnSpanFull(),
+            Toggle::make('show_in_nav')
+                ->label(__('Show in Navigation'))
+                ->helperText(__('Show this page as a link in the main navigation.')),
+            Toggle::make('show_in_footer')
+                ->label(__('Show in Footer'))
+                ->helperText(__('Show this page as a link in the footer.')),
             Select::make('status')
                 ->options(PostStatus::class)
                 ->default(PostStatus::Draft)

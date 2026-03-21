@@ -49,6 +49,8 @@ class Page extends Model implements HasMedia, HasRichContent
         'status',
         'published_at',
         'sort_order',
+        'show_in_nav',
+        'show_in_footer',
     ];
 
     /**

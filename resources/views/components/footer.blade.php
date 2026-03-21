@@ -3,6 +3,7 @@
     $footerText = \App\Models\Setting::get('footer_text');
     $newsletterEnabled = \App\Models\Setting::get('newsletter_enabled', '0') === '1';
 
+    $footerPages = \App\Models\Page::query()->published()->where('show_in_footer', true)->orderBy('sort_order')->get();
     $owner = \App\Models\User::first();
     $socials = $owner ? collect([
         'website' => $owner->website,
@@ -37,9 +38,9 @@
                     <span></span>
                 @endif
                 <div class="flex gap-4">
-                    <a href="{{ route('page.show', 'impressum') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Imprint') }}</a>
-                    <a href="{{ route('page.show', 'datenschutz') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Privacy') }}</a>
-                    <a href="{{ route('page.show', 'barrierefreiheit') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Accessibility') }}</a>
+                    @foreach ($footerPages as $footerPage)
+                        <a href="{{ route('page.show', $footerPage->slug) }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ $footerPage->title }}</a>
+                    @endforeach
                     @guest
                         <a href="{{ url('/admin/login') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Login') }}</a>
                     @endguest

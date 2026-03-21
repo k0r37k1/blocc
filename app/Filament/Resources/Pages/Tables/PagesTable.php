@@ -29,6 +29,14 @@ class PagesTable
                 TextColumn::make('status')
                     ->badge()
                     ->sortable(),
+                ToggleColumn::make('show_in_nav')
+                    ->label(__('Navigation'))
+                    ->onColor('success')
+                    ->offColor('gray'),
+                ToggleColumn::make('show_in_footer')
+                    ->label(__('Footer'))
+                    ->onColor('success')
+                    ->offColor('gray'),
                 ToggleColumn::make('is_published')
                     ->label(__('Published'))
                     ->onColor('success')
