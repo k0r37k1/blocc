@@ -229,5 +229,15 @@
     "Brevo DOI Template ID": "Brevo DOI-Template-ID",
     "The ID of the double opt-in confirmation email template in Brevo.": "ID der Double-Opt-in-Bestätigungs-E-Mail in Brevo.",
     "Open Brevo Dashboard": "Brevo Dashboard öffnen",
-    "Email address": "E-Mail-Adresse"
+    "Email address": "E-Mail-Adresse",
+    "Hero Title Size": "Hero-Überschrift",
+    "Font size of the blog title on the homepage.": "Schriftgröße des Blog-Titels auf der Startseite.",
+    "Hero Subtitle Size": "Hero-Untertitel",
+    "Font size of the blog description on the homepage.": "Schriftgröße der Blog-Beschreibung auf der Startseite.",
+    "Post Title Size": "Beitragstitel",
+    "Font size of post titles in the blog list.": "Schriftgröße der Beitragstitel in der Blog-Liste.",
+    "Small": "Klein",
+    "Medium": "Mittel",
+    "Large": "Groß",
+    "Extra Large": "Sehr groß"
 }
