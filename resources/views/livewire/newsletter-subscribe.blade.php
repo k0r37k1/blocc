@@ -13,7 +13,12 @@
             @if ($variant === 'card')
                 {{-- Card variant: heading left + input with arrow button --}}
                 <div class="flex items-center gap-4">
-                    <p id="newsletter-label" class="shrink-0 text-xl font-bold text-neutral-900 dark:text-neutral-100">{{ __('Newsletter') }}</p>
+                    <div id="newsletter-label" class="shrink-0 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                        {{-- Mobile: open envelope icon --}}
+                        <x-heroicon-o-envelope class="sm:hidden w-6 h-6" aria-hidden="true" />
+                        {{-- Desktop: text --}}
+                        <span class="hidden sm:inline">{{ __('Newsletter') }}</span>
+                    </div>
 
                     <div class="relative flex-1">
                         <input

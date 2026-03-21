@@ -8,7 +8,7 @@
 <article
     x-data
     x-intersect.once="$el.classList.add('revealed')"
-    class="reveal post-card-hover group -mx-4 rounded-lg px-4 py-6 hover:bg-[var(--color-card-hover)]"
+    class="reveal post-card-hover group sm:-mx-4 rounded-lg px-4 py-6 hover:bg-[var(--color-card-hover)]"
     style="transition-delay: {{ $index * 80 }}ms"
 >
     @if ($post->getFirstMediaUrl('featured-image', 'thumbnail'))
