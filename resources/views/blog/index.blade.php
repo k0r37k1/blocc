@@ -21,7 +21,7 @@
     {{ $posts->links('components.pagination') }}
 
     @if (\App\Models\Setting::get('newsletter_enabled', '0') === '1')
-        <div class="mt-16 -mx-4 rounded-lg px-4 py-5" style="background-color: var(--color-card)">
+        <div class="mt-16 rounded-lg px-4 py-5" style="background-color: var(--color-card)">
             <livewire:newsletter-subscribe variant="card" />
         </div>
     @endif
