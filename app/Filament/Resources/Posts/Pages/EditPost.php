@@ -32,7 +32,7 @@ class EditPost extends EditRecord
                 ->action(function () use ($record): void {
                     $newPost = $record->replicate(['published_at']);
                     $newPost->title = $record->title.' ('.__('Copy').')';
-                    $newPost->slug = Str::slug($newPost->title);
+                    $newPost->slug = Str::slug($newPost->title, '-', 'de');
                     $newPost->status = PostStatus::Draft; /** @phpstan-ignore assign.propertyType */
                     $newPost->save();
 

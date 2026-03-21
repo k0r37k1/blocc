@@ -26,7 +26,7 @@ class PageForm
                         ($get('status') !== PostStatus::Published->value) ||
                         (($get('slug') ?? '') === Str::slug($old ?? ''))
                     ) {
-                        $set('slug', Str::slug($state ?? ''));
+                        $set('slug', Str::slug($state ?? '', '-', 'de'));
                     }
                 }),
             TextInput::make('slug')

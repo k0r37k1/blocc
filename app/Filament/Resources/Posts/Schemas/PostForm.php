@@ -28,9 +28,9 @@ class PostForm
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state): void {
                     if (
                         ($get('status') !== PostStatus::Published->value) ||
-                        (($get('slug') ?? '') === Str::slug($old ?? ''))
+                        (($get('slug') ?? '') === Str::slug($old ?? '', '-', 'de'))
                     ) {
-                        $set('slug', Str::slug($state ?? ''));
+                        $set('slug', Str::slug($state ?? '', '-', 'de'));
                     }
                 }),
             TextInput::make('slug')
@@ -52,7 +52,7 @@ class PostForm
                         ->required()
                         ->maxLength(255)
                         ->live(onBlur: true)
-                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? ''))),
+                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? '', '-', 'de'))),
                     TextInput::make('slug')
                         ->required()
                         ->maxLength(255)
@@ -69,7 +69,7 @@ class PostForm
                         ->required()
                         ->maxLength(255)
                         ->live(onBlur: true)
-                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? ''))),
+                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? '', '-', 'de'))),
                     TextInput::make('slug')
                         ->required()
                         ->maxLength(255)

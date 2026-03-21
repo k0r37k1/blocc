@@ -18,8 +18,8 @@ class TagForm
                 ->maxLength(255)
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state): void {
-                    if (($get('slug') ?? '') === Str::slug($old ?? '')) {
-                        $set('slug', Str::slug($state ?? ''));
+                    if (($get('slug') ?? '') === Str::slug($old ?? '', '-', 'de')) {
+                        $set('slug', Str::slug($state ?? '', '-', 'de'));
                     }
                 }),
             TextInput::make('slug')
