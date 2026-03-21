@@ -39,20 +39,8 @@ class NewsletterSubscribeTest extends TestCase
         Livewire::test(NewsletterSubscribe::class)
             ->set('formLoadedAt', now()->subSeconds(10)->timestamp)
             ->set('email', 'not-an-email')
-            ->set('consent', true)
             ->call('subscribe')
             ->assertHasErrors(['email' => 'email']);
-    }
-
-    #[Test]
-    public function it_requires_consent(): void
-    {
-        Livewire::test(NewsletterSubscribe::class)
-            ->set('formLoadedAt', now()->subSeconds(10)->timestamp)
-            ->set('email', 'user@example.com')
-            ->set('consent', false)
-            ->call('subscribe')
-            ->assertHasErrors(['consent']);
     }
 
     #[Test]
@@ -60,7 +48,6 @@ class NewsletterSubscribeTest extends TestCase
     {
         Livewire::test(NewsletterSubscribe::class)
             ->set('email', 'bot@example.com')
-            ->set('consent', true)
             ->set('website', 'http://spam.com')
             ->call('subscribe')
             ->assertSet('successMessage', __('Thank you! Please check your inbox to confirm your subscription.'))
@@ -76,7 +63,6 @@ class NewsletterSubscribeTest extends TestCase
         Livewire::test(NewsletterSubscribe::class)
             ->set('formLoadedAt', now()->subSeconds(10)->timestamp)
             ->set('email', 'user@example.com')
-            ->set('consent', true)
             ->call('subscribe')
             ->assertSet('errorMessage', __('Newsletter is temporarily unavailable. Please try again later.'));
     }
@@ -91,7 +77,6 @@ class NewsletterSubscribeTest extends TestCase
         Livewire::test(NewsletterSubscribe::class)
             ->set('formLoadedAt', now()->subSeconds(10)->timestamp)
             ->set('email', 'user@example.com')
-            ->set('consent', true)
             ->call('subscribe')
             ->assertSet('errorMessage', __('Too many attempts. Please try again later.'));
     }

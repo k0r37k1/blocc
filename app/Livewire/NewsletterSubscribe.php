@@ -15,8 +15,6 @@ class NewsletterSubscribe extends Component
 {
     public string $email = '';
 
-    public bool $consent = false;
-
     /** Honeypot field — must remain empty. */
     public string $website = '';
 
@@ -27,9 +25,13 @@ class NewsletterSubscribe extends Component
 
     public string $errorMessage = '';
 
-    public function mount(): void
+    /** Display variant: 'footer' (underline input) or 'card' (bordered input + filled button). */
+    public string $variant = 'footer';
+
+    public function mount(string $variant = 'footer'): void
     {
         $this->formLoadedAt = now()->timestamp;
+        $this->variant = $variant;
     }
 
     public function render(): View
@@ -47,9 +49,6 @@ class NewsletterSubscribe extends Component
 
         $this->validate([
             'email' => 'required|email|max:255',
-            'consent' => 'accepted',
-        ], [
-            'consent.accepted' => __('You must agree to receive the newsletter.'),
         ]);
 
         $rateLimitKey = 'newsletter:'.request()->ip();
@@ -89,12 +88,12 @@ class NewsletterSubscribe extends Component
             $contactsApi->createDoiContact($doiContact);
 
             $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
-            $this->reset('email', 'consent', 'website');
+            $this->reset('email', 'website');
         } catch (\Brevo\Client\ApiException $e) {
             // 400 with "Contact already exist" or similar — treat as success to avoid enumeration
             if ($e->getCode() === 400) {
                 $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
-                $this->reset('email', 'consent', 'website');
+                $this->reset('email', 'website');
 
                 return;
             }

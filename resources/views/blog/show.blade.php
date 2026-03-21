@@ -113,6 +113,8 @@
         @endif
     </article>
 
+    @php $newsletterEnabled = \App\Models\Setting::get('newsletter_enabled', '0') === '1'; @endphp
+
     @if ($post->author)
         <div class="mt-14 rounded-xl p-6" style="background-color: var(--color-card)">
             <div class="flex flex-col sm:flex-row items-start gap-4">
@@ -156,6 +158,12 @@
                     @endif
                 </div>
             </div>
+        </div>
+    @endif
+
+    @if ($newsletterEnabled)
+        <div class="mt-6 rounded-xl p-6" style="background-color: var(--color-card)">
+            <livewire:newsletter-subscribe variant="card" />
         </div>
     @endif
 

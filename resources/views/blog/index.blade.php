@@ -19,4 +19,10 @@
     </div>
 
     {{ $posts->links('components.pagination') }}
+
+    @if (\App\Models\Setting::get('newsletter_enabled', '0') === '1')
+        <div class="mt-10 -mx-4 rounded-lg px-4 py-6" style="background-color: var(--color-card)">
+            <livewire:newsletter-subscribe variant="card" />
+        </div>
+    @endif
 </x-layout>
