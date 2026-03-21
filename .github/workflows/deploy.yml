@@ -44,7 +44,8 @@ jobs:
 
           # Filter out non-production files
           sort -u raw_changed.txt | grep -vE \
-            "^(tests/|Upload/|\.github/|node_modules/|vendor/|storage/|\.planning/|\.junie/|playwright|\.phpunit|\.DS_Store|\.env|database/[^m])" \
+            "^(tests/|Upload/|\.github/|node_modules/|vendor/|storage/|\.planning/|\.junie/|playwright|\.phpunit|\.DS_Store|\.env|database/[^m])" | \
+            grep -vE "^(\.gitattributes|\.gitignore|\.mcp\.json|CLAUDE\.md|INSTALL|LICENSE|README\.md|biome\.json|boost\.json|package\.json|package-lock\.json|phpstan\.neon|phpunit\.xml)$" \
             > deploy_files.txt
 
           echo "=== Files to deploy ($(wc -l < deploy_files.txt)) ==="
