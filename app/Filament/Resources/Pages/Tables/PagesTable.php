@@ -26,11 +26,12 @@ class PagesTable
                     ->sortable(),
                 TextColumn::make('slug')
                     ->searchable()
-                    ->hidden(fn (Page $record): bool => $record->is_system),
+                    ->formatStateUsing(fn (Page $record, string $state): string => $record->is_system ? '—' : $state),
                 TextColumn::make('status')
                     ->badge()
                     ->sortable()
-                    ->hidden(fn (Page $record): bool => $record->is_system),
+                    ->color(fn (Page $record): string => $record->is_system ? 'gray' : 'success')
+                    ->formatStateUsing(fn (Page $record): string => $record->is_system ? __('System') : $record->status->getLabel()),
                 ToggleColumn::make('is_published')
                     ->label(__('Published'))
                     ->onColor('success')
@@ -47,7 +48,7 @@ class PagesTable
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->hidden(fn (Page $record): bool => $record->is_system),
+                    ->placeholder('—'),
             ])
             ->recordClasses(fn (Page $record): string => $record->is_system ? 'opacity-50' : '')
             ->reorderable('sort_order')

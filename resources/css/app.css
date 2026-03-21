@@ -285,3 +285,7 @@ input[type="checkbox"].appearance-none:checked {
 .dark .post-card-hover:hover {
     box-shadow: 0 4px 20px rgb(0 0 0 / 0.3);
 }
+
+.system-page-row {
+    opacity: 0.4;
+}
