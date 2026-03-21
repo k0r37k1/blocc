@@ -1,6 +1,6 @@
 <x-layout :title="config('app.name')" :description="config('app.description')">
-    <div class="mb-10">
-        <h1 class="text-2xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
+    <div class="mb-16">
+        <h1 class="text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
             {{ \App\Models\Setting::get('blog_name', config('app.name')) }}
         </h1>
         @if ($description = \App\Models\Setting::get('blog_description'))
@@ -8,9 +8,11 @@
         @endif
     </div>
 
-    <div class="space-y-2">
+    <div class="divide-y divide-neutral-200 dark:divide-neutral-800">
         @forelse ($posts as $post)
-            <x-post-card :post="$post" :index="$loop->index" />
+            <div class="py-8 first:pt-0">
+                <x-post-card :post="$post" :index="$loop->index" />
+            </div>
         @empty
             <p class="py-12 text-center text-neutral-500 dark:text-neutral-400">
                 {{ __('No posts yet.') }}
