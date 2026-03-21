@@ -51,6 +51,7 @@ class Page extends Model implements HasMedia, HasRichContent
         'sort_order',
         'show_in_nav',
         'show_in_footer',
+        'is_system',
     ];
 
     /**
@@ -63,6 +64,7 @@ class Page extends Model implements HasMedia, HasRichContent
         return [
             'status' => PostStatus::class,
             'published_at' => 'datetime',
+            'is_system' => 'boolean',
         ];
     }
 

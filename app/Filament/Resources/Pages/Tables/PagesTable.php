@@ -25,14 +25,17 @@ class PagesTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('slug')
-                    ->searchable(),
+                    ->searchable()
+                    ->hidden(fn (Page $record): bool => $record->is_system),
                 TextColumn::make('status')
                     ->badge()
-                    ->sortable(),
+                    ->sortable()
+                    ->hidden(fn (Page $record): bool => $record->is_system),
                 ToggleColumn::make('is_published')
                     ->label(__('Published'))
                     ->onColor('success')
                     ->offColor('gray')
+                    ->disabled(fn (Page $record): bool => $record->is_system)
                     ->updateStateUsing(function (Page $record, bool $state): bool {
                         $record->update([
                             'status' => $state ? PostStatus::Published : PostStatus::Draft,
@@ -43,8 +46,10 @@ class PagesTable
                     }),
                 TextColumn::make('updated_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->hidden(fn (Page $record): bool => $record->is_system),
             ])
+            ->recordClasses(fn (Page $record): string => $record->is_system ? 'opacity-50' : '')
             ->reorderable('sort_order')
             ->defaultSort('sort_order', 'asc')
             ->filters([
@@ -52,8 +57,10 @@ class PagesTable
                     ->options(PostStatus::class),
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->hidden(fn (Page $record): bool => $record->is_system),
+                DeleteAction::make()
+                    ->hidden(fn (Page $record): bool => $record->is_system),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

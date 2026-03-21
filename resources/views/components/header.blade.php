@@ -2,6 +2,18 @@
     $currentRoute = request()->route()?->getName();
     $currentLocale = app()->getLocale();
     $navPages = \App\Models\Page::query()->published()->where('show_in_nav', true)->orderBy('sort_order')->get();
+
+    $navUrl = fn (\App\Models\Page $page): string => match ($page->slug) {
+        '__blog' => route('blog.index'),
+        '__archive' => route('archive'),
+        default => route('page.show', $page->slug),
+    };
+
+    $isNavActive = fn (\App\Models\Page $page): bool => match ($page->slug) {
+        '__blog' => $currentRoute === 'blog.index',
+        '__archive' => $currentRoute === 'archive',
+        default => $currentRoute === 'page.show' && request()->route('page') === $page->slug,
+    };
 @endphp
 
 <header class="border-b border-neutral-100 dark:border-neutral-900">
@@ -18,11 +30,9 @@
 
             {{-- Desktop nav --}}
             <div class="hidden sm:flex items-center gap-6 ml-auto">
-                <a href="{{ route('blog.index') }}" class="{{ $currentRoute === 'blog.index' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Blog') }}</a>
                 @foreach ($navPages as $navPage)
-                    <a href="{{ route('page.show', $navPage->slug) }}" class="{{ $currentRoute === 'page.show' && request()->route('page') === $navPage->slug ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ $navPage->title }}</a>
+                    <a href="{{ $navUrl($navPage) }}" class="{{ $isNavActive($navPage) ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ $navPage->title }}</a>
                 @endforeach
-                <a href="{{ route('archive') }}" class="{{ $currentRoute === 'archive' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Archive') }}</a>
 
                 {{-- Divider --}}
                 <span class="h-5 w-px bg-neutral-300 dark:bg-neutral-700" aria-hidden="true"></span>
@@ -109,11 +119,9 @@
 
         {{-- Mobile menu --}}
         <div x-show="open" x-transition id="mobile-menu" class="sm:hidden pb-4">
-            <a href="{{ route('blog.index') }}" class="block py-2 {{ $currentRoute === 'blog.index' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Blog') }}</a>
             @foreach ($navPages as $navPage)
-                <a href="{{ route('page.show', $navPage->slug) }}" class="block py-2 {{ $currentRoute === 'page.show' && request()->route('page') === $navPage->slug ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ $navPage->title }}</a>
+                <a href="{{ $navUrl($navPage) }}" class="block py-2 {{ $isNavActive($navPage) ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ $navPage->title }}</a>
             @endforeach
-            <a href="{{ route('archive') }}" class="block py-2 {{ $currentRoute === 'archive' ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Archive') }}</a>
 
             <div class="mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
                 <a
