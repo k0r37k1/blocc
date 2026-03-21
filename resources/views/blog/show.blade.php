@@ -122,11 +122,11 @@
                     <img
                         src="{{ $post->author->getFirstMediaUrl('avatar') }}"
                         alt="{{ $post->author->name }}"
-                        class="h-14 w-14 shrink-0 rounded-full object-cover"
+                        class="h-10 w-10 sm:h-14 sm:w-14 shrink-0 rounded-full object-cover"
                         loading="lazy"
                     >
                 @else
-                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-lg font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
+                    <div class="flex h-10 w-10 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-lg font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
                         {{ str($post->author->name)->substr(0, 1)->upper() }}
                     </div>
                 @endif
