@@ -259,6 +259,16 @@ input[type="checkbox"].appearance-none:checked {
     background-repeat: no-repeat;
 }
 
+/* ---- Newsletter arrow loop ---- */
+@keyframes arrow-nudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+}
+
+@utility animate-arrow-nudge {
+    animation: arrow-nudge 1.2s ease-in-out infinite;
+}
+
 /* ---- Post card hover lift ---- */
 .post-card-hover {
     transition:

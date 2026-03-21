@@ -34,12 +34,11 @@
                         type="submit"
                         wire:loading.attr="disabled"
                         wire:loading.attr="aria-busy"
-                        class="shrink-0 p-2.5 rounded-md text-white disabled:opacity-50 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                        style="background-color: var(--color-accent-bg)"
+                        class="group shrink-0 p-2.5 rounded-md text-white bg-neutral-500 hover:bg-neutral-600 dark:bg-neutral-600 dark:hover:bg-neutral-500 disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                         aria-label="{{ __('Subscribe') }}"
                     >
                         <span wire:loading.remove aria-hidden="true">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <svg class="w-5 h-5 group-hover:animate-arrow-nudge" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                             </svg>
                         </span>
