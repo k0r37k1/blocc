@@ -8,7 +8,7 @@
 <article
     x-data
     x-intersect.once="$el.classList.add('revealed')"
-    class="reveal post-card-hover group sm:-mx-4 rounded-lg px-4 py-6 hover:bg-[var(--color-card-hover)]"
+    class="reveal post-card-hover group -mx-4 rounded-lg px-4 py-6 hover:bg-[var(--color-card-hover)]"
     style="transition-delay: {{ $index * 80 }}ms"
 >
     @if ($post->getFirstMediaUrl('featured-image', 'thumbnail'))
@@ -27,7 +27,8 @@
     <div class="@if ($post->getFirstMediaUrl('featured-image', 'thumbnail')) mt-4 @endif">
         <div class="flex items-center gap-2 text-sm text-muted dark:text-muted-dark">
             <time datetime="{{ $post->published_at->toDateString() }}">
-                {{ $post->published_at->translatedFormat('j. F Y') }}
+                <span class="sm:hidden">{{ $post->published_at->format('d.m.Y') }}</span>
+                <span class="hidden sm:inline">{{ $post->published_at->translatedFormat('j. F Y') }}</span>
             </time>
 
             @if ($post->reading_time)

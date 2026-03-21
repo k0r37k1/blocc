@@ -117,7 +117,7 @@
 
     @if ($post->author)
         <div class="mt-14 rounded-xl p-6" style="background-color: var(--color-card)">
-            <div class="flex flex-col sm:flex-row items-start gap-4">
+            <div class="flex flex-row items-start gap-4">
                 @if ($post->author->getFirstMediaUrl('avatar'))
                     <img
                         src="{{ $post->author->getFirstMediaUrl('avatar') }}"
