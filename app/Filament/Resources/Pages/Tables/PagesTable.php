@@ -31,7 +31,7 @@ class PagesTable
                     ->badge()
                     ->sortable()
                     ->color(fn (Page $record): string => $record->is_system ? 'gray' : 'success')
-                    ->formatStateUsing(fn (Page $record): string => $record->is_system ? __('System') : $record->status->getLabel()),
+                    ->formatStateUsing(fn (Page $record): string => $record->is_system ? __('Gesperrt') : $record->status->getLabel()),
                 ToggleColumn::make('is_published')
                     ->label(__('Published'))
                     ->onColor('success')

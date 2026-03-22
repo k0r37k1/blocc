@@ -1,4 +1,4 @@
-<div x-data x-on:pageshow.window="if ($event.persisted) { $wire.successMessage = ''; $wire.errorMessage = ''; }">
+<div x-data x-auto-animate x-on:pageshow.window="if ($event.persisted) { $wire.successMessage = ''; $wire.errorMessage = ''; }">
     @if ($successMessage)
         <p class="text-sm text-accent" role="status">{{ $successMessage }}</p>
     @elseif ($errorMessage)

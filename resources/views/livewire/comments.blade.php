@@ -41,6 +41,7 @@
     </h2>
 
     {{-- Comment list --}}
+    <div x-auto-animate>
     @forelse ($comments as $comment)
         <div class="group mb-6" wire:key="comment-{{ $comment->id }}">
             <div class="flex items-start gap-3">
@@ -204,6 +205,7 @@
             {{ __('No comments yet. Be the first!') }}
         </p>
     @endforelse
+    </div>
 
     {{-- Pagination --}}
     @if ($comments->hasPages())
