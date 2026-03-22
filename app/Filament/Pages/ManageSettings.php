@@ -3,10 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Models\Site;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -18,6 +18,7 @@ use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\SpatieLaravelMediaLibraryPlugin\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
@@ -100,7 +101,6 @@ class ManageSettings extends Page
         $this->form->fill([
             'blog_name' => Setting::get('blog_name', config('app.name')),
             'blog_description' => Setting::get('blog_description', config('app.description', '')),
-            'blog_logo' => filled(Setting::get('blog_logo')) ? [Setting::get('blog_logo')] : [],
             'posts_per_page' => Setting::get('posts_per_page', '10'),
             'accent_color' => Setting::get('accent_color', '#16a34a'),
             'accent_color_dark' => Setting::get('accent_color_dark', '#4ade80'),
@@ -110,7 +110,6 @@ class ManageSettings extends Page
             'heading_font' => Setting::get('heading_font', 'Inter'),
             'body_font' => Setting::get('body_font', 'Inter'),
             'code_theme' => Setting::get('code_theme', 'GitHub'),
-            'favicon' => filled(Setting::get('favicon')) ? [Setting::get('favicon')] : [],
             'comments_enabled' => Setting::get('comments_enabled', '1') === '1',
             'footer_text' => Setting::get('footer_text', ''),
             'head_scripts' => Setting::get('head_scripts', ''),
@@ -133,24 +132,32 @@ class ManageSettings extends Page
                                 ->label(__('Blog Name'))
                                 ->required()
                                 ->maxLength(255),
-                            Grid::make(2)
+                            Grid::make(3)
                                 ->schema([
-                                    FileUpload::make('blog_logo')
-                                        ->label(__('Blog Logo'))
-                                        ->helperText(__('Shown in the header next to the blog name. Recommended: PNG or SVG with transparent background.'))
+                                    SpatieMediaLibraryFileUpload::make('logo_light')
+                                        ->label(__('Logo (Light)'))
+                                        ->helperText(__('Shown in the header in light mode. SVG or PNG with transparent background.'))
+                                        ->collection('logo_light')
+                                        ->model(Site::instance())
                                         ->image()
-                                        ->disk('public')
-                                        ->directory('logo')
-                                        ->maxSize(512),
-                                    FileUpload::make('favicon')
+                                        ->maxSize(1024)
+                                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/webp']),
+                                    SpatieMediaLibraryFileUpload::make('logo_dark')
+                                        ->label(__('Logo (Dark)'))
+                                        ->helperText(__('Shown in the header in dark mode. Falls back to light logo if not set.'))
+                                        ->collection('logo_dark')
+                                        ->model(Site::instance())
+                                        ->image()
+                                        ->maxSize(1024)
+                                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/webp']),
+                                    SpatieMediaLibraryFileUpload::make('favicon')
                                         ->label(__('Favicon'))
-                                        ->helperText(__('Browser tab icon. Recommended: 32x32px PNG or ICO.'))
+                                        ->helperText(__('Browser tab icon. SVG or 32x32px PNG.'))
+                                        ->collection('favicon')
+                                        ->model(Site::instance())
                                         ->image()
-                                        ->disk('public')
-                                        ->directory('favicon')
-                                        ->maxSize(128)
-                                        ->acceptedFileTypes(['image/png', 'image/x-icon', 'image/svg+xml', 'image/vnd.microsoft.icon'])
-                                        ->imageCropAspectRatio('1:1'),
+                                        ->maxSize(256)
+                                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/x-icon', 'image/vnd.microsoft.icon']),
                                 ]),
                             Textarea::make('blog_description')
                                 ->label(__('Blog Description'))
@@ -296,15 +303,7 @@ class ManageSettings extends Page
     {
         $data = $this->form->getState();
 
-        foreach (['blog_logo', 'favicon'] as $fileField) {
-            $file = $data[$fileField] ?? [];
-            if (is_array($file)) {
-                $first = reset($file);
-                $data[$fileField] = $first !== false ? $first : null;
-            } else {
-                $data[$fileField] = $file;
-            }
-        }
+        unset($data['logo_light'], $data['logo_dark'], $data['favicon']);
 
         $data['comments_enabled'] = $data['comments_enabled'] ? '1' : '0';
         $data['newsletter_enabled'] = $data['newsletter_enabled'] ? '1' : '0';

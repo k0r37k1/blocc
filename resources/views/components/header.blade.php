@@ -21,10 +21,17 @@
         <div class="flex items-center h-16">
             {{-- Brand --}}
             <a href="{{ route('blog.index') }}" class="mr-auto text-lg font-bold text-neutral-900 dark:text-neutral-100 hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
-                @if ($logo = \App\Models\Setting::get('blog_logo'))
-                    <img src="{{ asset('storage/' . $logo) }}" alt="{{ \App\Models\Setting::get('blog_name', config('app.name')) }}" class="h-8 w-auto">
+                @php
+                    $site = \App\Models\Site::instance();
+                    $logoLight = $site->getFirstMediaUrl('logo_light');
+                    $logoDark = $site->getFirstMediaUrl('logo_dark') ?: $logoLight;
+                    $blogName = \App\Models\Setting::get('blog_name', config('app.name'));
+                @endphp
+                @if ($logoLight)
+                    <img src="{{ $logoLight }}" alt="{{ $blogName }}" class="h-8 w-auto dark:hidden">
+                    <img src="{{ $logoDark }}" alt="{{ $blogName }}" class="h-8 w-auto hidden dark:block">
                 @else
-                    {{ \App\Models\Setting::get('blog_name', config('app.name')) }}
+                    {{ $blogName }}
                 @endif
             </a>
 

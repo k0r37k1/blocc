@@ -24,7 +24,7 @@
     $fontStacks = config('appearance.fonts');
     $headingFontStack = $fontStacks[$headingFontKey] ?? $fontStacks['Inter'];
     $bodyFontStack = $fontStacks[$bodyFontKey] ?? $fontStacks['Inter'];
-    $favicon = \App\Models\Setting::get('favicon');
+    $favicon = \App\Models\Site::instance()->getFirstMediaUrl('favicon');
 @endphp
 
 <!DOCTYPE html>
@@ -54,7 +54,7 @@
 
         {{-- Favicon --}}
         @if ($favicon)
-            <link rel="icon" href="{{ asset('storage/' . $favicon) }}">
+            <link rel="icon" href="{{ $favicon }}">
         @endif
 
         {{-- RSS auto-discovery --}}
