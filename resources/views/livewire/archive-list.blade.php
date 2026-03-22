@@ -12,14 +12,6 @@
                 @endforeach
             </select>
 
-            @if (filled($year) || filled($month))
-                <button
-                    wire:click="$set('year', ''); $set('month', '')"
-                    type="button"
-                    class="text-sm text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
-                >{{ __('Clear') }}</button>
-            @endif
-
             @if (filled($year))
                 <select
                     wire:model.live="month"
@@ -30,6 +22,14 @@
                         <option value="{{ $item['month'] }}">{{ $item['label'] }} ({{ $item['count'] }})</option>
                     @endforeach
                 </select>
+            @endif
+
+            @if (filled($year) || filled($month))
+                <button
+                    wire:click="$set('year', ''); $set('month', '')"
+                    type="button"
+                    class="text-sm text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
+                >{{ __('Clear') }}</button>
             @endif
         </div>
     @endif
