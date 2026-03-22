@@ -115,6 +115,30 @@ class AdminPanelProvider extends PanelProvider
                         /* WCAG 2.2 AA: match frontend accent-bg (#15803d) for consistent button contrast */
                         .fi-bg-color-400, .dark .fi-bg-color-600 { background-color: #15803d !important; }
                         .fi-bg-color-400 { color: #fff !important; }
+
+                        /* FilePond grid mode: center the drop label vertically in the panel */
+                        .filepond--root[data-style-panel-layout~="grid"] .filepond--drop-label {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .filepond--root[data-style-panel-layout~="grid"] .filepond--drop-label label {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 0.5rem;
+                        }
+                        .filepond--root[data-style-panel-layout~="grid"] .filepond--drop-label label::before {
+                            content: "";
+                            display: block;
+                            width: 2rem;
+                            height: 2rem;
+                            background-image: url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\' stroke-width=\'1.5\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5\'/%3E%3C/svg%3E");
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            opacity: 0.5;
+                        }
                     </style>'
                 ),
             );

@@ -20,17 +20,20 @@ class ListMedia extends ListRecords
             Action::make('upload')
                 ->label(__('Upload'))
                 ->icon(Heroicon::OutlinedArrowUpTray)
+                ->modalWidth('2xl')
                 ->schema([
                     SpatieMediaLibraryFileUpload::make('files')
-                        ->label(__('Files'))
+                        ->hiddenLabel()
                         ->helperText(__('For logo and favicon, use the filenames logo_light, logo_dark, or favicon.'))
                         ->collection('uploads')
                         ->model(Site::instance())
                         ->multiple()
+                        ->image()
+                        ->imagePreviewHeight('200')
                         ->maxSize(10240)
                         ->panelLayout('grid')
-                        ->reorderable()
-                        ->acceptedFileTypes(['image/*']),
+                        ->panelAspectRatio('2:1')
+                        ->reorderable(),
                 ])
                 ->action(function (): void {
                     Notification::make()
