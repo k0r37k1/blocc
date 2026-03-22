@@ -6,7 +6,7 @@
                 <button
                     wire:click="$set('year', ''); $set('month', '')"
                     type="button"
-                    class="text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
+                    class="text-neutral-400 dark:text-neutral-500 hover:text-red-500 dark:hover:text-red-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
                     aria-label="{{ __('Clear filter') }}"
                 >
                     <x-heroicon-o-x-mark class="w-4 h-4" aria-hidden="true" />
