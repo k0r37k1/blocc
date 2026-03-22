@@ -3,9 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Setting;
-use Brevo\Client\Configuration;
-use Brevo\Client\Model\CreateDoiContact;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
@@ -73,32 +71,33 @@ class NewsletterSubscribe extends Component
         }
 
         try {
-            $config = Configuration::getDefaultConfiguration()
-                ->setApiKey('api-key', config('brevo.api_key'));
-
-            $contactsApi = new \Brevo\Client\Api\ContactsApi(new Client, $config);
-
-            $doiContact = new CreateDoiContact([
+            $response = Http::withHeaders([
+                'api-key' => config('brevo.api_key'),
+                'Accept' => 'application/json',
+            ])->post('https://api.brevo.com/v3/contacts/doubleOptinConfirmation', [
                 'email' => $this->email,
                 'includeListIds' => [$listId],
                 'templateId' => $templateId,
                 'redirectionUrl' => $redirectionUrl,
             ]);
 
-            $contactsApi->createDoiContact($doiContact);
+            if ($response->successful()) {
+                $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
+                $this->reset('email', 'website');
 
-            $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
-            $this->reset('email', 'website');
-        } catch (\Brevo\Client\ApiException $e) {
+                return;
+            }
+
+            $body = $response->json();
+
             Log::error('Newsletter subscription failed', [
                 'email' => $this->email,
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
-                'response' => $e->getResponseBody(),
+                'status' => $response->status(),
+                'response' => $body,
             ]);
 
-            // 400 with "Contact already exist" or similar — treat as success to avoid enumeration
-            if ($e->getCode() === 400) {
+            // 400 — treat as success to avoid enumeration (e.g. contact already exists)
+            if ($response->status() === 400) {
                 $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
                 $this->reset('email', 'website');
 

@@ -3,11 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Setting;
-use Brevo\Client\Api\ContactsApi;
-use Brevo\Client\Configuration;
-use Brevo\Client\Model\CreateDoiContact;
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class TestBrevoApi extends Command
 {
@@ -44,27 +41,25 @@ class TestBrevoApi extends Command
             return self::FAILURE;
         }
 
+        $this->line('Sending DOI contact request...');
+
         try {
-            $config = Configuration::getDefaultConfiguration()
-                ->setApiKey('api-key', $apiKey);
-
-            $contactsApi = new ContactsApi(new Client, $config);
-
-            $doiContact = new CreateDoiContact([
+            $response = Http::withHeaders([
+                'api-key' => $apiKey,
+                'Accept' => 'application/json',
+            ])->post('https://api.brevo.com/v3/contacts/doubleOptinConfirmation', [
                 'email' => $email,
                 'includeListIds' => [$listId],
                 'templateId' => $templateId,
                 'redirectionUrl' => $redirectionUrl,
             ]);
 
-            $this->line('Sending DOI contact request...');
-            $contactsApi->createDoiContact($doiContact);
-
-            $this->info('SUCCESS: DOI confirmation email sent. Check inbox.');
-        } catch (\Brevo\Client\ApiException $e) {
-            $this->error("API Error (HTTP {$e->getCode()})");
-            $this->line('Message:  '.$e->getMessage());
-            $this->line('Response: '.json_encode(json_decode($e->getResponseBody()), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            if ($response->successful()) {
+                $this->info('SUCCESS: DOI confirmation email sent. Check inbox.');
+            } else {
+                $this->error("API Error (HTTP {$response->status()})");
+                $this->line('Response: '.json_encode($response->json(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            }
         } catch (\Throwable $e) {
             $this->error('Unexpected error: '.get_class($e));
             $this->line($e->getMessage());
