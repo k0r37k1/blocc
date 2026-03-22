@@ -30,7 +30,7 @@ class ListMedia extends ListRecords
                         ->maxSize(10240)
                         ->panelLayout('grid')
                         ->reorderable()
-                        ->acceptedFileTypes(['image/*', 'application/pdf', 'video/*']),
+                        ->acceptedFileTypes(['image/*']),
                 ])
                 ->action(function (): void {
                     Notification::make()
