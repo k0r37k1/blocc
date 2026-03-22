@@ -29,8 +29,8 @@
                     $blogName = \App\Models\Setting::get('blog_name', config('app.name'));
                 @endphp
                 @if ($logoLight)
-                    <img src="{{ $logoLight }}" alt="{{ $blogName }}" class="h-12 w-auto dark:hidden">
-                    <img src="{{ $logoDark }}" alt="{{ $blogName }}" class="h-12 w-auto hidden dark:block">
+                    <img src="{{ $logoLight }}" alt="{{ $blogName }}" class="h-10 w-auto dark:hidden">
+                    <img src="{{ $logoDark }}" alt="{{ $blogName }}" class="h-10 w-auto hidden dark:block">
                 @else
                     {{ $blogName }}
                 @endif
