@@ -106,8 +106,6 @@ class PostForm
             SpatieMediaLibraryFileUpload::make('featured_image')
                 ->collection('featured-image')
                 ->image()
-                ->imageResizeMode('cover')
-                ->imageResizeTargetWidth(1200)
                 ->maxSize(5120)
                 ->columnSpanFull()
                 ->live(),
