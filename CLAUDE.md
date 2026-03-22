@@ -245,4 +245,31 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - IMPORTANT: Always use `search-docs` tool for version-specific Tailwind CSS documentation and updated code examples. Never rely on training data.
 - IMPORTANT: Activate `tailwindcss-development` every time you're working with a Tailwind CSS or styling-related task.
 
+
+=== brevo rules ===
+
+# Brevo (Newsletter / Double Opt-In)
+
+## DOI Template Requirements
+
+For the `POST /v3/contacts/doubleOptinConfirmation` API to work, the Brevo template must meet **two conditions**:
+
+1. The button/link href must use the placeholder `{{ doubleoptin }}` (not `{{ params.DOIUrl }}`).
+2. The template must have the tag `optin` set — this is what registers it as an active DOI template in Brevo's system.
+
+Without the `optin` tag, Brevo returns `400 invalid_parameter: "An active DOI template does not exist"` even if the template is active and contains the correct placeholder.
+
+To set the tag via API:
+```php
+Http::withHeaders(['api-key' => config('brevo.api_key')])
+    ->put('https://api.brevo.com/v3/smtp/templates/{id}', [
+        // ... other fields ...
+        'tag' => 'optin',
+    ]);
+```
+
+## Local Testing
+
+- The `brevo:test` Artisan command only works on the live server (the local `.env` has no API key and `APP_URL` is `localhost` which Brevo rejects as `redirectionUrl`).
+
 </laravel-boost-guidelines>
