@@ -12,6 +12,7 @@ class Site extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
+        $this->addMediaCollection('uploads');
         $this->addMediaCollection('site_assets');
     }
 
