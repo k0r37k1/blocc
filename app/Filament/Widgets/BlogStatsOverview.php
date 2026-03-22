@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\Pages\PageResource;
 use App\Filament\Resources\Posts\PostResource;
 use App\Models\Page;
 use App\Models\Post;
@@ -19,14 +20,23 @@ class BlogStatsOverview extends StatsOverviewWidget
 
         return [
             Stat::make(__('Published Posts'), Post::published()->count())
-                ->color('success'),
+                ->description(__('View all'))
+                ->descriptionIcon(Heroicon::OutlinedArrowTopRightOnSquare)
+                ->color('success')
+                ->url(PostResource::getUrl('index')),
             Stat::make(__('Drafts'), Post::draft()->count())
-                ->color('warning'),
+                ->description(__('View drafts'))
+                ->descriptionIcon(Heroicon::OutlinedPencilSquare)
+                ->color('warning')
+                ->url(PostResource::getUrl('index')),
             Stat::make(__('Pages'), Page::count())
-                ->color('info'),
+                ->description(__('View all'))
+                ->descriptionIcon(Heroicon::OutlinedArrowTopRightOnSquare)
+                ->color('info')
+                ->url(PageResource::getUrl('index')),
             Stat::make(__('Last Published'), $latestPublished !== null ? $latestPublished->published_at->diffForHumans(short: true) : __('Never'))
                 ->description(__('View latest'))
-                ->descriptionIcon(Heroicon::Clock)
+                ->descriptionIcon(Heroicon::OutlinedClock)
                 ->color('gray')
                 ->url($latestPublished !== null ? PostResource::getUrl('edit', ['record' => $latestPublished]) : null),
         ];

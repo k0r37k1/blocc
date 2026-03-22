@@ -15,13 +15,13 @@ class Dashboard extends BaseDashboard
         return [
             Action::make('newPost')
                 ->label(__('New Post'))
-                ->icon(Heroicon::PlusCircle)
+                ->icon(Heroicon::OutlinedPlusCircle)
                 ->color('primary')
                 ->url(PostResource::getUrl('create')),
 
             Action::make('newPage')
                 ->label(__('New Page'))
-                ->icon(Heroicon::DocumentPlus)
+                ->icon(Heroicon::OutlinedDocumentPlus)
                 ->color('gray')
                 ->url(PageResource::getUrl('create')),
         ];
