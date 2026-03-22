@@ -20,7 +20,7 @@
     <nav x-data="{ open: false }" class="max-w-3xl mx-auto px-4 sm:px-6" aria-label="{{ __('Main navigation') }}">
         <div class="flex items-center h-16">
             {{-- Brand --}}
-            <a href="{{ route('blog.index') }}" class="mr-auto text-lg font-bold text-neutral-900 dark:text-neutral-100 hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
+            <a href="{{ route('blog.index') }}" class="mr-auto text-lg font-bold text-neutral-900 dark:text-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
                 @php
                     $site = \App\Models\Site::instance();
                     $assets = $site->getMedia('uploads')->keyBy(fn ($m) => pathinfo($m->file_name, PATHINFO_FILENAME));
@@ -30,8 +30,8 @@
                 @endphp
                 <span class="flex items-center gap-2">
                     @if ($logoLight)
-                        <img src="{{ $logoLight }}" alt="" class="h-10 w-auto dark:hidden">
-                        <img src="{{ $logoDark }}" alt="" class="h-10 w-auto hidden dark:block">
+                        <img src="{{ $logoLight }}" alt="" class="h-8 w-auto dark:hidden">
+                        <img src="{{ $logoDark }}" alt="" class="h-8 w-auto hidden dark:block">
                     @endif
                     {{ $blogName }}
                 </span>
