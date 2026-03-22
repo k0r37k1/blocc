@@ -28,11 +28,13 @@
                     $logoDark = $assets->get('logo_dark')?->getUrl() ?: $logoLight;
                     $blogName = \App\Models\Setting::get('blog_name', config('app.name'));
                 @endphp
-                @if ($logoLight)
-                    <img src="{{ $logoLight }}" alt="" class="h-10 w-auto dark:hidden">
-                    <img src="{{ $logoDark }}" alt="" class="h-10 w-auto hidden dark:block">
-                @endif
-                {{ $blogName }}
+                <span class="flex items-center gap-2">
+                    @if ($logoLight)
+                        <img src="{{ $logoLight }}" alt="" class="h-10 w-auto dark:hidden">
+                        <img src="{{ $logoDark }}" alt="" class="h-10 w-auto hidden dark:block">
+                    @endif
+                    {{ $blogName }}
+                </span>
             </a>
 
             {{-- Desktop nav --}}
