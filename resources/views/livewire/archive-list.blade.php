@@ -2,16 +2,6 @@
     {{-- Filter dropdowns --}}
     @if ($this->availableYears->isNotEmpty())
         <div class="flex justify-end items-center gap-3 mb-8">
-            <select
-                wire:model.live="year"
-                class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-                <option value="">{{ __('All years') }}</option>
-                @foreach ($this->availableYears as $item)
-                    <option value="{{ $item['year'] }}">{{ $item['year'] }} ({{ $item['count'] }})</option>
-                @endforeach
-            </select>
-
             @if (filled($year) || filled($month))
                 <button
                     wire:click="$set('year', ''); $set('month', '')"
@@ -22,6 +12,16 @@
                     <x-heroicon-o-x-mark class="w-4 h-4" aria-hidden="true" />
                 </button>
             @endif
+
+            <select
+                wire:model.live="year"
+                class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+                <option value="">{{ __('All years') }}</option>
+                @foreach ($this->availableYears as $item)
+                    <option value="{{ $item['year'] }}">{{ $item['year'] }} ({{ $item['count'] }})</option>
+                @endforeach
+            </select>
 
             @if (filled($year))
                 <select
