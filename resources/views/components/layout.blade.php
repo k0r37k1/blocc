@@ -24,7 +24,7 @@
     $fontStacks = config('appearance.fonts');
     $headingFontStack = $fontStacks[$headingFontKey] ?? $fontStacks['Inter'];
     $bodyFontStack = $fontStacks[$bodyFontKey] ?? $fontStacks['Inter'];
-    $siteAssets = \App\Models\Site::instance()->getMedia('site_assets')->keyBy(fn ($m) => pathinfo($m->file_name, PATHINFO_FILENAME));
+    $siteAssets = \App\Models\Site::instance()->getMedia('uploads')->keyBy(fn ($m) => pathinfo($m->file_name, PATHINFO_FILENAME));
     $favicon = $siteAssets->get('favicon')?->getUrl();
 @endphp
 
