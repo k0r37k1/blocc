@@ -90,6 +90,13 @@ class NewsletterSubscribe extends Component
             $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
             $this->reset('email', 'website');
         } catch (\Brevo\Client\ApiException $e) {
+            Log::error('Newsletter subscription failed', [
+                'email' => $this->email,
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'response' => $e->getResponseBody(),
+            ]);
+
             // 400 with "Contact already exist" or similar — treat as success to avoid enumeration
             if ($e->getCode() === 400) {
                 $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
@@ -97,12 +104,6 @@ class NewsletterSubscribe extends Component
 
                 return;
             }
-
-            Log::error('Newsletter subscription failed', [
-                'email' => $this->email,
-                'code' => $e->getCode(),
-                'message' => $e->getMessage(),
-            ]);
 
             $this->errorMessage = __('Something went wrong. Please try again later.');
         }
