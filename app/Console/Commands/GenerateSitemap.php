@@ -21,9 +21,11 @@ class GenerateSitemap extends Command
         $categories = Category::all(['name', 'slug']);
         $tags = Tag::all(['name', 'slug']);
 
-        $xml = view('sitemap', compact('posts', 'pages', 'categories', 'tags'))->render();
+        $xml = ltrim(view('sitemap', compact('posts', 'pages', 'categories', 'tags'))->render());
 
         file_put_contents(public_path('sitemap.xml'), $xml);
+
+        $this->line('Path: '.public_path('sitemap.xml'));
 
         $this->info('sitemap.xml generated successfully.');
 
