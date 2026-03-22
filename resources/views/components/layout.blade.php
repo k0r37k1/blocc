@@ -13,7 +13,7 @@
     $description ??= config('app.description');
     $resolvedOgTitle = $ogTitle ?? $title ?? config('app.name');
     $resolvedOgDescription = $ogDescription ?? $description;
-    $resolvedOgImage = $ogImage ?? asset('images/og-default.png');
+    $resolvedOgImage = $ogImage;
     $resolvedCanonicalUrl = $canonicalUrl ?? url()->current();
     $twitterCard = $ogImage ? 'summary_large_image' : 'summary';
 
@@ -45,13 +45,17 @@
         <meta property="og:description" content="{{ $resolvedOgDescription }}">
         <meta property="og:url" content="{{ $resolvedCanonicalUrl }}">
         <meta property="og:type" content="{{ $ogType }}">
-        <meta property="og:image" content="{{ $resolvedOgImage }}">
+        @if ($resolvedOgImage)
+            <meta property="og:image" content="{{ $resolvedOgImage }}">
+        @endif
 
         {{-- Twitter Card --}}
         <meta name="twitter:card" content="{{ $twitterCard }}">
         <meta name="twitter:title" content="{{ $resolvedOgTitle }}">
         <meta name="twitter:description" content="{{ $resolvedOgDescription }}">
-        <meta name="twitter:image" content="{{ $resolvedOgImage }}">
+        @if ($resolvedOgImage)
+            <meta name="twitter:image" content="{{ $resolvedOgImage }}">
+        @endif
 
         {{-- Favicon --}}
         @if ($favicon)

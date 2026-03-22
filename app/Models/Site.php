@@ -15,11 +15,14 @@ class Site extends Model implements HasMedia
         $this->addMediaCollection('uploads')->useDisk('images');
     }
 
+    private static ?self $cached = null;
+
     /**
      * Always return the singleton instance (ID=1), creating it if needed.
+     * Result is cached for the lifetime of the request.
      */
     public static function instance(): static
     {
-        return static::find(1) ?? static::forceCreate(['id' => 1]);
+        return static::$cached ??= static::find(1) ?? static::forceCreate(['id' => 1]);
     }
 }
