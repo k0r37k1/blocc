@@ -18,6 +18,7 @@
 /node_modules
 # /public/build  # Committed for shared hosting (no Node.js)
 /public/hot
+/public/sitemap.xml
 /public/storage
 /storage/*.key
 /storage/debugbar
