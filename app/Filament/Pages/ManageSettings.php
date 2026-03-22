@@ -97,6 +97,7 @@ class ManageSettings extends Page
     {
         $this->form->fill([
             'blog_name' => Setting::get('blog_name', config('app.name')),
+            'hero_title' => Setting::get('hero_title', ''),
             'blog_description' => Setting::get('blog_description', config('app.description', '')),
             'posts_per_page' => Setting::get('posts_per_page', '10'),
             'accent_color' => Setting::get('accent_color', '#16a34a'),
@@ -127,7 +128,12 @@ class ManageSettings extends Page
                         ->schema([
                             TextInput::make('blog_name')
                                 ->label(__('Blog Name'))
+                                ->helperText(__('Used in the navbar and browser tab title.'))
                                 ->required()
+                                ->maxLength(255),
+                            TextInput::make('hero_title')
+                                ->label(__('Hero Title'))
+                                ->helperText(__('Large title shown on the homepage. Defaults to Blog Name if left empty.'))
                                 ->maxLength(255),
                             Textarea::make('blog_description')
                                 ->label(__('Blog Description'))

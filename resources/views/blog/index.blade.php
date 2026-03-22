@@ -15,7 +15,7 @@
 @endphp
     <div class="mb-10">
         <h1 class="{{ $heroTitleClass }} font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
-            {{ \App\Models\Setting::get('blog_name', config('app.name')) }}
+            {{ \App\Models\Setting::get('hero_title') ?: \App\Models\Setting::get('blog_name', config('app.name')) }}
         </h1>
         @if ($description = \App\Models\Setting::get('blog_description'))
             <p class="mt-1 {{ $heroSubtitleClass }} text-muted dark:text-muted-dark">{{ $description }}</p>
