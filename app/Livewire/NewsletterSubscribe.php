@@ -106,6 +106,14 @@ class NewsletterSubscribe extends Component
             }
 
             $this->errorMessage = __('Something went wrong. Please try again later.');
+        } catch (\Throwable $e) {
+            Log::error('Newsletter unexpected error', [
+                'email' => $this->email,
+                'class' => get_class($e),
+                'message' => $e->getMessage(),
+            ]);
+
+            $this->errorMessage = __('Something went wrong. Please try again later.');
         }
     }
 
