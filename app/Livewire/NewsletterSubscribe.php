@@ -80,9 +80,9 @@ class NewsletterSubscribe extends Component
 
             $doiContact = new CreateDoiContact([
                 'email' => $this->email,
-                'include_list_ids' => [$listId],
-                'template_id' => $templateId,
-                'redirection_url' => $redirectionUrl,
+                'includeListIds' => [$listId],
+                'templateId' => $templateId,
+                'redirectionUrl' => $redirectionUrl,
             ]);
 
             $contactsApi->createDoiContact($doiContact);
