@@ -206,5 +206,6 @@
     "Email": "Email",
     "Full URLs including https://": "Full URLs including https://",
     "Social Links": "Social Links",
-    "Top bar": "Top bar"
+    "Top bar": "Top bar",
+    "For logo and favicon, use the filenames logo_light, logo_dark, or favicon.": "For logo and favicon, use the filenames logo_light, logo_dark, or favicon."
 }

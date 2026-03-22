@@ -246,5 +246,6 @@
     "Small": "Klein",
     "Medium": "Mittel",
     "Large": "Groß",
-    "Extra Large": "Sehr groß"
+    "Extra Large": "Sehr groß",
+    "For logo and favicon, use the filenames logo_light, logo_dark, or favicon.": "Für Logo und Favicon die Dateinamen logo_light, logo_dark oder favicon verwenden."
 }

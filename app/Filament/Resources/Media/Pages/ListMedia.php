@@ -23,7 +23,7 @@ class ListMedia extends ListRecords
                 ->schema([
                     SpatieMediaLibraryFileUpload::make('files')
                         ->label(__('Files'))
-                        ->helperText(__('Logo/Favicon: name files logo_light, logo_dark or favicon.'))
+                        ->helperText(__('For logo and favicon, use the filenames logo_light, logo_dark, or favicon.'))
                         ->collection('uploads')
                         ->model(Site::instance())
                         ->multiple()
