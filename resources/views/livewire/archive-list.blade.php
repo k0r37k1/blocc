@@ -1,34 +1,29 @@
 <div>
-    {{-- Year pills --}}
+    {{-- Filter dropdowns --}}
     @if ($this->availableYears->isNotEmpty())
-        <div class="flex flex-wrap gap-2 mb-4">
-            @foreach ($this->availableYears as $item)
-                <button
-                    wire:click="selectYear('{{ $item['year'] }}')"
-                    type="button"
-                    class="text-sm px-3 py-1 rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent {{ $year === $item['year'] ? 'border-accent text-accent' : 'border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-accent hover:text-accent' }}"
-                >
-                    {{ $item['year'] }} <span class="opacity-60">({{ $item['count'] }})</span>
-                </button>
-            @endforeach
-        </div>
-
-        {{-- Month pills (only when a year is selected) --}}
-        @if (filled($year) && $this->availableMonths->isNotEmpty())
-            <div x-auto-animate class="flex flex-wrap gap-2 mb-8">
-                @foreach ($this->availableMonths as $item)
-                    <button
-                        wire:click="selectMonth('{{ $item['month'] }}')"
-                        type="button"
-                        class="text-sm px-3 py-1 rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent {{ $month === $item['month'] ? 'border-accent text-accent' : 'border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-accent hover:text-accent' }}"
-                    >
-                        {{ $item['label'] }} <span class="opacity-60">({{ $item['count'] }})</span>
-                    </button>
+        <div class="flex gap-3 mb-8">
+            <select
+                wire:model.live="year"
+                class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+                <option value="">{{ __('All years') }}</option>
+                @foreach ($this->availableYears as $item)
+                    <option value="{{ $item['year'] }}">{{ $item['year'] }} ({{ $item['count'] }})</option>
                 @endforeach
-            </div>
-        @else
-            <div class="mb-8"></div>
-        @endif
+            </select>
+
+            @if (filled($year))
+                <select
+                    wire:model.live="month"
+                    class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                    <option value="">{{ __('All months') }}</option>
+                    @foreach ($this->availableMonths as $item)
+                        <option value="{{ $item['month'] }}">{{ $item['label'] }} ({{ $item['count'] }})</option>
+                    @endforeach
+                </select>
+            @endif
+        </div>
     @endif
 
     {{-- Post list --}}

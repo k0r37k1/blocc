@@ -29,7 +29,7 @@ class ArchiveListTest extends TestCase
             ->assertDontSee('Draft Post');
     }
 
-    public function test_shows_year_pills_for_published_posts(): void
+    public function test_shows_years_in_dropdown(): void
     {
         Post::factory()->published()->create(['published_at' => Carbon::parse('2024-06-15')]);
         Post::factory()->published()->create(['published_at' => Carbon::parse('2023-03-10')]);
@@ -62,20 +62,7 @@ class ArchiveListTest extends TestCase
             ->assertDontSee('March Post');
     }
 
-    public function test_selecting_same_year_deselects_it(): void
-    {
-        Post::factory()->published()->create(['title' => 'Post 2024', 'published_at' => Carbon::parse('2024-06-15')]);
-        Post::factory()->published()->create(['title' => 'Post 2023', 'published_at' => Carbon::parse('2023-03-10')]);
-
-        Livewire::test(ArchiveList::class)
-            ->set('year', '2024')
-            ->call('selectYear', '2024')
-            ->assertSet('year', '')
-            ->assertSee('Post 2024')
-            ->assertSee('Post 2023');
-    }
-
-    public function test_selecting_new_year_resets_month(): void
+    public function test_changing_year_resets_month(): void
     {
         Post::factory()->published()->create(['title' => 'Post A', 'published_at' => Carbon::parse('2024-06-15')]);
         Post::factory()->published()->create(['title' => 'Post B', 'published_at' => Carbon::parse('2023-03-10')]);
@@ -83,22 +70,20 @@ class ArchiveListTest extends TestCase
         Livewire::test(ArchiveList::class)
             ->set('year', '2024')
             ->set('month', '6')
-            ->call('selectYear', '2023')
+            ->set('year', '2023')
             ->assertSet('month', '');
     }
 
-    public function test_selecting_same_month_deselects_it(): void
+    public function test_clearing_year_shows_all_posts(): void
     {
-        Post::factory()->published()->create(['title' => 'June Post', 'published_at' => Carbon::parse('2024-06-15')]);
-        Post::factory()->published()->create(['title' => 'March Post', 'published_at' => Carbon::parse('2024-03-10')]);
+        Post::factory()->published()->create(['title' => 'Post 2024', 'published_at' => Carbon::parse('2024-06-15')]);
+        Post::factory()->published()->create(['title' => 'Post 2023', 'published_at' => Carbon::parse('2023-03-10')]);
 
         Livewire::test(ArchiveList::class)
             ->set('year', '2024')
-            ->set('month', '6')
-            ->call('selectMonth', '6')
-            ->assertSet('month', '')
-            ->assertSee('June Post')
-            ->assertSee('March Post');
+            ->set('year', '')
+            ->assertSee('Post 2024')
+            ->assertSee('Post 2023');
     }
 
     public function test_shows_empty_state_when_no_posts(): void

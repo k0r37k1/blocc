@@ -22,17 +22,6 @@ class ArchiveList extends Component
         $this->month = '';
     }
 
-    public function selectYear(string $year): void
-    {
-        $this->year = $this->year === $year ? '' : $year;
-        $this->month = '';
-    }
-
-    public function selectMonth(string $month): void
-    {
-        $this->month = $this->month === $month ? '' : $month;
-    }
-
     /** @return Collection<string, Collection<int, Post>> */
     #[Computed]
     public function postsByYear(): Collection
