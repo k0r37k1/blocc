@@ -289,3 +289,10 @@ input[type="checkbox"].appearance-none:checked {
 .system-page-row {
     opacity: 0.4;
 }
+
+/* ---- PostList: disable scroll-reveal inside Livewire filter (AutoAnimate handles it) ---- */
+.post-list-livewire .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}

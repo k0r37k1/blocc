@@ -6,6 +6,7 @@ use App\Filament\Pages\Auth\EditProfile;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
@@ -45,6 +46,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register mb_lower() for case-insensitive Unicode search in SQLite
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            DB::connection()->getPdo()->sqliteCreateFunction(
+                'mb_lower',
+                fn (?string $value): string => mb_strtolower($value ?? '', 'UTF-8'),
+                1
+            );
+        }
+
         Livewire::component('app.filament.pages.auth.edit-profile', EditProfile::class);
 
         FilamentView::registerRenderHook(

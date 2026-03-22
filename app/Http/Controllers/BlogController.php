@@ -2,22 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Setting;
 use Illuminate\View\View;
 
 class BlogController extends Controller
 {
     public function index(): View
     {
-        $posts = Post::query()
-            ->published()
-            ->with(['category', 'media', 'author.media'])
-            ->withCount('approvedComments')
-            ->latest('published_at')
-            ->simplePaginate((int) Setting::get('posts_per_page', '10'));
-
-        return view('blog.index', compact('posts'));
+        return view('blog.index');
     }
 
     public function show(string $post): View

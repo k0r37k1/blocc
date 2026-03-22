@@ -1,4 +1,8 @@
+import { autoAnimatePlugin } from '@formkit/auto-animate/alpine'
+
 document.addEventListener('alpine:init', () => {
+    Alpine.plugin(autoAnimatePlugin)
+
     Alpine.data('codeBlocks', () => ({
         init() {
             const copyLabel = this.$el.dataset.copyLabel || 'Copy'
