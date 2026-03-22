@@ -1,7 +1,7 @@
 <div class="post-list-livewire">
     {{-- Search bar --}}
     <div class="flex justify-end mb-8">
-        <div class="relative w-1/2 md:w-1/3">
+        <div class="relative w-1/2 sm:w-1/3">
             <input
                 wire:model.live.debounce.250ms="search"
                 type="search"
