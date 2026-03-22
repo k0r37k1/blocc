@@ -21,6 +21,6 @@ class Site extends Model implements HasMedia
      */
     public static function instance(): static
     {
-        return static::firstOrCreate(['id' => 1]);
+        return static::find(1) ?? static::forceCreate(['id' => 1]);
     }
 }
