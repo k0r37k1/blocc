@@ -81,7 +81,9 @@ jobs:
           script: |
             cd ${{ secrets.FTP_SERVER_DIR }}
             /opt/plesk/php/8.4/bin/php artisan down
-            /opt/plesk/php/8.4/bin/php /usr/lib/plesk-9.0/composer.phar install --no-dev --optimize-autoloader
+            curl -sS https://getcomposer.org/installer | /opt/plesk/php/8.4/bin/php -- --quiet
+            /opt/plesk/php/8.4/bin/php composer.phar install --no-dev --optimize-autoloader
+            rm -f composer.phar
             /opt/plesk/php/8.4/bin/php artisan migrate --force
             /opt/plesk/php/8.4/bin/php artisan filament:upgrade
             /opt/plesk/php/8.4/bin/php artisan optimize:clear
