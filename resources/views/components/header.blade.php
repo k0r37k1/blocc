@@ -23,8 +23,9 @@
             <a href="{{ route('blog.index') }}" class="mr-auto text-lg font-bold text-neutral-900 dark:text-neutral-100 hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
                 @php
                     $site = \App\Models\Site::instance();
-                    $logoLight = $site->getFirstMediaUrl('logo_light');
-                    $logoDark = $site->getFirstMediaUrl('logo_dark') ?: $logoLight;
+                    $assets = $site->getMedia('site_assets')->keyBy(fn ($m) => pathinfo($m->file_name, PATHINFO_FILENAME));
+                    $logoLight = $assets->get('logo_light')?->getUrl();
+                    $logoDark = $assets->get('logo_dark')?->getUrl() ?: $logoLight;
                     $blogName = \App\Models\Setting::get('blog_name', config('app.name'));
                 @endphp
                 @if ($logoLight)

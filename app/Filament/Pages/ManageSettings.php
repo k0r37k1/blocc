@@ -3,7 +3,6 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
-use App\Models\Site;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
@@ -15,10 +14,8 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Form;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\SpatieLaravelMediaLibraryPlugin\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
@@ -132,33 +129,6 @@ class ManageSettings extends Page
                                 ->label(__('Blog Name'))
                                 ->required()
                                 ->maxLength(255),
-                            Grid::make(3)
-                                ->schema([
-                                    SpatieMediaLibraryFileUpload::make('logo_light')
-                                        ->label(__('Logo (Light)'))
-                                        ->helperText(__('Shown in the header in light mode. SVG or PNG with transparent background.'))
-                                        ->collection('logo_light')
-                                        ->model(Site::instance())
-                                        ->image()
-                                        ->maxSize(1024)
-                                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/webp']),
-                                    SpatieMediaLibraryFileUpload::make('logo_dark')
-                                        ->label(__('Logo (Dark)'))
-                                        ->helperText(__('Shown in the header in dark mode. Falls back to light logo if not set.'))
-                                        ->collection('logo_dark')
-                                        ->model(Site::instance())
-                                        ->image()
-                                        ->maxSize(1024)
-                                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/webp']),
-                                    SpatieMediaLibraryFileUpload::make('favicon')
-                                        ->label(__('Favicon'))
-                                        ->helperText(__('Browser tab icon. SVG or 32x32px PNG.'))
-                                        ->collection('favicon')
-                                        ->model(Site::instance())
-                                        ->image()
-                                        ->maxSize(256)
-                                        ->acceptedFileTypes(['image/svg+xml', 'image/png', 'image/x-icon', 'image/vnd.microsoft.icon']),
-                                ]),
                             Textarea::make('blog_description')
                                 ->label(__('Blog Description'))
                                 ->helperText(__('Used in meta tags and RSS feed.'))
@@ -302,8 +272,6 @@ class ManageSettings extends Page
     public function save(): void
     {
         $data = $this->form->getState();
-
-        unset($data['logo_light'], $data['logo_dark'], $data['favicon']);
 
         $data['comments_enabled'] = $data['comments_enabled'] ? '1' : '0';
         $data['newsletter_enabled'] = $data['newsletter_enabled'] ? '1' : '0';

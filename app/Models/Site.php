@@ -12,9 +12,7 @@ class Site extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('logo_light')->singleFile();
-        $this->addMediaCollection('logo_dark')->singleFile();
-        $this->addMediaCollection('favicon')->singleFile();
+        $this->addMediaCollection('site_assets');
     }
 
     /**
