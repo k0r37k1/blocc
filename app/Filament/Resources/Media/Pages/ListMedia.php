@@ -5,9 +5,9 @@ namespace App\Filament\Resources\Media\Pages;
 use App\Filament\Resources\Media\MediaResource;
 use App\Models\Site;
 use Filament\Actions\Action;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
-use Filament\SpatieLaravelMediaLibraryPlugin\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Support\Icons\Heroicon;
 
 class ListMedia extends ListRecords
