@@ -56,15 +56,6 @@ class PostList extends Component
         $this->resetPage();
     }
 
-    public function clearFilters(): void
-    {
-        $this->search = '';
-        $this->category = '';
-        $this->tag = '';
-        $this->sort = 'newest';
-        $this->resetPage();
-    }
-
     /** @return LengthAwarePaginator<Post> */
     #[Computed]
     public function posts(): LengthAwarePaginator
@@ -108,11 +99,6 @@ class PostList extends Component
             ->withCount(['posts' => fn ($query) => $query->published()])
             ->orderBy('name')
             ->get();
-    }
-
-    public function hasActiveFilters(): bool
-    {
-        return filled($this->search) || filled($this->category) || filled($this->tag) || $this->sort !== 'newest';
     }
 
     public function render(): View

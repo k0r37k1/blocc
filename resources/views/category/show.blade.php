@@ -1,8 +1,8 @@
 <x-layout :title="__('Category: :name', ['name' => $category->name]) . ' - ' . config('app.name')" :description="$category->description ?? __('All posts in category :name', ['name' => $category->name])">
-    <h1 class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">{{ __('Category: :name', ['name' => $category->name]) }}</h1>
+    <h1 class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 mb-8">{{ __('Category: :name', ['name' => $category->name]) }}</h1>
 
     @if($category->description)
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400">{{ $category->description }}</p>
+        <p class="-mt-5 mb-8 text-neutral-600 dark:text-neutral-400">{{ $category->description }}</p>
     @endif
 
     <div class="space-y-2">

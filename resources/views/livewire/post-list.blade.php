@@ -1,64 +1,29 @@
 <div class="post-list-livewire">
-    {{-- Filter bar --}}
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center mb-6">
-        <div class="relative flex-1">
+    {{-- Search bar --}}
+    <div class="flex justify-end mb-8">
+        <div class="relative w-1/3">
             <input
                 wire:model.live.debounce.250ms="search"
                 type="search"
-                placeholder="{{ __('Search posts…') }}"
-                class="w-full border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                placeholder="{{ __('Search…') }}"
+                class="w-full border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm pl-3 pr-9 py-2 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 aria-label="{{ __('Search posts') }}"
             >
-        </div>
-
-        @if ($this->categories->isNotEmpty())
-            <select
-                wire:model.live="category"
-                class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-600 dark:text-neutral-400 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                aria-label="{{ __('Filter by category') }}"
-            >
-                <option value="">{{ __('All categories') }}</option>
-                @foreach ($this->categories as $cat)
-                    <option value="{{ $cat->slug }}">{{ $cat->name }} ({{ $cat->posts_count }})</option>
-                @endforeach
-            </select>
-        @endif
-
-        <select
-            wire:model.live="sort"
-            class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-600 dark:text-neutral-400 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            aria-label="{{ __('Sort posts') }}"
-        >
-            <option value="newest">{{ __('Newest first') }}</option>
-            <option value="oldest">{{ __('Oldest first') }}</option>
-        </select>
-
-        @if ($this->hasActiveFilters())
             <button
-                wire:click="clearFilters"
+                wire:click="$set('sort', '{{ $sort === 'newest' ? 'oldest' : 'newest' }}')"
                 type="button"
-                class="text-sm text-neutral-500 dark:text-neutral-400 hover:text-accent dark:hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm whitespace-nowrap"
+                class="absolute inset-y-0 right-0 flex items-center px-2.5 text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors focus-visible:outline-none"
+                aria-label="{{ $sort === 'newest' ? __('Sorted: newest first') : __('Sorted: oldest first') }}"
+                title="{{ $sort === 'newest' ? __('Newest first') : __('Oldest first') }}"
             >
-                {{ __('Clear filters') }}
+                @if ($sort === 'newest')
+                    <x-heroicon-o-bars-arrow-down class="w-4 h-4" aria-hidden="true" />
+                @else
+                    <x-heroicon-o-bars-arrow-up class="w-4 h-4" aria-hidden="true" />
+                @endif
             </button>
-        @endif
-    </div>
-
-    {{-- Tag pills --}}
-    @if ($this->tags->isNotEmpty())
-        <div class="flex flex-wrap gap-2 mb-8">
-            @foreach ($this->tags as $t)
-                <button
-                    wire:click="toggleTag('{{ $t->slug }}')"
-                    type="button"
-                    class="text-sm px-3 py-1 rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent {{ $tag === $t->slug ? 'border-accent text-accent dark:border-accent dark:text-accent' : 'border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-accent hover:text-accent dark:hover:border-accent dark:hover:text-accent' }}"
-                    aria-pressed="{{ $tag === $t->slug ? 'true' : 'false' }}"
-                >
-                    {{ $t->name }}
-                </button>
-            @endforeach
         </div>
-    @endif
+    </div>
 
     {{-- Post list --}}
     <div
@@ -71,7 +36,7 @@
             </div>
         @empty
             <p wire:key="empty-state" class="py-12 text-center text-neutral-500 dark:text-neutral-400">
-                {{ $this->hasActiveFilters() ? __('No posts found for your filters.') : __('No posts yet.') }}
+                {{ filled($this->search) ? __('No posts found.') : __('No posts yet.') }}
             </p>
         @endforelse
     </div>

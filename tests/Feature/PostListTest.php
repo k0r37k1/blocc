@@ -158,17 +158,13 @@ class PostListTest extends TestCase
         $this->assertEmpty($component->instance()->posts->items());
     }
 
-    public function test_clear_filters_resets_all(): void
+    public function test_sort_toggles_via_set(): void
     {
         Livewire::test(PostList::class)
-            ->set('search', 'test')
-            ->set('category', 'laravel')
-            ->set('tag', 'php')
+            ->assertSet('sort', 'newest')
             ->set('sort', 'oldest')
-            ->call('clearFilters')
-            ->assertSet('search', '')
-            ->assertSet('category', '')
-            ->assertSet('tag', '')
+            ->assertSet('sort', 'oldest')
+            ->set('sort', 'newest')
             ->assertSet('sort', 'newest');
     }
 }

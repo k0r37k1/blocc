@@ -1,7 +1,7 @@
-import { autoAnimatePlugin } from '@formkit/auto-animate/alpine'
+import autoAnimate from '@formkit/auto-animate'
 
 document.addEventListener('alpine:init', () => {
-    Alpine.plugin(autoAnimatePlugin)
+    Alpine.directive('auto-animate', (el) => autoAnimate(el))
 
     Alpine.data('codeBlocks', () => ({
         init() {
