@@ -41,12 +41,15 @@
         <link rel="canonical" href="{{ $resolvedCanonicalUrl }}">
 
         {{-- Open Graph --}}
+        <meta property="og:site_name" content="{{ \App\Models\Setting::get('blog_name', config('app.name')) }}">
+        <meta property="og:locale" content="{{ str_replace('-', '_', app()->getLocale() === 'de' ? 'de_DE' : 'en_US') }}">
         <meta property="og:title" content="{{ $resolvedOgTitle }}">
         <meta property="og:description" content="{{ $resolvedOgDescription }}">
         <meta property="og:url" content="{{ $resolvedCanonicalUrl }}">
         <meta property="og:type" content="{{ $ogType }}">
         @if ($resolvedOgImage)
             <meta property="og:image" content="{{ $resolvedOgImage }}">
+            <meta property="og:image:alt" content="{{ $resolvedOgTitle }}">
         @endif
 
         {{-- Twitter Card --}}
@@ -55,11 +58,13 @@
         <meta name="twitter:description" content="{{ $resolvedOgDescription }}">
         @if ($resolvedOgImage)
             <meta name="twitter:image" content="{{ $resolvedOgImage }}">
+            <meta name="twitter:image:alt" content="{{ $resolvedOgTitle }}">
         @endif
 
         {{-- Favicon --}}
         @if ($favicon)
             <link rel="icon" href="{{ $favicon }}">
+            <link rel="apple-touch-icon" href="{{ $favicon }}">
         @endif
 
         {{-- RSS auto-discovery --}}
