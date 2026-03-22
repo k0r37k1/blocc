@@ -132,7 +132,7 @@ class ManageSettings extends Page
                                 ->required()
                                 ->maxLength(255),
                             TextInput::make('hero_title')
-                                ->label(__('Hero Title'))
+                                ->label(__('Blog Title'))
                                 ->helperText(__('Large title shown on the homepage. Defaults to Blog Name if left empty.'))
                                 ->maxLength(255),
                             Textarea::make('blog_description')

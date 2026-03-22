@@ -77,7 +77,7 @@
     "Tag": "Tag",
     "Tags": "Tags",
     "Used in the navbar and browser tab title.": "Wird in der Navbar und im Browser-Tab angezeigt.",
-    "Hero Title": "Hero-Titel",
+    "Blog Title": "Blog-Titel",
     "Large title shown on the homepage. Defaults to Blog Name if left empty.": "Großer Titel auf der Startseite. Leer lassen = Blog-Name wird verwendet.",
     "Basic blog configuration": "Allgemeine Einstellungen",
     "Blog Name": "Blog-Name",
