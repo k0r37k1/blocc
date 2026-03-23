@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Posts\Schemas;
 
 use App\Enums\PostStatus;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -109,6 +110,11 @@ class PostForm
                 ->maxSize(5120)
                 ->columnSpanFull()
                 ->live(),
+            Checkbox::make('use_placeholder_image')
+                ->label(__('Use random placeholder image if no image uploaded'))
+                ->default(false)
+                ->visibleOn('create')
+                ->columnSpanFull(),
             TextInput::make('featured_image_alt')
                 ->label(__('Featured Image Alt Text'))
                 ->required(fn (Get $get): bool => filled($get('featured_image')))

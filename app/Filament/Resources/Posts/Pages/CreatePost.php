@@ -14,24 +14,30 @@ class CreatePost extends CreateRecord
     {
         $post = $this->record;
 
-        if ($post->getMedia('featured-image')->isEmpty()) {
-            $placeholderDir = storage_path('app/public/featured-placeholders');
-
-            if (! is_dir($placeholderDir)) {
-                return;
-            }
-
-            $files = File::files($placeholderDir);
-
-            if (empty($files)) {
-                return;
-            }
-
-            $random = $files[array_rand($files)];
-
-            $post->addMedia($random->getPathname())
-                ->preservingOriginal()
-                ->toMediaCollection('featured-image');
+        if (! $this->data['use_placeholder_image']) {
+            return;
         }
+
+        if (! $post->getMedia('featured-image')->isEmpty()) {
+            return;
+        }
+
+        $placeholderDir = storage_path('app/public/featured-placeholders');
+
+        if (! is_dir($placeholderDir)) {
+            return;
+        }
+
+        $files = File::files($placeholderDir);
+
+        if (empty($files)) {
+            return;
+        }
+
+        $random = $files[array_rand($files)];
+
+        $post->addMedia($random->getPathname())
+            ->preservingOriginal()
+            ->toMediaCollection('featured-image');
     }
 }
