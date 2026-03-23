@@ -56,6 +56,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentSvgAvatarPlugin::make(),
             ])
+            ->unsavedChangesAlerts()
             ->globalSearchKeyBindings(['mod+k'])
             ->navigationGroups([
                 NavigationGroup::make(fn (): string => __('Content')),
