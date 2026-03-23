@@ -12,7 +12,7 @@ class CategoryController extends Controller
     {
         $posts = $category->posts()
             ->published()
-            ->with(['media'])
+            ->with(['category', 'media'])
             ->withCount('approvedComments')
             ->latest('published_at')
             ->simplePaginate((int) Setting::get('posts_per_page', '10'));

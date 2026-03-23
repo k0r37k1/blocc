@@ -110,10 +110,13 @@ class AdminPanelProvider extends PanelProvider
             )
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn (): HtmlString => new HtmlString(
-                    '<style>
-                        /* WCAG 2.2 AA: match frontend accent-bg (#15803d) for consistent button contrast */
-                        .fi-bg-color-400, .dark .fi-bg-color-600 { background-color: #15803d !important; }
+                function (): HtmlString {
+                    $accentColor = \App\Models\Setting::get('accent_color', '#15803d');
+
+                    return new HtmlString(
+                        '<style>
+                        /* WCAG 2.2 AA: match frontend accent-bg for consistent button contrast */
+                        .fi-bg-color-400, .dark .fi-bg-color-600 { background-color: '.$accentColor.' !important; }
                         .fi-bg-color-400 { color: #fff !important; }
 
                         /* FilePond grid mode: center the drop label vertically in the panel */
@@ -140,7 +143,8 @@ class AdminPanelProvider extends PanelProvider
                             opacity: 0.5;
                         }
                     </style>'
-                ),
+                    );
+                },
             );
     }
 }

@@ -15,6 +15,13 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, InteractsWithMedia, Notifiable;
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatar')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
+    }
+
     /**
      * The attributes that are mass assignable.
      *

@@ -38,16 +38,4 @@ class NewCommentNotification extends Notification implements ShouldQueue
             ->action(__('View Post'), $postUrl)
             ->line(__('The comment is awaiting moderation.'));
     }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            'comment_id' => $this->comment->id,
-            'post_id' => $this->comment->post_id,
-            'nickname' => $this->comment->nickname,
-        ];
-    }
 }
