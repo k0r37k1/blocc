@@ -182,6 +182,12 @@ h3:hover .heading-anchor,
     opacity: 1;
 }
 
+@media (hover: none) {
+    .heading-anchor {
+        display: none;
+    }
+}
+
 h2:hover .heading-anchor::before,
 h3:hover .heading-anchor::before,
 .heading-anchor:focus::before {
