@@ -45,7 +45,7 @@
                     @if(\App\Models\Setting::get('cookie_consent_enabled', '1') === '1')
                         <button
                             type="button"
-                            onclick="document.getElementById('cookies-policy')?.classList.add('cookies--panel-open')"
+                            onclick="var el=document.getElementById('cookies-policy');if(el){el.classList.add('cookies--panel-open');}else{sessionStorage.setItem('openCookies','1');location.reload();}"
                             class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm cursor-pointer bg-transparent border-0 p-0 font-[inherit] text-[inherit]"
                         >{{ __('Cookie Settings') }}</button>
                     @endif

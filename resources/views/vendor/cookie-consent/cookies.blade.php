@@ -91,8 +91,9 @@
     function openPanel() { aside.classList.add('cookies--panel-open'); }
     function closePanel() { aside.classList.remove('cookies--panel-open'); }
 
-    // Auto-open only if consent hasn't been given yet
-    if (@json($autoOpen)) {
+    // Auto-open if consent hasn't been given yet, or if re-opening via footer "Cookies" link after reload
+    if (@json($autoOpen) || sessionStorage.getItem('openCookies') === '1') {
+        sessionStorage.removeItem('openCookies');
         openPanel();
     }
 
