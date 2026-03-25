@@ -42,6 +42,13 @@
                     @foreach ($footerPages as $footerPage)
                         <a href="{{ route('page.show', $footerPage->slug) }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ $footerPage->title }}</a>
                     @endforeach
+                    @if(\App\Models\Setting::get('cookie_consent_enabled', '1') === '1')
+                        <button
+                            type="button"
+                            onclick="document.getElementById('cookies-policy')?.classList.add('cookies--panel-open')"
+                            class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm cursor-pointer bg-transparent border-0 p-0 font-[inherit] text-[inherit]"
+                        >{{ __('Cookie Settings') }}</button>
+                    @endif
                     @guest
                         <a href="{{ url('/admin/login') }}" class="underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 hover:decoration-current transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ __('Login') }}</a>
                     @endguest
