@@ -28,6 +28,7 @@ Per FTP/SFTP auf den Server laden — ohne `vendor/`, `.git/` und Dev-Dateien.
 | `.env` | Umgebungskonfiguration (`.env.production` als Vorlage) |
 | `artisan` | Laravel CLI |
 | `composer.json`, `composer.lock` | Dependency-Definition |
+| `composer.phar` | Composer-Executable (wird fuer `composer install` benoetigt) |
 
 **Weglassen:**
 
