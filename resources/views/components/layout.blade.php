@@ -91,10 +91,6 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        @if(\App\Models\Setting::get('cookie_consent_enabled', '1') === '1')
-            @cookieconsentscripts
-        @endif
-
         {{-- Dynamic appearance overrides from settings --}}
         <style>
             :root {
@@ -123,17 +119,6 @@
 
         <x-back-to-top />
         <x-admin-bar :editUrl="$editUrl ?? null" />
-
-        @if(\App\Models\Setting::get('cookie_consent_enabled', '1') === '1')
-            @php
-                $cookiesManager = app(\Whitecube\LaravelCookieConsent\CookiesManager::class);
-                $cookieAutoOpen = $cookiesManager->shouldDisplayNotice();
-            @endphp
-            @include('vendor.cookie-consent.cookies', [
-                'cookies'  => app(\Whitecube\LaravelCookieConsent\CookiesRegistrar::class),
-                'autoOpen' => $cookieAutoOpen,
-            ])
-        @endif
 
         @livewireScripts
         @stack('scripts')

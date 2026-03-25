@@ -4,9 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
-use App\Http\Middleware\EnsureCredentialsChanged;
-use App\Http\Middleware\SetLocale;
-use App\Models\Setting;
 use Filament\Actions\Action;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -49,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(fn () => view('filament.admin.logo'))
             ->brandLogoHeight('1.5rem')
             ->colors(fn () => [
-                'primary' => Color::hex(Setting::get('accent_color', '#15803d')),
+                'primary' => Color::hex(\App\Models\Setting::get('accent_color', '#15803d')),
             ])
             ->font(
                 'Inter',
@@ -62,10 +59,9 @@ class AdminPanelProvider extends PanelProvider
             ->unsavedChangesAlerts()
             ->globalSearchKeyBindings(['mod+k'])
             ->navigationGroups([
-                NavigationGroup::make(fn (): string => __('General'))->collapsed(),
                 NavigationGroup::make(fn (): string => __('Content')),
                 NavigationGroup::make(fn (): string => __('Taxonomy')),
-                NavigationGroup::make(fn (): string => __('Datenschutz')),
+                NavigationGroup::make(fn (): string => __('General'))->collapsed(),
             ])
             ->navigationItems([
                 NavigationItem::make(fn (): string => __('My Profile'))
@@ -90,11 +86,11 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                SetLocale::class,
+                \App\Http\Middleware\SetLocale::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
-                EnsureCredentialsChanged::class,
+                \App\Http\Middleware\EnsureCredentialsChanged::class,
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
@@ -116,7 +112,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 function (): HtmlString {
-                    $accentColor = Setting::get('accent_color', '#15803d');
+                    $accentColor = \App\Models\Setting::get('accent_color', '#15803d');
 
                     return new HtmlString(
                         '<style>
