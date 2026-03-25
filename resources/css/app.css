@@ -156,8 +156,7 @@ h3[id] {
 .heading-anchor {
     opacity: 0;
     text-decoration: none;
-    margin-left: -1.5rem;
-    padding-right: 0.25rem;
+    margin-left: 0.4rem;
     transition: opacity 0.15s;
 }
 
