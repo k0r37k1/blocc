@@ -93,11 +93,6 @@
 
         @if(\App\Models\Setting::get('cookie_consent_enabled', '1') === '1')
             @cookieconsentscripts
-            @if(!app(\Whitecube\LaravelCookieConsent\CookiesManager::class)->shouldDisplayNotice())
-                {{-- On return visits @cookieconsentscripts skips cookies.js, but we need
-                     window.LaravelCookieConsent defined so the accept/save buttons work. --}}
-                <script>{!! file_get_contents(LCC_ROOT . '/dist/cookies.js') !!}</script>
-            @endif
         @endif
 
         {{-- Dynamic appearance overrides from settings --}}

@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Middleware\ContentSecurityPolicy;
+use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\SetLocale;
+use Illuminate\Cookie\Middleware\EncryptCookies as BaseEncryptCookies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Support\Str;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,13 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [
-            SetLocale::class,
-        ]);
+        $middleware->web(
+            append: [SetLocale::class],
+            replace: [BaseEncryptCookies::class => EncryptCookies::class],
+        );
         $middleware->append(ContentSecurityPolicy::class);
-        $middleware->encryptCookies(except: [
-            Str::slug(env('APP_NAME', 'laravel'), '_').'_cookie_consent',
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
