@@ -77,6 +77,13 @@ class PostForm
                         ->unique('tags', 'slug'),
                 ])
                 ->native(false),
+            Textarea::make('excerpt')
+                ->rows(3)
+                ->maxLength(300)
+                ->live(onBlur: true)
+                ->hint(fn (?string $state): string => strlen($state ?? '').' / 300')
+                ->helperText(__('Leave blank to auto-generate from the first ~160 characters of the body.'))
+                ->columnSpanFull(),
             RichEditor::make('body')
                 ->required()
                 ->toolbarButtons([
@@ -91,13 +98,6 @@ class PostForm
                 ->afterStateHydrated(fn ($component, $record) => $component->state($record?->body_raw ?? $record?->body))
                 ->placeholder(__('Start writing...'))
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
-                ->columnSpanFull(),
-            Textarea::make('excerpt')
-                ->rows(3)
-                ->maxLength(300)
-                ->live(onBlur: true)
-                ->hint(fn (?string $state): string => strlen($state ?? '').' / 300')
-                ->helperText(__('Leave blank to auto-generate from the first ~160 characters of the body.'))
                 ->columnSpanFull(),
             Placeholder::make('reading_time_display')
                 ->label(__('Reading Time'))
@@ -121,15 +121,19 @@ class PostForm
                 ->maxLength(255)
                 ->helperText(__('Describe the image for accessibility. Required when a featured image is set.'))
                 ->columnSpanFull(),
+            Toggle::make('comments_enabled')
+                ->label(__('Allow Comments'))
+                ->helperText(__('Disable to hide the comment section on this post.'))
+                ->default(true),
+            Toggle::make('toc_enabled')
+                ->label(__('Show Table of Contents'))
+                ->helperText(__('Disable to hide the table of contents on this post.'))
+                ->default(true),
             Select::make('status')
                 ->options(PostStatus::class)
                 ->default(PostStatus::Draft)
                 ->required()
                 ->native(false),
-            Toggle::make('comments_enabled')
-                ->label(__('Allow Comments'))
-                ->helperText(__('Disable to hide the comment section on this post.'))
-                ->default(true),
             Placeholder::make('created_at')
                 ->label(__('Created'))
                 ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-')

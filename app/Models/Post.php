@@ -85,6 +85,7 @@ class Post extends Model implements HasMedia, HasRichContent
         'reading_time',
         'featured_image_alt',
         'comments_enabled',
+        'toc_enabled',
     ];
 
     /**
@@ -99,6 +100,7 @@ class Post extends Model implements HasMedia, HasRichContent
             'published_at' => 'datetime',
             'reading_time' => 'integer',
             'comments_enabled' => 'boolean',
+            'toc_enabled' => 'boolean',
         ];
     }
 

@@ -212,5 +212,8 @@
     "View all": "View all",
     "View drafts": "View drafts",
     "Top bar": "Top bar",
-    "For logo and favicon, use the filenames logo_light, logo_dark, or favicon.": "For logo and favicon, use the filenames logo_light, logo_dark, or favicon."
+    "For logo and favicon, use the filenames logo_light, logo_dark, or favicon.": "For logo and favicon, use the filenames logo_light, logo_dark, or favicon.",
+    "Table of contents": "Table of contents",
+    "Show Table of Contents": "Show Table of Contents",
+    "Disable to hide the table of contents on this post.": "Disable to hide the table of contents on this post."
 }

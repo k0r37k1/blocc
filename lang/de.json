@@ -253,5 +253,8 @@
     "Large": "Groß",
     "Extra Large": "Sehr groß",
     "For logo and favicon, use the filenames logo_light, logo_dark, or favicon.": "Für Logo und Favicon die Dateinamen logo_light, logo_dark oder favicon verwenden.",
-    "Use random placeholder image if no image uploaded": "Zufälliges Platzhalterbild verwenden, wenn kein Bild hochgeladen wurde"
+    "Use random placeholder image if no image uploaded": "Zufälliges Platzhalterbild verwenden, wenn kein Bild hochgeladen wurde",
+    "Table of contents": "Inhalt",
+    "Show Table of Contents": "Inhaltsverzeichnis anzeigen",
+    "Disable to hide the table of contents on this post.": "Deaktivieren, um das Inhaltsverzeichnis bei diesem Beitrag auszublenden."
 }

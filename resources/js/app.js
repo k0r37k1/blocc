@@ -56,6 +56,49 @@ document.addEventListener('alpine:init', () => {
         },
     }))
 
+    Alpine.data('tableOfContents', () => ({
+        items: [],
+        activeId: null,
+        open: false,
+
+        init() {
+            if (this.$el.dataset.tocEnabled === 'false') return
+
+            const prose = this.$el.querySelector('.prose')
+            if (!prose) return
+
+            const headings = prose.querySelectorAll('h2[id], h3[id]')
+            if (headings.length < 3) return
+
+            this.items = Array.from(headings).map((h) => ({
+                id: h.id,
+                text: h.textContent.trim(),
+                level: parseInt(h.tagName.slice(1)),
+            }))
+
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting) {
+                            this.activeId = entry.target.id
+                        }
+                    }
+                },
+                { rootMargin: '-5% 0px -75% 0px' }
+            )
+
+            headings.forEach((h) => observer.observe(h))
+        },
+
+        get visible() {
+            return this.items.length >= 3
+        },
+
+        toggle() {
+            this.open = !this.open
+        },
+    }))
+
     // Reading progress bar (blog posts only)
     Alpine.data('readingProgress', () => ({
         progress: 0,
