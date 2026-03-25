@@ -51,7 +51,7 @@ html {
 /* Scroll margin so anchored headings don't hide behind sticky nav */
 h2[id],
 h3[id] {
-    scroll-margin-top: 2rem;
+    scroll-margin-top: 5rem;
 }
 
 /* ---- Phiki multi-theme: dark mode switches via .dark class ---- */
@@ -345,14 +345,6 @@ input[type="checkbox"].appearance-none:checked {
     list-style: none;
     padding: 0;
     margin: 0.75rem 0 0;
-    overflow: hidden;
-    transition: max-height 0.25s ease, opacity 0.2s ease;
-}
-
-.toc ol.collapsed {
-    max-height: 0 !important;
-    opacity: 0;
-    margin-top: 0;
 }
 
 .toc-item {
