@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "370c7fa38e4039bcac2cb152c3ba2167",
+    "content-hash": "185a67744013091564fe5c7b3a6b871c",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -5580,16 +5580,16 @@
         },
         {
             "name": "spatie/laravel-backup",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-backup.git",
-                "reference": "b0cf953073b91ffbc48afa79b8112cf442effdfb"
+                "reference": "e69bda927005e4909e67b7b86eb7697ed1fe51bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/b0cf953073b91ffbc48afa79b8112cf442effdfb",
-                "reference": "b0cf953073b91ffbc48afa79b8112cf442effdfb",
+                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/e69bda927005e4909e67b7b86eb7697ed1fe51bc",
+                "reference": "e69bda927005e4909e67b7b86eb7697ed1fe51bc",
                 "shasum": ""
             },
             "require": {
@@ -5664,7 +5664,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-backup/issues",
-                "source": "https://github.com/spatie/laravel-backup/tree/10.2.0"
+                "source": "https://github.com/spatie/laravel-backup/tree/10.2.1"
             },
             "funding": [
                 {
@@ -5676,7 +5676,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-03-19T18:01:53+00:00"
+            "time": "2026-03-24T10:30:33+00:00"
         },
         {
             "name": "spatie/laravel-medialibrary",
@@ -9046,6 +9046,81 @@
                 }
             ],
             "time": "2026-02-10T21:19:20+00:00"
+        },
+        {
+            "name": "whitecube/laravel-cookie-consent",
+            "version": "v1.3.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/whitecube/laravel-cookie-consent.git",
+                "reference": "4c0776076163d8a04a19488dd208e7f95741b861"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/whitecube/laravel-cookie-consent/zipball/4c0776076163d8a04a19488dd208e7f95741b861",
+                "reference": "4c0776076163d8a04a19488dd208e7f95741b861",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9|^10|^11|^12|^13",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.5",
+                "orchestra/testbench": "^8.5|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Cookies": "Whitecube\\LaravelCookieConsent\\Facades\\Cookies"
+                    },
+                    "providers": [
+                        "Whitecube\\LaravelCookieConsent\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Whitecube\\LaravelCookieConsent\\": "src/",
+                    "Whitecube\\LaravelCookieConsent\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Whitecube",
+                    "email": "hello@whitecube.be"
+                },
+                {
+                    "name": "Toon Van den Bos",
+                    "email": "toon@whitecube.be"
+                }
+            ],
+            "description": "Register, configure and ask for cookies consent in a EU-compliant way.",
+            "keywords": [
+                "compliant",
+                "cookies",
+                "eu",
+                "gdpr",
+                "laravel",
+                "whitecube"
+            ],
+            "support": {
+                "issues": "https://github.com/whitecube/laravel-cookie-consent/issues",
+                "source": "https://github.com/whitecube/laravel-cookie-consent/tree/v1.3.9"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/whitecube",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-03-18T17:21:11+00:00"
         }
     ],
     "packages-dev": [
@@ -9466,16 +9541,16 @@
         },
         {
             "name": "laravel/boost",
-            "version": "v2.2.3",
+            "version": "v2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/boost.git",
-                "reference": "44ab65a5455c2d6fceb71d6145f8d5d89c02d889"
+                "reference": "f6241df9fd81a86d79a051851177d4ffe3e28506"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/boost/zipball/44ab65a5455c2d6fceb71d6145f8d5d89c02d889",
-                "reference": "44ab65a5455c2d6fceb71d6145f8d5d89c02d889",
+                "url": "https://api.github.com/repos/laravel/boost/zipball/f6241df9fd81a86d79a051851177d4ffe3e28506",
+                "reference": "f6241df9fd81a86d79a051851177d4ffe3e28506",
                 "shasum": ""
             },
             "require": {
@@ -9528,7 +9603,7 @@
                 "issues": "https://github.com/laravel/boost/issues",
                 "source": "https://github.com/laravel/boost"
             },
-            "time": "2026-03-06T20:20:28+00:00"
+            "time": "2026-03-25T16:37:40+00:00"
         },
         {
             "name": "laravel/mcp",
@@ -9685,16 +9760,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.27.1",
+            "version": "v1.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "54cca2de13790570c7b6f0f94f37896bee4abcb5"
+                "reference": "bdec963f53172c5e36330f3a400604c69bf02d39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/54cca2de13790570c7b6f0f94f37896bee4abcb5",
-                "reference": "54cca2de13790570c7b6f0f94f37896bee4abcb5",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/bdec963f53172c5e36330f3a400604c69bf02d39",
+                "reference": "bdec963f53172c5e36330f3a400604c69bf02d39",
                 "shasum": ""
             },
             "require": {
@@ -9705,13 +9780,14 @@
                 "php": "^8.2.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.93.1",
-                "illuminate/view": "^12.51.0",
-                "larastan/larastan": "^3.9.2",
+                "friendsofphp/php-cs-fixer": "^3.94.2",
+                "illuminate/view": "^12.54.1",
+                "larastan/larastan": "^3.9.3",
                 "laravel-zero/framework": "^12.0.5",
                 "mockery/mockery": "^1.6.12",
-                "nunomaduro/termwind": "^2.3.3",
-                "pestphp/pest": "^3.8.5"
+                "nunomaduro/termwind": "^2.4.0",
+                "pestphp/pest": "^3.8.6",
+                "shipfastlabs/agent-detector": "^1.1.0"
             },
             "bin": [
                 "builds/pint"
@@ -9748,7 +9824,7 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2026-02-10T20:00:20+00:00"
+            "time": "2026-03-12T15:51:39+00:00"
         },
         {
             "name": "laravel/roster",
@@ -9813,16 +9889,16 @@
         },
         {
             "name": "laravel/sail",
-            "version": "v1.53.0",
+            "version": "v1.55.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "e340eaa2bea9b99192570c48ed837155dbf24fbb"
+                "reference": "67dc1b72da4e066a2fb54c1c7582fd2f140ea191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/e340eaa2bea9b99192570c48ed837155dbf24fbb",
-                "reference": "e340eaa2bea9b99192570c48ed837155dbf24fbb",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/67dc1b72da4e066a2fb54c1c7582fd2f140ea191",
+                "reference": "67dc1b72da4e066a2fb54c1c7582fd2f140ea191",
                 "shasum": ""
             },
             "require": {
@@ -9872,7 +9948,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2026-02-06T12:16:02+00:00"
+            "time": "2026-03-23T15:56:34+00:00"
         },
         {
             "name": "mockery/mockery",

@@ -16,7 +16,8 @@
         "spatie/laravel-backup": "^10.0",
         "spatie/laravel-medialibrary": "^11.21",
         "stevebauman/purify": "^6.3",
-        "voltra/filament-svg-avatar": "^1.4"
+        "voltra/filament-svg-avatar": "^1.4",
+        "whitecube/laravel-cookie-consent": "^1.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.1",
