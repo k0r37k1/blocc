@@ -2,9 +2,11 @@
 
 > A minimal, self-hosted blog platform built with Laravel — deployable on shared hosting without Node.js.
 
-[![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white)](https://php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php&logoColor=white)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)](https://laravel.com)
 [![License](https://img.shields.io/github/license/k0r37k1/blocc)](LICENSE)
+
+**Live demo: [kopfsalat.blog](https://kopfsalat.blog)**
 
 ---
 
@@ -14,7 +16,15 @@ blocc is an opinionated, single-user blog engine for developers who want full co
 
 - **SQLite by default** — no database server required
 - **Build output committed** — no Node.js on the server
-- **Shared hosting friendly** — runs on any PHP 8.4 host with Composer
+- **Shared hosting friendly** — runs on any PHP 8.2+ host with Composer
+
+---
+
+## Why blocc?
+
+Most self-hosted blog platforms require a VPS, a database server, or a Node.js runtime. blocc is built for developers on shared hosting who want a proper admin panel and a clean writing experience without the overhead.
+
+Ghost is great — but it needs Node.js and a VPS. WordPress works everywhere — but it's WordPress. blocc sits in between: a Laravel app with a Filament admin panel, SQLite as the database, and the frontend build committed to the repo so the server only needs PHP and Composer.
 
 ---
 
@@ -147,6 +157,12 @@ resources/
   js/                 Alpine.js entry point
 lang/                 Translations (de, en)
 ```
+
+---
+
+## Changelog
+
+See [Releases](https://github.com/k0r37k1/blocc/releases) for version history.
 
 ---
 
