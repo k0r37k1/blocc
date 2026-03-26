@@ -22,9 +22,7 @@ blocc is an opinionated, single-user blog engine for developers who want full co
 
 ## Why blocc?
 
-Most self-hosted blog platforms require a VPS, a database server, or a Node.js runtime. blocc is built for developers on shared hosting who want a proper admin panel and a clean writing experience without the overhead.
-
-Ghost is great — but it needs Node.js and a VPS. WordPress works everywhere — but it's WordPress. blocc sits in between: a Laravel app with a Filament admin panel, SQLite as the database, and the frontend build committed to the repo so the server only needs PHP and Composer.
+Most self-hosted blog platforms require a VPS, a database server, or a Node.js runtime. blocc is built for developers on shared hosting who want a proper admin panel and a clean writing experience without the overhead — just PHP, Composer, and a SQLite file.
 
 ---
 
