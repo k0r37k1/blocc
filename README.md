@@ -56,18 +56,18 @@ blocc is an opinionated, single-user blog engine for developers who want full co
 
 | Layer | Technology |
 |---|---|
-| Backend | PHP 8.4, Laravel 12 |
+| Backend | PHP 8.2+, Laravel 12 |
 | Admin Panel | Filament 5, Livewire 4 |
 | Frontend | Blade, Alpine.js, Tailwind CSS 4 |
 | Database | SQLite |
 | Media | Spatie Media Library |
-| Testing | PHPUnit 11 |
+| Testing | PHPUnit 12 |
 
 ---
 
 ## Requirements
 
-- PHP 8.4+
+- PHP 8.2+
 - Composer
 - Node.js 18+ *(development only)*
 
@@ -135,8 +135,12 @@ See [INSTALL](INSTALL) for a step-by-step shared hosting guide.
 app/
   Filament/           Admin panel — resources, pages, widgets
   Http/Controllers/   Public blog controllers
+  Livewire/           Livewire components
   Models/             Eloquent models
-  Services/           Content processing (reading time, excerpts, anchors)
+  Services/           Content processing pipeline
+  Enums/              PHP enums
+  Notifications/      Mail and database notifications
+  Support/            Helper classes
 resources/
   views/              Blade templates
   css/                Tailwind entry point
