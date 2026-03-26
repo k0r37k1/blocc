@@ -1,62 +1,77 @@
 # blocc
 
-A minimal, fast, and opinionated blog platform built with Laravel 12 and Filament 4. Designed for developers who want a clean blog with a powerful admin panel — deployable on shared hosting without Node.js.
+> A minimal, self-hosted blog platform built with Laravel — deployable on shared hosting without Node.js.
 
-## Tech Stack
+[![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php&logoColor=white)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)](https://laravel.com)
+[![License](https://img.shields.io/github/license/k0r37k1/blocc)](LICENSE)
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | PHP 8.4+, Laravel 12 |
-| Admin Panel | Filament 5, Livewire 4 |
-| Frontend | Blade, Alpine.js, Tailwind CSS 4 |
-| Build Tool | Vite 7 |
-| Database | SQLite (default) |
-| Media | Spatie Media Library |
-| Code Style | Laravel Pint, Biome |
-| Testing | PHPUnit 12 |
+---
+
+## Overview
+
+blocc is an opinionated, single-user blog engine for developers who want full control over their content without managing a database server or a Node.js runtime in production.
+
+- **SQLite by default** — no database server required
+- **Build output committed** — no Node.js on the server
+- **Shared hosting friendly** — runs on any PHP 8.4 host with Composer
+
+---
 
 ## Features
 
-### Blog
-- Rich text editor with syntax highlighting (Phiki) and auto-generated heading anchors
-- Featured images with automatic WebP conversion (thumbnail + medium)
-- Reading time calculation (200 wpm)
-- Auto-generated excerpts
-- Categories with color badges and tags
+**Writing**
+- Rich text editor with syntax highlighting ([Phiki](https://github.com/phikiphp/phiki)) and auto-generated heading anchors
 - Draft / Published workflow
+- Auto-generated excerpts and reading time
+- Featured images with automatic WebP conversion
+- Categories, tags, and archive view
+
+**Readers**
 - Comment system with replies, editing, and Gravatar avatars
-- RSS feed (`/feed`) and sitemap (`/sitemap.xml`)
-- Archive view
+- RSS feed at `/feed`
+- Sitemap at `/sitemap.xml`
 
-### Admin Panel
-- Dashboard with stats overview, recent posts, and draft reminders
+**Admin Panel** *(powered by Filament)*
+- Dashboard with post stats, recent drafts, and quick actions
 - Full CRUD for posts, pages, categories, tags, and media
-- Comment moderation panel
-- Appearance settings (accent colors, heading/body fonts, syntax highlighting theme, favicon, logo)
-- Settings page (blog name, tagline, description, social links, custom scripts)
-- User profile with avatar and social links (GitHub, X, LinkedIn, Instagram, Bluesky)
-- Username-based login with forced password change on first login
+- Comment moderation
+- Appearance settings — accent color, fonts, syntax theme, favicon, logo
+- Site settings — name, tagline, social links, custom `<head>` scripts
+- User profile with avatar and social links
 
-### i18n
-- German and English translations
-- Session-based locale switching with language toggle in admin and frontend
+**Internationalisation**
+- German and English translations included
+- Session-based locale switching in admin and frontend
 
-### Security
+**Security**
 - Content Security Policy headers (production)
 - HTML sanitization via HTMLPurifier
-- Rate-limited login (5 attempts)
+- Rate-limited login (5 attempts / minute)
+- Pre-commit secret scanning via [gitleaks](https://github.com/gitleaks/gitleaks)
 
-### Deployment
-- Build output committed to repo — no Node.js required on server
-- SQLite by default — no database server needed
-- Database-backed sessions, cache, and queue
-- Shared hosting guide included (see [INSTALL](INSTALL))
+---
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | PHP 8.4, Laravel 12 |
+| Admin Panel | Filament 5, Livewire 4 |
+| Frontend | Blade, Alpine.js, Tailwind CSS 4 |
+| Database | SQLite |
+| Media | Spatie Media Library |
+| Testing | PHPUnit 11 |
+
+---
 
 ## Requirements
 
 - PHP 8.4+
 - Composer
-- Node.js 18+ (development only)
+- Node.js 18+ *(development only)*
+
+---
 
 ## Installation
 
@@ -66,15 +81,15 @@ cd blocc
 composer run setup
 ```
 
-This will install dependencies, copy `.env.example`, generate an app key, run migrations, and build frontend assets.
+`composer run setup` installs dependencies, copies `.env.example`, generates an app key, runs migrations, and builds frontend assets.
 
-### Configure Admin User
+### Configure your admin account
 
-Edit `.env` to set your admin credentials:
+Open `.env` and set:
 
 ```env
-ADMIN_USERNAME=admin
-ADMIN_EMAIL=admin@example.com
+ADMIN_USERNAME=yourname
+ADMIN_EMAIL=you@example.com
 ADMIN_PASSWORD=changeme
 ```
 
@@ -84,16 +99,9 @@ Then seed the database:
 php artisan db:seed
 ```
 
-### Default Login
+Log in at `/admin` — you will be prompted to change your password on first login.
 
-After seeding, log in at `/admin` with:
-
-| Field | Value |
-|-------|-------|
-| Username | `admin` |
-| Password | `changeme` |
-
-You will be prompted to change your password on first login.
+---
 
 ## Development
 
@@ -101,41 +109,48 @@ You will be prompted to change your password on first login.
 composer run dev
 ```
 
-Starts the Laravel server, queue worker, log viewer (Pail), and Vite dev server concurrently.
-
-## Scripts
+Starts the Laravel server, queue worker, Pail log viewer, and Vite dev server concurrently.
 
 | Command | Description |
-|---------|-------------|
+|---|---|
 | `composer run setup` | Initial project setup |
 | `composer run dev` | Start all dev services |
-| `composer test` | Run PHPUnit test suite |
-| `npm run dev` | Vite dev server |
+| `composer test` | Run the test suite |
 | `npm run build` | Build frontend assets |
-| `vendor/bin/pint` | Format PHP code |
+| `vendor/bin/pint` | Format PHP (Laravel Pint) |
+
+---
+
+## Deployment
+
+blocc is designed for shared hosting. The frontend build output is committed to the repository, so no Node.js runtime is needed on the server.
+
+See [INSTALL](INSTALL) for a step-by-step shared hosting guide.
+
+---
 
 ## Project Structure
 
 ```
 app/
-  Filament/          # Admin panel (resources, pages, widgets)
-  Http/Controllers/  # Public controllers (blog, feed, sitemap)
-  Models/            # Eloquent models
-  Services/          # Content processing pipeline
+  Filament/           Admin panel — resources, pages, widgets
+  Http/Controllers/   Public blog controllers
+  Models/             Eloquent models
+  Services/           Content processing (reading time, excerpts, anchors)
 resources/
-  views/             # Blade templates
-  css/               # Tailwind entry point
-  js/                # Alpine.js entry point
-lang/                # Translation files (de, en)
+  views/              Blade templates
+  css/                Tailwind entry point
+  js/                 Alpine.js entry point
+lang/                 Translations (de, en)
 ```
 
-## Notable Packages
+---
 
-- [filament/filament](https://filamentphp.com) — Admin panel framework
-- [spatie/laravel-medialibrary](https://github.com/spatie/laravel-medialibrary) — Media management with image conversions
-- [spatie/laravel-backup](https://github.com/spatie/laravel-backup) — Database and file backups
-- [stevebauman/purify](https://github.com/stevebauman/purify) — HTML sanitization
-- [phiki/phiki](https://github.com/phikiphp/phiki) — Syntax highlighting for code blocks
+## Contributing
+
+Issues and pull requests are welcome. For larger changes, open an issue first to discuss what you'd like to change.
+
+---
 
 ## License
 
