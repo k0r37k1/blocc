@@ -6,6 +6,8 @@
 .phpunit.result.cache
 .planning/
 .junie/
+.claude/
+.github/
 /docs/
 *.log
 /.fleet
