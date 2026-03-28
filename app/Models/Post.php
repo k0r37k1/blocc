@@ -153,7 +153,6 @@ class Post extends Model implements HasMedia, HasRichContent
             ->nonQueued();
 
         $this->addMediaConversion('medium')
-            ->fit(Fit::Contain, 800, 600)
             ->format('webp')
             ->quality(90)
             ->nonQueued();
