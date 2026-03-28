@@ -1,0 +1,97 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: Deploy changed files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Build frontend
+        run: npm ci && npm run build
+
+      - name: Determine changed production files
+        run: |
+          git fetch --tags
+
+          if git rev-parse deployed >/dev/null 2>&1; then
+            echo "Deploying changes since last deploy tag"
+            git diff --name-only deployed HEAD > raw_changed.txt
+          else
+            echo "No deploy tag found — deploying all production files"
+            git ls-files > raw_changed.txt
+          fi
+
+          # Always include freshly built frontend assets
+          find public/build -type f >> raw_changed.txt
+
+          # Filter out non-production files
+          sort -u raw_changed.txt | grep -vE \
+            "^(tests/|Upload/|\.github/|node_modules/|vendor/|storage/|\.planning/|\.junie/|playwright|\.phpunit|\.DS_Store|\.env|database/[^m])" | \
+            grep -vE "^(\.gitattributes|\.gitignore|\.mcp\.json|CLAUDE\.md|INSTALL|LICENSE|README\.md|biome\.json|boost\.json|package\.json|package-lock\.json|phpstan\.neon|phpunit\.xml)$" \
+            > deploy_files.txt
+
+          echo "=== Files to deploy ($(wc -l < deploy_files.txt)) ==="
+          cat deploy_files.txt
+
+      - name: Build deploy directory
+        run: |
+          mkdir -p _deploy
+          while IFS= read -r file; do
+            if [ -f "$file" ]; then
+              mkdir -p "_deploy/$(dirname "$file")"
+              cp "$file" "_deploy/$file"
+            fi
+          done < deploy_files.txt
+
+      - name: Upload via FTP
+        run: |
+          sudo apt-get install -y lftp > /dev/null 2>&1
+          lftp -c "
+            set ftp:ssl-allow yes;
+            set ssl:verify-certificate no;
+            open -u '${{ secrets.FTP_USER }}','${{ secrets.FTP_PASSWORD }}' ${{ secrets.FTP_HOST }};
+            mirror --reverse --verbose \
+              _deploy/ ${{ secrets.FTP_SERVER_DIR }}/;
+          "
+
+      - name: Run post-deploy commands via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd ${{ secrets.FTP_SERVER_DIR }}
+            /opt/plesk/php/8.4/bin/php artisan down
+            /opt/plesk/php/8.4/bin/php composer.phar install --no-dev --optimize-autoloader
+            /opt/plesk/php/8.4/bin/php artisan migrate --force
+            /opt/plesk/php/8.4/bin/php artisan storage:link --force
+            /opt/plesk/php/8.4/bin/php artisan filament:upgrade
+            /opt/plesk/php/8.4/bin/php artisan optimize:clear
+            /opt/plesk/php/8.4/bin/php artisan sitemap:generate
+            /opt/plesk/php/8.4/bin/php artisan up
+
+      - name: Update deployed tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f deployed
+          git push origin -f deployed
