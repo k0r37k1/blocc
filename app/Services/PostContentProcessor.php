@@ -19,15 +19,56 @@ class PostContentProcessor
      * @var array<string, string>
      */
     private const LANGUAGE_ALIASES = [
+        // Shell
         'bash' => 'shellscript',
         'sh' => 'shellscript',
         'shell' => 'shellscript',
+        'zsh' => 'shellscript',
+        // Web
         'js' => 'javascript',
+        'javascript' => 'javascript',
         'ts' => 'typescript',
+        'typescript' => 'typescript',
+        'jsx' => 'jsx',
+        'tsx' => 'tsx',
+        // Python
         'py' => 'python',
+        'python3' => 'python',
+        // Ruby
         'rb' => 'ruby',
+        // Data / Config
         'yml' => 'yaml',
+        'env' => 'dotenv',
+        'tf' => 'terraform',
+        'hcl' => 'hcl',
+        'toml' => 'toml',
+        // Systems
+        'rs' => 'rust',
+        'golang' => 'go',
+        'cs' => 'csharp',
+        'c#' => 'csharp',
+        'c++' => 'cpp',
+        'kt' => 'kotlin',
+        'kts' => 'kotlin',
+        'ps1' => 'powershell',
+        'cmd' => 'bat',
+        // Markup / Docs
+        'md' => 'markdown',
+        'mdx' => 'mdx',
+        'html' => 'html',
+        'xml' => 'xml',
+        // Templates
+        'hbs' => 'handlebars',
+        'jinja2' => 'jinja',
+        'twig' => 'twig',
+        // Scripting / Other
+        'coffeescript' => 'coffee',
+        'makefile' => 'make',
+        'vim' => 'viml',
+        'vimscript' => 'viml',
+        'objc' => 'objective-c',
         'dockerfile' => 'docker',
+        // Plain text
         'plain' => 'txt',
         'plaintext' => 'txt',
         'text' => 'txt',
