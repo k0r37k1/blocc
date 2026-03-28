@@ -27,7 +27,7 @@
 
     <div x-data="codeBlocks" data-copy-label="{{ __('Copy') }}" data-copied-label="{{ __('Copied') }}">
         <x-prose class="mt-6">
-            {!! str($page->body)->sanitizeHtml() !!}
+            {!! $page->body !!}
         </x-prose>
     </div>
 </x-layout>
