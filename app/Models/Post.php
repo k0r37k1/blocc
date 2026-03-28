@@ -149,11 +149,13 @@ class Post extends Model implements HasMedia, HasRichContent
         $this->addMediaConversion('thumbnail')
             ->fit(Fit::Crop, 400, 300)
             ->format('webp')
+            ->quality(90)
             ->nonQueued();
 
         $this->addMediaConversion('medium')
             ->fit(Fit::Contain, 800, 600)
             ->format('webp')
+            ->quality(90)
             ->nonQueued();
     }
 
