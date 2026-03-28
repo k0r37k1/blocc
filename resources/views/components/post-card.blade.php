@@ -3,7 +3,8 @@
 @php
     $commentsEnabled = \App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled;
     $commentCount = $post->approved_comments_count ?? $post->approvedComments()->count();
-    $hasImage = $post->getFirstMediaUrl('featured-image', 'thumbnail');
+    $featuredImage = $post->getFirstMedia('featured-image');
+    $hasImage = $featuredImage !== null;
     $postTitleClass = match(\App\Models\Setting::get('post_title_size', 'M')) {
         'S' => 'text-lg',
         'L' => 'text-2xl',
@@ -21,7 +22,7 @@
     @if ($hasImage)
         <a href="{{ route('blog.show', $post) }}" class="block">
             <img
-                src="{{ $post->getFirstMediaUrl('featured-image', 'medium') }}"
+                src="{{ $featuredImage->getAvailableUrl(['medium', 'thumbnail']) }}"
                 alt="{{ $post->featured_image_alt ?? $post->title }}"
                 class="w-full aspect-[2/1] object-cover rounded-lg bg-neutral-100 dark:bg-neutral-800"
                 loading="lazy"

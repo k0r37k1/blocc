@@ -80,10 +80,11 @@
             @endif
         </div>
 
-        @if ($post->getFirstMediaUrl('featured-image'))
+        @php $featuredImage = $post->getFirstMedia('featured-image'); @endphp
+        @if ($featuredImage)
             <figure class="mt-6">
                 <img
-                    src="{{ $post->getFirstMediaUrl('featured-image', 'medium') }}"
+                    src="{{ $featuredImage->getAvailableUrl(['medium', 'thumbnail']) }}"
                     alt="{{ $post->featured_image_alt ?? $post->title }}"
                     class="w-full aspect-video object-cover rounded-lg bg-neutral-100 dark:bg-neutral-800"
                     loading="lazy"

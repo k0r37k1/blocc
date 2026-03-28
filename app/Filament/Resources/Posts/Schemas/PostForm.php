@@ -109,7 +109,8 @@ class PostForm
                 ->image()
                 ->maxSize(5120)
                 ->columnSpanFull()
-                ->live(),
+                ->live()
+                ->preserveFilenames(),
             Checkbox::make('use_placeholder_image')
                 ->label(__('Use random placeholder image if no image uploaded'))
                 ->default(false)
