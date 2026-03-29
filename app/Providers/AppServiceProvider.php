@@ -7,6 +7,7 @@ use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
@@ -46,6 +47,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+
         // Register mb_lower() for case-insensitive Unicode search in SQLite
         if (DB::connection()->getDriverName() === 'sqlite') {
             DB::connection()->getPdo()->sqliteCreateFunction(
