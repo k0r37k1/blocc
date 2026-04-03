@@ -79,9 +79,9 @@ class PostForm
                 ->native(false),
             Textarea::make('excerpt')
                 ->rows(3)
-                ->maxLength(300)
+                ->maxLength(160)
                 ->live(onBlur: true)
-                ->hint(fn (?string $state): string => strlen($state ?? '').' / 300')
+                ->hint(fn (?string $state): string => strlen($state ?? '').' / 160')
                 ->helperText(__('Leave blank to auto-generate from the first ~160 characters of the body.'))
                 ->columnSpanFull(),
             RichEditor::make('body')

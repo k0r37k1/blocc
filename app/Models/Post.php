@@ -64,7 +64,9 @@ class Post extends Model implements HasMedia, HasRichContent
             // Auto-generate excerpt if not manually set
             if (blank($post->excerpt) && filled($post->body_raw ?? $post->body)) {
                 $plainText = strip_tags($post->body_raw ?? $post->body);
-                $post->excerpt = Str::limit($plainText, 160);
+                // Keep excerpt strictly within the 160-char UI/validation limit.
+                // Using an empty end avoids adding "..." which may push the value over the max.
+                $post->excerpt = Str::limit($plainText, 160, '');
             }
         });
     }
