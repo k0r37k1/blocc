@@ -34,6 +34,8 @@ class BlogController extends Controller
             ->oldest('published_at')
             ->first(['title', 'slug']);
 
-        return view('blog.show', compact('post', 'previousPost', 'nextPost'));
+        $relatedPosts = Post::relatedFor($post, 5);
+
+        return view('blog.show', compact('post', 'previousPost', 'nextPost', 'relatedPosts'));
     }
 }

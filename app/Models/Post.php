@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
@@ -203,5 +204,44 @@ class Post extends Model implements HasMedia, HasRichContent
     public function scopeDraft(Builder $query): Builder
     {
         return $query->where('status', PostStatus::Draft);
+    }
+
+    /**
+     * Published posts related by shared tags, then same category, then recency.
+     *
+     * @return Collection<int, self>
+     */
+    public static function relatedFor(self $post, int $limit = 5): Collection
+    {
+        $post->loadMissing('tags');
+        /** @var Collection<int, int|string> $tagIds */
+        $tagIds = $post->tags->pluck('id');
+        $categoryId = $post->category_id;
+
+        $query = static::query()
+            ->published()
+            ->whereKeyNot($post->getKey());
+
+        if ($tagIds->isNotEmpty()) {
+            $query->withCount([
+                'tags' => fn (Builder $q) => $q->whereIn($q->qualifyColumn('id'), $tagIds),
+            ])->orderByDesc('tags_count');
+        }
+
+        if ($categoryId !== null) {
+            $query->orderByRaw(sprintf(
+                'CASE WHEN %s = ? THEN 0 ELSE 1 END',
+                $query->qualifyColumn('category_id')
+            ), [$categoryId]);
+        } else {
+            $query->orderByRaw(sprintf(
+                'CASE WHEN %s IS NULL THEN 0 ELSE 1 END',
+                $query->qualifyColumn('category_id')
+            ));
+        }
+
+        $query->latest('published_at')->limit($limit);
+
+        return $query->get();
     }
 }

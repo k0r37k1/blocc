@@ -138,6 +138,29 @@
         @endif
     </article>
 
+    @if ($relatedPosts->isNotEmpty())
+        <details class="related-posts mt-14">
+            <summary class="related-posts-summary">
+                <span class="related-posts-title">{{ __('Related posts (:count)', ['count' => $relatedPosts->count()]) }}</span>
+                <svg class="related-posts-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <ul class="related-posts-list">
+                @foreach ($relatedPosts as $relatedPost)
+                    <li class="related-posts-item">
+                        <a href="{{ route('blog.show', $relatedPost) }}" class="related-posts-link group block rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                            <time datetime="{{ $relatedPost->published_at->toDateString() }}" class="related-posts-meta tabular-nums">
+                                {{ $relatedPost->published_at->translatedFormat('j. M Y') }}
+                            </time>
+                            <span class="mt-0.5 block font-medium leading-snug text-neutral-900 transition-colors group-hover:text-accent dark:text-neutral-100 dark:group-hover:text-accent">
+                                {{ $relatedPost->title }}
+                            </span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </details>
+    @endif
+
     @php $newsletterEnabled = \App\Models\Setting::get('newsletter_enabled', '0') === '1'; @endphp
 
     @if ($post->author)
