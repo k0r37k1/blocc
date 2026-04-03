@@ -1,44 +1,25 @@
 <x-layout :title="'404 - ' . __('Page not found')" :description="__('Page not found')">
-    @php
-        $recentPosts = \App\Models\Post::published()
-            ->latest('published_at')
-            ->limit(3)
-            ->get(['title', 'slug', 'published_at']);
-    @endphp
-
-    <div class="flex flex-col items-center justify-center text-center min-h-[50vh]">
-        <p class="text-6xl font-bold text-neutral-500 dark:text-neutral-500 select-none" aria-hidden="true">
+    <div class="flex min-h-[45vh] flex-col items-center justify-center text-center px-4">
+        <p class="select-none text-6xl font-bold tracking-tight text-neutral-500 dark:text-neutral-400" aria-hidden="true">
             404
         </p>
 
-        <h1 class="mt-4 text-xl text-neutral-600 dark:text-neutral-400">
+        <h1 class="mt-4 text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
             {{ __('Page not found') }}
         </h1>
 
-        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <p class="mt-2 max-w-prose text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
             {{ __('Nothing but lettuce here.') }}
         </p>
 
-        <a href="{{ route('blog.index') }}" class="mt-6 text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
-            {{ __('Go to homepage') }}
-        </a>
+        <div class="mt-6 w-full flex items-center justify-center">
+            <a
+                href="{{ route('blog.index') }}"
+                class="inline-flex items-center justify-center rounded-sm border border-neutral-200 dark:border-neutral-800 px-4 py-2 text-sm font-medium text-neutral-900 dark:text-neutral-100 hover:text-accent hover:border-accent/60 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+                {{ __('Go to homepage') }}
+            </a>
+        </div>
 
-        @if ($recentPosts->isNotEmpty())
-            <div class="mt-12 w-full max-w-sm">
-                <p class="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-                    {{ __('Recent posts') }}
-                </p>
-
-                <ul class="mt-3 space-y-2">
-                    @foreach ($recentPosts as $post)
-                        <li>
-                            <a href="{{ route('blog.show', $post) }}" class="text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
-                                {{ $post->title }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
     </div>
 </x-layout>
