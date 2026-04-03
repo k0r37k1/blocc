@@ -82,7 +82,7 @@ class PostForm
                 ->maxLength(160)
                 ->live(onBlur: true)
                 ->hint(fn (?string $state): string => strlen($state ?? '').' / 160')
-                ->helperText(__('Leave blank to auto-generate from the first ~160 characters of the body.'))
+                ->helperText(__('Leave blank to auto-generate from the body (max. 160 characters, adds … when truncated).'))
                 ->columnSpanFull(),
             RichEditor::make('body')
                 ->required()

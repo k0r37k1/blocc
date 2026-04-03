@@ -126,7 +126,7 @@
     "Start writing...": "Schreib los …",
     "Slug is locked after publishing. Edit manually if needed.": "Slug ist nach Veröffentlichung gesperrt. Bei Bedarf manuell ändern.",
     "Auto-generated from title. Will lock after publishing.": "Wird aus dem Titel generiert und nach Veröffentlichung gesperrt.",
-    "Leave blank to auto-generate from the first ~160 characters of the body.": "Leer lassen – wird automatisch aus den ersten ~160 Zeichen erstellt.",
+    "Leave blank to auto-generate from the body (max. 160 characters, adds … when truncated).": "Leer lassen – wird automatisch aus dem Text erzeugt (max. 160 Zeichen; bei Kürzung mit …).",
     "Title": "Titel",
     "Status": "Status",
     "Updated at": "Aktualisiert am",

@@ -124,7 +124,7 @@
     "Start writing...": "Start writing...",
     "Slug is locked after publishing. Edit manually if needed.": "Slug is locked after publishing. Edit manually if needed.",
     "Auto-generated from title. Will lock after publishing.": "Auto-generated from title. Will lock after publishing.",
-    "Leave blank to auto-generate from the first ~160 characters of the body.": "Leave blank to auto-generate from the first ~160 characters of the body.",
+    "Leave blank to auto-generate from the body (max. 160 characters, adds … when truncated).": "Leave blank to auto-generate from the body (max. 160 characters, adds … when truncated).",
     "Title": "Title",
     "Status": "Status",
     "Updated at": "Updated at",

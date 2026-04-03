@@ -377,17 +377,7 @@ input[type="checkbox"].appearance-none:checked {
     color: var(--color-accent) !important;
 }
 
-/* ---- Related posts (accordion, matches TOC tone) ---- */
-.related-posts {
-    padding: 1rem 1.25rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.dark .related-posts {
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
+/* ---- Related posts (accordion, no card — aligns with post nav separator) ---- */
 .related-posts-summary {
     display: flex;
     align-items: center;

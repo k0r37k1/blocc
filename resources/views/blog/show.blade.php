@@ -139,7 +139,7 @@
     </article>
 
     @if ($relatedPosts->isNotEmpty())
-        <details class="related-posts mt-14">
+        <details class="related-posts mt-14 border-t border-neutral-200 pt-8 dark:border-neutral-800">
             <summary class="related-posts-summary">
                 <span class="related-posts-title">{{ __('Related posts (:count)', ['count' => $relatedPosts->count()]) }}</span>
                 <svg class="related-posts-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
