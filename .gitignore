@@ -49,12 +49,13 @@ pnpm-debug.log*
 /.zed
 /auth.json
 
-# AI / local agent state (keep `.cursor/mcp.json` for shared MCP config)
+# AI / local agent state (local only; not pushed — use `git rm --cached` if previously tracked)
 .planning/
 .junie/
 .claude/
-.cursor/*
-!.cursor/mcp.json
+/.cursor/
+/AGENTS.md
+/CLAUDE.md
 
 # Local-only notes (versioned under documentation/)
 /docs/
