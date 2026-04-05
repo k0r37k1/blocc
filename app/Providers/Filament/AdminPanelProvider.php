@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\AvatarProviders\GravatarAvatarProvider;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
 use Filament\Actions\Action;
@@ -24,7 +25,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Voltra\FilamentSvgAvatar\FilamentSvgAvatarPlugin;
 
 use function Filament\Support\original_request;
 
@@ -53,9 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 url: asset('css/fonts.css'),
                 provider: LocalFontProvider::class,
             )
-            ->plugins([
-                FilamentSvgAvatarPlugin::make(),
-            ])
+            ->defaultAvatarProvider(GravatarAvatarProvider::class)
             ->unsavedChangesAlerts()
             ->globalSearchKeyBindings(['mod+k'])
             ->navigationGroups([

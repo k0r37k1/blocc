@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements FilamentUser, HasMedia
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, InteractsWithMedia, Notifiable;
@@ -73,5 +74,15 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->id === 1;
+    }
+
+    /**
+     * Uploaded profile image takes precedence; otherwise Filament uses {@see \App\Filament\AvatarProviders\GravatarAvatarProvider}.
+     */
+    public function getFilamentAvatarUrl(): ?string
+    {
+        $url = $this->getFirstMediaUrl('avatar');
+
+        return filled($url) ? $url : null;
     }
 }

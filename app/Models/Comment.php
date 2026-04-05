@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Gravatar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -104,9 +105,7 @@ class Comment extends Model
      */
     public function getGravatarUrlAttribute(): string
     {
-        $hash = md5(strtolower(trim($this->email ?? '')));
-
-        return "https://www.gravatar.com/avatar/{$hash}?s=80&d=mp";
+        return Gravatar::url($this->email, 80, 'mp');
     }
 
     /**

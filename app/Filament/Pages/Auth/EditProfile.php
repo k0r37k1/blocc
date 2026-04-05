@@ -32,6 +32,7 @@ class EditProfile extends BaseEditProfile
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('avatar')
                             ->label(__('Profile Picture'))
+                            ->helperText(__('If you do not upload a picture, your Gravatar for this email address is shown (same service as blog comment avatars).'))
                             ->collection('avatar')
                             ->image()
                             ->avatar()
