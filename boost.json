@@ -1,9 +1,16 @@
 {
-    "agents": ["claude_code", "junie"],
+    "agents": [
+        "claude_code",
+        "cursor",
+        "junie"
+    ],
     "guidelines": true,
-    "herd_mcp": false,
     "mcp": true,
     "nightwatch_mcp": false,
     "sail": false,
-    "skills": ["tailwindcss-development"]
+    "skills": [
+        "laravel-best-practices",
+        "livewire-development",
+        "tailwindcss-development"
+    ]
 }

@@ -2,7 +2,7 @@
 
 > A minimal, self-hosted blog platform built with Laravel — deployable on shared hosting without Node.js.
 
-[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php&logoColor=white)](https://php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?logo=php&logoColor=white)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)](https://laravel.com)
 [![License](https://img.shields.io/github/license/k0r37k1/blocc)](LICENSE)
 
@@ -16,7 +16,7 @@ blocc is an opinionated, single-user blog engine for developers who want full co
 
 - **SQLite by default** — no database server required
 - **Build output committed** — no Node.js on the server
-- **Shared hosting friendly** — runs on any PHP 8.2+ host with Composer
+- **Shared hosting friendly** — runs on any PHP 8.3+ host with Composer
 
 ---
 
@@ -64,7 +64,7 @@ Most self-hosted blog platforms require a VPS, a database server, or a Node.js r
 
 | Layer | Technology |
 |---|---|
-| Backend | PHP 8.2+, Laravel 12 |
+| Backend | PHP 8.3+, Laravel 12 |
 | Admin Panel | Filament 5, Livewire 4 |
 | Frontend | Blade, Alpine.js, Tailwind CSS 4 |
 | Database | SQLite |
@@ -75,7 +75,7 @@ Most self-hosted blog platforms require a VPS, a database server, or a Node.js r
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.3+
 - Composer
 - Node.js 18+ *(development only)*
 

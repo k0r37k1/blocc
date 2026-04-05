@@ -1,24 +1,18 @@
 .DS_Store
+Thumbs.db
+
+# Environment
 .env
 .env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-.planning/
-.junie/
-.claude/
-.github/
-/docs/
-*.log
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
+.env.*.local
+
+# Dependencies
 /node_modules
-# /public/build  # Committed for shared hosting (no Node.js)
+/vendor
+
+# Laravel
+# /public/build  — committed for shared hosting (no Node.js in production)
 /public/hot
 /public/sitemap.xml
 /public/storage
@@ -26,13 +20,44 @@
 /storage/debugbar
 /storage/pail
 /upload
-/vendor
 /database/*.sqlite
 /database/*.sqlite-wal
 /database/*.sqlite-shm
-Homestead.json
-Homestead.yaml
-Thumbs.db
+
+# Testing & e2e
+.phpunit.result.cache
+/.phpunit.cache
 /test-results
 /playwright-report
 /blob-report
+/coverage
+/.nyc_output
+
+# Logs & package managers
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE & editors
+.phpactor.json
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+/auth.json
+
+# AI / local agent state (keep `.cursor/mcp.json` for shared MCP config)
+.planning/
+.junie/
+.claude/
+.cursor/*
+!.cursor/mcp.json
+
+# Local-only project notes
+/docs/
+
+Homestead.json
+Homestead.yaml
