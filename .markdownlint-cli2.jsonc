@@ -7,8 +7,7 @@
   "globs": [
     "README.md",
     "SECURITY.md",
-    "documentation/**/*.md",
-    "docs/**/*.md"
+    "documentation/**/*.md"
   ],
   "ignores": [
     "node_modules/**",

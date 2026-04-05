@@ -56,5 +56,8 @@ pnpm-debug.log*
 .cursor/*
 !.cursor/mcp.json
 
+# Local-only notes (versioned under documentation/)
+/docs/
+
 Homestead.json
 Homestead.yaml
