@@ -29,6 +29,13 @@ class BloccHtmlDefinition implements Definition
         // TipTap details block body (Filament DetailsContentExtension)
         $definition->addAttribute('div', 'data-type', 'Text');
 
+        // Filament customBlock placeholder + TipTap grid metadata
+        $definition->addAttribute('div', 'data-id', 'Text');
+        $definition->addAttribute('div', 'data-config', 'Text');
+        $definition->addAttribute('div', 'data-cols', 'Text');
+        $definition->addAttribute('div', 'data-from-breakpoint', 'Text');
+        $definition->addAttribute('div', 'data-col-span', 'Text');
+
         // TipTap / ProseMirror table column widths
         $definition->addAttribute('td', 'data-colwidth', 'Text');
         $definition->addAttribute('th', 'data-colwidth', 'Text');
@@ -36,5 +43,8 @@ class BloccHtmlDefinition implements Definition
         // Filament embedded media reference (ImageExtension)
         $definition->addAttribute('img', 'data-id', 'Text');
         $definition->addAttribute('img', 'loading', 'Enum#lazy,eager,auto');
+
+        // Callout block (`aside` in HTML.Allowed)
+        $definition->addAttribute('aside', 'role', 'Enum#note,complementary,status,none,presentation');
     }
 }

@@ -260,5 +260,21 @@
     "Table of contents": "Inhalt",
     "Related posts (:count)": "Ähnliche Beiträge (:count)",
     "Show Table of Contents": "Inhaltsverzeichnis anzeigen",
-    "Disable to hide the table of contents on this post.": "Deaktivieren, um das Inhaltsverzeichnis bei diesem Beitrag auszublenden."
+    "Disable to hide the table of contents on this post.": "Deaktivieren, um das Inhaltsverzeichnis bei diesem Beitrag auszublenden.",
+    "Rich editor: Video embed": "Video-Einbettung",
+    "Rich editor: Callout": "Hinweis-Box",
+    "Paste a YouTube or Vimeo page URL. The video is embedded responsively on the public site.": "YouTube- oder Vimeo-Link einfügen. Das Video wird auf der öffentlichen Seite responsiv eingebettet.",
+    "Video URL": "Video-URL",
+    "Invalid or unsupported video URL.": "Ungültige oder nicht unterstützte Video-URL.",
+    "Embedded video": "Eingebettetes Video",
+    "Use callouts for tips, warnings, or short highlighted notes.": "Hinweis-Boxen für Tipps, Warnungen oder kurze Hervorhebungen.",
+    "Callout type": "Art des Hinweises",
+    "Callout variant: Information": "Information",
+    "Callout variant: Warning": "Warnung",
+    "Callout variant: Success": "Erfolg",
+    "Callout variant: Tip": "Tipp",
+    "Title (optional)": "Titel (optional)",
+    "Text": "Text",
+    "Rich editor: headings menu": "Überschriften",
+    "Rich editor: lists menu": "Listen"
 }

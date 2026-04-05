@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\PostStatus;
+use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\CalloutRichContentBlock;
+use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\VideoEmbedRichContentBlock;
 use App\Services\PostContentProcessor;
 use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
@@ -28,7 +30,7 @@ class Page extends Model implements HasMedia, HasRichContent
             // Process body through content pipeline (sanitize, highlight, anchors)
             if ($page->isDirty('body') && filled($page->body)) {
                 $page->body_raw = $page->body;
-                $page->body = app(PostContentProcessor::class)->process($page->body);
+                $page->body = app(PostContentProcessor::class)->process($page->body, $page);
             }
 
             if ($page->status === PostStatus::Published && $page->published_at === null) {
@@ -74,6 +76,10 @@ class Page extends Model implements HasMedia, HasRichContent
         $this->registerRichContent('body')
             ->textColors([
                 ...TextColor::getDefaults(),
+            ])
+            ->customBlocks([
+                VideoEmbedRichContentBlock::class,
+                CalloutRichContentBlock::class,
             ])
             ->fileAttachmentProvider(
                 SpatieMediaLibraryFileAttachmentProvider::make()

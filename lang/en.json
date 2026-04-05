@@ -219,5 +219,21 @@
     "Table of contents": "Table of contents",
     "Related posts (:count)": "Related posts (:count)",
     "Show Table of Contents": "Show Table of Contents",
-    "Disable to hide the table of contents on this post.": "Disable to hide the table of contents on this post."
+    "Disable to hide the table of contents on this post.": "Disable to hide the table of contents on this post.",
+    "Rich editor: Video embed": "Video embed",
+    "Rich editor: Callout": "Callout",
+    "Paste a YouTube or Vimeo page URL. The video is embedded responsively on the public site.": "Paste a YouTube or Vimeo page URL. The video is embedded responsively on the public site.",
+    "Video URL": "Video URL",
+    "Invalid or unsupported video URL.": "Invalid or unsupported video URL.",
+    "Embedded video": "Embedded video",
+    "Use callouts for tips, warnings, or short highlighted notes.": "Use callouts for tips, warnings, or short highlighted notes.",
+    "Callout type": "Callout type",
+    "Callout variant: Information": "Information",
+    "Callout variant: Warning": "Warning",
+    "Callout variant: Success": "Success",
+    "Callout variant: Tip": "Tip",
+    "Title (optional)": "Title (optional)",
+    "Text": "Text",
+    "Rich editor: headings menu": "Headings",
+    "Rich editor: lists menu": "Lists"
 }

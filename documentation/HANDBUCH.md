@@ -49,7 +49,7 @@ Ressourcen werden unter `app/Filament/Resources/` per `AdminPanelProvider` einge
 | **Comments** | `CommentResource` | Nur Listen-Seite (`ListComments`); Badge = ausstehende Kommentare. |
 | **Media** | `MediaResource` | Nur **Liste**; `canCreate(): false` – **kein** Upload über diese Ressource. Löschen/Bulk über Tabelle möglich (`ListMedia`). |
 
-**Post-Formular (Auszug, `PostForm`):** Titel, Slug, Kategorie, Tags, Auszug, RichEditor-Body (Toolbar u. a. **H1–H3**, **Textfarbe** `textColor`, Tabellen, Details, …; Purify in `config/purify.php`), Lesezeit-Anzeige (Berechnung beim Speichern im Model), Featured Image, Alt-Text (Pflicht wenn Bild gesetzt), Platzhalterbild-Checkbox **nur bei Create**, Kommentare pro Post, TOC, Status.
+**Post-Formular (Auszug, `PostForm`):** Titel, Slug, Kategorie, Tags, Auszug, RichEditor-Body (Toolbar u. a. **H1–H6**, **Sub/Sup**, **Ausrichtung** (`alignStart`–`alignJustify`), **Textfarbe** `textColor`, **Custom Blocks** für YouTube/Vimeo und Hinweis-Boxen, Tabellen, Details, …). **Pipeline beim Speichern:** Purify (`config/purify.php`) → **Raster (Grid):** sichere `--cols` / `--col-span` aus `data-cols` / `data-col-span` (Purify entfernt die Variablen im `style`, der Processor setzt sie erneut) → Custom Blocks auflösen (`PostContentProcessor`) → Phiki → Überschriften-Anker. Lesezeit-Anzeige (Berechnung beim Speichern im Model), Featured Image, Alt-Text (Pflicht wenn Bild gesetzt), Platzhalterbild-Checkbox **nur bei Create**, Kommentare pro Post, TOC, Status.
 
 **Post bearbeiten (`EditPost`):** Aktionen Duplizieren, Auf Website ansehen (nur veröffentlicht), Löschen.
 
@@ -96,7 +96,7 @@ Ressourcen werden unter `app/Filament/Resources/` per `AdminPanelProvider` einge
 
 ## 6. Inhaltsspeicherung Post/Page
 
-- Beim Speichern: `body_raw` = Roh-HTML aus dem Formular; `body` = `PostContentProcessor::process($body)` (Purify-Konfiguration `filament_rich_content`, Phiki für Codeblöcke, Anker nur für `h2`/`h3` — **H1** im Body bleibt ohne automatische TOC-Anker).
+- Beim Speichern: `body_raw` = Roh-HTML aus dem Formular; `body` = `PostContentProcessor::process($body, $model)` (Purify `filament_rich_content`, Filament **Custom Blocks** → fertiges HTML, Phiki für Codeblöcke, Anker nur für `h2`/`h3` — **H1** im Body bleibt ohne automatische TOC-Anker).
 - Editor-Befüllung: `afterStateHydrated` nutzt `body_raw ?? body` (Post/Page-Formulare).
 - **Toolbar erweitern:** `config/purify.php` und `app/Purify/*` an TipTap-Ausgabe anpassen (Kommentar auch in `PostForm`/`PageForm`).
 

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Pages\Schemas;
 
 use App\Enums\PostStatus;
+use App\Filament\RichEditor\BodyToolbar;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
@@ -42,15 +43,7 @@ class PageForm
             // New toolbar features: keep `config/purify.php` + `App\Purify\*Definition` in sync with TipTap output.
             RichEditor::make('body')
                 ->required()
-                ->toolbarButtons([
-                    ['bold', 'italic', 'underline', 'strike', 'link', 'textColor'],
-                    ['h1', 'h2', 'h3'],
-                    ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                    ['table', 'horizontalRule', 'details'],
-                    ['highlight', 'small', 'lead'],
-                    ['attachFiles'],
-                    ['undo', 'redo'],
-                ])
+                ->toolbarButtons(BodyToolbar::buttons())
                 ->afterStateHydrated(fn ($component, $record) => $component->state($record?->body_raw ?? $record?->body))
                 ->placeholder(__('Start writing...'))
                 ->extraInputAttributes(['style' => 'min-height: 12rem'])
