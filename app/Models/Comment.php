@@ -109,6 +109,21 @@ class Comment extends Model
     }
 
     /**
+     * Avatar for list UI: guest comments use Gravatar; author (admin) comments use the same rules as {@see User::publicAvatarUrl()}.
+     */
+    public function displayAvatarUrl(int $size = 80): string
+    {
+        if ($this->is_author && filled($this->email)) {
+            $user = User::query()->where('email', $this->email)->first();
+            if ($user !== null) {
+                return $user->publicAvatarUrl($size);
+            }
+        }
+
+        return Gravatar::url($this->email ?? '', $size, 'mp');
+    }
+
+    /**
      * Check if comment is still editable (within 60 minutes).
      */
     public function isEditable(): bool

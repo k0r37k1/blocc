@@ -47,7 +47,7 @@
             <div class="flex items-start gap-3">
                 {{-- Avatar --}}
                 <img
-                    src="{{ $comment->gravatar_url }}"
+                    src="{{ $comment->displayAvatarUrl(72) }}"
                     alt="{{ $comment->nickname }}"
                     loading="lazy"
                     class="h-9 w-9 shrink-0 rounded-full {{ $comment->is_author ? 'ring-2 ring-accent' : '' }}"
@@ -131,7 +131,7 @@
                             @foreach ($comment->replies as $reply)
                                 <div class="flex items-start gap-3" wire:key="reply-{{ $reply->id }}">
                                     <img
-                                        src="{{ $reply->gravatar_url }}"
+                                        src="{{ $reply->displayAvatarUrl(56) }}"
                                         alt="{{ $reply->nickname }}"
                                         loading="lazy"
                                         class="h-7 w-7 shrink-0 rounded-full {{ $reply->is_author ? 'ring-2 ring-accent' : '' }}"

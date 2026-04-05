@@ -27,7 +27,11 @@
                 ],
             ];
             if ($post->author) {
-                $jsonLd['author'] = ['@type' => 'Person', 'name' => $post->author->name];
+                $jsonLd['author'] = [
+                    '@type' => 'Person',
+                    'name' => $post->author->name,
+                    'image' => $post->author->publicAvatarUrl(400),
+                ];
             }
             if ($post->getFirstMediaUrl('featured-image')) {
                 $jsonLd['image'] = $post->getFirstMediaUrl('featured-image');
@@ -166,18 +170,14 @@
     @if ($post->author)
         <div class="mt-14 rounded-xl p-6" style="background-color: var(--color-card)">
             <div class="flex flex-row items-start gap-4">
-                @if ($post->author->getFirstMediaUrl('avatar'))
-                    <img
-                        src="{{ $post->author->getFirstMediaUrl('avatar') }}"
-                        alt="{{ $post->author->name }}"
-                        class="h-10 w-10 sm:h-14 sm:w-14 shrink-0 rounded-full object-cover"
-                        loading="lazy"
-                    >
-                @else
-                    <div class="flex h-10 w-10 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-lg font-bold text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
-                        {{ str($post->author->name)->substr(0, 1)->upper() }}
-                    </div>
-                @endif
+                <img
+                    src="{{ $post->author->publicAvatarUrl(160) }}"
+                    alt="{{ $post->author->name }}"
+                    class="h-10 w-10 sm:h-14 sm:w-14 shrink-0 rounded-full object-cover bg-neutral-200 dark:bg-neutral-800"
+                    loading="lazy"
+                    width="160"
+                    height="160"
+                >
 
                 <div class="min-w-0">
                     <p class="font-semibold text-neutral-900 dark:text-neutral-100">{{ $post->author->name }}</p>

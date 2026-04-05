@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Gravatar;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
@@ -84,5 +85,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia
         $url = $this->getFirstMediaUrl('avatar');
 
         return filled($url) ? $url : null;
+    }
+
+    /**
+     * Avatar for the public blog (author box): uploaded image or Gravatar (same as comments / admin fallback).
+     */
+    public function publicAvatarUrl(int $size = 128): string
+    {
+        $url = $this->getFirstMediaUrl('avatar');
+
+        return filled($url) ? $url : Gravatar::url($this->email, $size, 'mp');
     }
 }
