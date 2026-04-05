@@ -11,6 +11,12 @@ use Phiki\Phiki;
 use Phiki\Theme\Theme;
 use Stevebauman\Purify\Facades\Purify;
 
+/**
+ * Blog post / page HTML pipeline after Filament RichEditor.
+ *
+ * Order: {@see self::sanitize()} (config `purify.configs.filament_rich_content`) → Phiki → heading anchors.
+ * Editor state must stay TipTap HTML in {@see \App\Models\Post::$body_raw}; do not feed {@see \App\Models\Post::$body} back into Purify.
+ */
 class PostContentProcessor
 {
     /**
@@ -96,7 +102,7 @@ class PostContentProcessor
     private function sanitize(string $html): string
     {
         /** @var string $cleaned */
-        $cleaned = Purify::clean($html);
+        $cleaned = Purify::config('filament_rich_content')->clean($html);
 
         return $cleaned;
     }

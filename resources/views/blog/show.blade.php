@@ -57,7 +57,12 @@
 
         <div class="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted dark:text-muted-dark">
             @if ($post->author)
-                <span class="font-medium text-neutral-700 dark:text-neutral-300">{{ $post->author->name }}</span>
+                <a
+                    href="#post-author"
+                    class="font-medium text-neutral-700 dark:text-neutral-300 hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
+                >
+                    {{ $post->author->name }}
+                </a>
                 <span>&middot;</span>
             @endif
 
@@ -168,7 +173,7 @@
     @php $newsletterEnabled = \App\Models\Setting::get('newsletter_enabled', '0') === '1'; @endphp
 
     @if ($post->author)
-        <div class="mt-14 rounded-xl p-6" style="background-color: var(--color-card)">
+        <div id="post-author" class="mt-14 scroll-mt-8 rounded-xl p-6" style="background-color: var(--color-card)">
             <div class="flex flex-row items-start gap-4">
                 <img
                     src="{{ $post->author->publicAvatarUrl(160) }}"

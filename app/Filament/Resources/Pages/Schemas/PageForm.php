@@ -39,6 +39,7 @@ class PageForm
                     ? __('Slug is locked after publishing. Edit manually if needed.')
                     : __('Auto-generated from title. Will lock after publishing.')
                 ),
+            // New toolbar features: keep `config/purify.php` + `App\Purify\*Definition` in sync with TipTap output.
             RichEditor::make('body')
                 ->required()
                 ->toolbarButtons([

@@ -84,6 +84,7 @@ class PostForm
                 ->hint(fn (?string $state): string => strlen($state ?? '').' / 160')
                 ->helperText(__('Leave blank to auto-generate from the body (max. 160 characters, adds … when truncated).'))
                 ->columnSpanFull(),
+            // New toolbar features: keep `config/purify.php` + `App\Purify\*Definition` in sync with TipTap output.
             RichEditor::make('body')
                 ->required()
                 ->toolbarButtons([

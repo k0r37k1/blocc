@@ -1,128 +1,91 @@
 <?php
 
-use Stevebauman\Purify\Definitions\Html5Definition;
+use App\Purify\BloccCssDefinition;
+use App\Purify\BloccHtmlDefinition;
 
+/**
+ * HTMLPurifier rules aligned with Filament v5 {@see \Filament\Forms\Components\RichEditor} (TipTap).
+ *
+ * Toolbar (PostForm / PageForm): bold, italic, underline, strike, link, h2, h3, blockquote,
+ * codeBlock, bulletList, orderedList, table, horizontalRule, details, highlight, small, lead,
+ * attachFiles, undo, redo.
+ *
+ * Not in toolbar (no Purify allowance required until enabled): textColor (span.color + data-color),
+ * textAlign (style text-align on p/headings), subscript, superscript, grid blocks.
+ *
+ * Pipeline: Filament saves TipTap HTML → {@see \App\Services\PostContentProcessor::sanitize()}
+ * (this config) → Phiki code blocks → heading anchors. Public HTML is {@see \App\Models\Post::$body};
+ * the editor loads {@see \App\Models\Post::$body_raw} when set (never run Phiki output through Purify).
+ *
+ * Custom attributes: {@see BloccHtmlDefinition}.
+ */
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Default Config
-    |--------------------------------------------------------------------------
-    |
-    | This option defines the default config that is provided to HTMLPurifier.
-    |
-    */
-
-    'default' => 'default',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Config sets
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure various sets of configuration for differentiated use of HTMLPurifier.
-    | A specific set of configuration can be applied by calling the "config($name)" method on
-    | a Purify instance. Feel free to add/remove/customize these attributes as you wish.
-    |
-    | Documentation: http://htmlpurifier.org/live/configdoc/plain.html
-    |
-    |   Core.Encoding               The encoding to convert input to.
-    |   HTML.Doctype                Doctype to use during filtering.
-    |   HTML.Allowed                The allowed HTML Elements with their allowed attributes.
-    |   HTML.ForbiddenElements      The forbidden HTML elements. Elements that are listed in this
-    |                               string will be removed, however their content will remain.
-    |   CSS.AllowedProperties       The Allowed CSS properties.
-    |   AutoFormat.AutoParagraph    Newlines are converted in to paragraphs whenever possible.
-    |   AutoFormat.RemoveEmpty      Remove empty elements that contribute no semantic information to the document.
-    |
-    */
+    'default' => 'filament_rich_content',
 
     'configs' => [
 
-        'default' => [
+        'filament_rich_content' => [
             'Core.Encoding' => 'utf-8',
             'HTML.Doctype' => 'HTML 4.01 Transitional',
             'HTML.Allowed' => implode(',', [
-                'p[class]', 'br', 'hr',
-                'h2', 'h3', 'h4', 'h5', 'h6',
-                'strong', 'em', 'u', 's', 'sub', 'sup', 'small', 'mark',
-                'a[href|title|target|rel]',
-                'ul', 'ol', 'li',
+                // Paragraphs may carry TipTap text-align via style when textAlign is enabled in Filament.
+                'p[class|style]',
+                'br',
+                'hr',
+                'h2[class|style]',
+                'h3[class|style]',
+                'h4[class|style]',
+                'h5[class|style]',
+                'h6[class|style]',
+                'strong',
+                'em',
+                'u',
+                's',
+                'sub',
+                'sup',
+                'small',
+                'mark',
+                'a[href|title|target|rel|class|aria-label]',
+                'ul',
+                'ol',
+                'li',
                 'blockquote',
-                'pre[class]', 'code[class]',
-                'img[src|alt|width|height]',
-                'table', 'thead', 'tbody', 'tr', 'th', 'td',
-                'figure', 'figcaption',
-                'dl', 'dt', 'dd',
-                'details', 'summary',
+                'pre[class]',
+                'code[class]',
+                // Lead block + TipTap details body
+                'div[class|data-type]',
+                'img[src|alt|width|height|data-id|loading|class|style]',
+                'table',
+                'thead',
+                'tbody',
+                'tr',
+                'th[colspan|rowspan|data-colwidth]',
+                'td[colspan|rowspan|data-colwidth]',
+                'figure',
+                'figcaption',
+                'dl',
+                'dt',
+                'dd',
+                'details',
+                'summary',
             ]),
+            // Keep narrow: TipTap image resize / alignment use inline styles; text-align if enabled later.
+            'CSS.AllowedProperties' => 'text-align,width,height,max-width,max-height',
             'HTML.ForbiddenElements' => 'script,style,iframe,form,input,textarea,select,button',
-            'CSS.AllowedProperties' => '',
             'AutoFormat.AutoParagraph' => false,
             'AutoFormat.RemoveEmpty' => false,
         ],
 
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | HTMLPurifier definitions
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify a class that augments the HTML definitions used by
-    | HTMLPurifier. Additional HTML5 definitions are provided out of the box.
-    | When specifying a custom class, make sure it implements the interface:
-    |
-    |   \Stevebauman\Purify\Definitions\Definition
-    |
-    | Note that these definitions are applied to every Purifier instance.
-    |
-    | Documentation: http://htmlpurifier.org/docs/enduser-customize.html
-    |
-    */
+    'definitions' => BloccHtmlDefinition::class,
 
-    'definitions' => Html5Definition::class,
-
-    /*
-    |--------------------------------------------------------------------------
-    | HTMLPurifier CSS definitions
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify a class that augments the CSS definitions used by
-    | HTMLPurifier. When specifying a custom class, make sure it implements
-    | the interface:
-    |
-    |   \Stevebauman\Purify\Definitions\CssDefinition
-    |
-    | Note that these definitions are applied to every Purifier instance.
-    |
-    | CSS should be extending $definition->info['css-attribute'] = values
-    | See HTMLPurifier_CSSDefinition for further explanation
-    |
-    */
-
-    'css-definitions' => null,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Serializer
-    |--------------------------------------------------------------------------
-    |
-    | The storage implementation where HTMLPurifier can store its serializer files.
-    | If the filesystem cache is in use, the path must be writable through the
-    | storage disk by the web server, otherwise an exception will be thrown.
-    |
-    */
+    'css-definitions' => BloccCssDefinition::class,
 
     'serializer' => [
         'driver' => env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
         'cache' => \Stevebauman\Purify\Cache\CacheDefinitionCache::class,
     ],
-
-    // 'serializer' => [
-    //    'disk' => env('FILESYSTEM_DISK', 'local'),
-    //    'path' => 'purify',
-    //    'cache' => \Stevebauman\Purify\Cache\FilesystemDefinitionCache::class,
-    // ],
 
 ];

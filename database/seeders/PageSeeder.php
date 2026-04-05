@@ -69,8 +69,9 @@ class PageSeeder extends Seeder
     }
 
     /**
-     * Datenschutz-HTML (öffentlicher Blog + Kommentare, Newsletter, Gravatar).
+     * Datenschutz-HTML (öffentlicher Blog + Kommentare, Newsletter, Gravatar/Profilbilder).
      * IP-Aufbewahrung: 30 Tage (siehe config/comments.php und Artisan comments:anonymize-ips).
+     * Markdown-Spiegel (bei inhaltlichen Änderungen mitpflegen): documentation/datenschutz.md
      */
     private function datenschutzBody(): string
     {
@@ -121,14 +122,16 @@ E-Mail: <a href="mailto:hallo@kopfsalatblog.de">hallo@kopfsalatblog.de</a></p>
 <p>Der Versand und die Verwaltung der Liste erfolgen über <strong>Brevo</strong> (Brevo SAS, Frankreich; vormals Sendinblue). Ihre E-Mail-Adresse wird dorthin übermittelt und dort gespeichert. Aktuelle Firmen- und Kontaktangaben: <a href="https://www.brevo.com/legal-notice/" rel="noopener noreferrer">brevo.com/legal-notice</a>. Mit Brevo besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO. Die Datenschutzhinweise von Brevo: <a href="https://www.brevo.com/de/legal/privacypolicy/" rel="noopener noreferrer">brevo.com/de/legal/privacypolicy</a>.</p>
 <p>Die Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen, z. B. über den Abmeldelink in jedem Newsletter oder per E-Mail an die oben genannte Adresse. Nach Widerruf wird die Adresse aus dem Verteiler entfernt, soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
 
-<h3>6. Gravatar (Kommentar-Avatare)</h3>
-<p>Wenn Sie beim Kommentieren eine E-Mail-Adresse angeben, kann Ihr Browser zur Anzeige eines Profilbilds eine Anfrage an den Dienst <strong>Gravatar</strong> (Betreiber: Automattic Inc., USA) richten. Dabei wird typischerweise ein aus der E-Mail-Adresse gebildeter Hash in der URL verwendet. Es kann eine Übermittlung in ein Drittland stattfinden. Die Datenschutzhinweise von Automattic finden Sie unter <a href="https://automattic.com/privacy/" rel="noopener noreferrer">automattic.com/privacy</a>. Wird kein Bild gefunden, wird ein neutraler Platzhalter angezeigt. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (Darstellung der Kommentarfunktion). Sie können die Übermittlung vermeiden, indem Sie keine E-Mail-Adresse angeben (der Kommentar bleibt grundsätzlich möglich, sofern die Funktion dies vorsieht).</p>
+<h3>6. Gravatar und Profilbilder</h3>
+<p><strong>Kommentare von Besucherinnen und Besuchern:</strong> Wenn Sie beim Kommentieren eine E-Mail-Adresse angeben, kann Ihr Browser zur Anzeige eines Profilbilds eine Anfrage an den Dienst <strong>Gravatar</strong> (Betreiber: Automattic Inc., USA) richten. Dabei wird typischerweise ein aus der E-Mail-Adresse gebildeter Hash in der URL verwendet. Es kann eine Übermittlung in ein Drittland stattfinden. Die Datenschutzhinweise von Automattic finden Sie unter <a href="https://automattic.com/privacy/" rel="noopener noreferrer">automattic.com/privacy</a>. Wird kein Bild gefunden, wird ein neutraler Platzhalter angezeigt. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (Darstellung der Kommentarfunktion). Sie können die Übermittlung vermeiden, indem Sie keine E-Mail-Adresse angeben (der Kommentar bleibt grundsätzlich möglich, sofern die Funktion dies vorsieht).</p>
+<p><strong>Autorinnen und Autoren / Redaktion auf dem Blog:</strong> Zu Beiträgen können Name, Kurzbeschreibung und ein Profilbild angezeigt werden. Das Bild wird entweder auf diesem Webserver gespeichert (Upload durch die Redaktion) oder, falls kein eigenes Bild hinterlegt ist, über <strong>Gravatar</strong> anhand einer Hash-Angabe aus der E-Mail-Adresse des Autors bzw. der Redaktion geladen (gleicher Dienst und Datenschutzhinweise wie oben). Dasselbe gilt, wenn die Redaktion als Autorin bzw. Autor in der Kommentarliste erkennbar ist. In strukturierten Daten (z. B. für Suchmaschinen) kann die Adresse (URL) dieses Profilbilds mit ausgegeben werden. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (öffentliche Darstellung der Inhalte).</p>
+<p><strong>Administratorsbereich:</strong> Für die Anzeige des Nutzerkontos in der Redaktions-Oberfläche gilt dieselbe Logik: optional hochgeladenes Bild auf diesem Server oder sonst Gravatar für die im Profil hinterlegte E-Mail-Adresse. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (Bereitstellung des Redaktionssystems).</p>
 
 <h3>7. Kontaktaufnahme per E-Mail</h3>
 <p>Wenn Sie uns per E-Mail kontaktieren, verarbeiten wir die von Ihnen mitgeteilten Daten zur Bearbeitung der Anfrage. Eine Weitergabe an Dritte erfolgt nicht, soweit nicht gesetzlich vorgeschrieben. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO und ggf. Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen.</p>
 
 <h3>8. Administrationsbereich (Redaktion)</h3>
-<p>Für die Pflege des Blogs wird ein geschützter Administrationsbereich genutzt. Zugangsdaten und Aktivitäten dort werden nur zur Bereitstellung und Sicherung des Dienstes verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO bzw. bei Vertragsbeziehung mit Mitwirkenden Art. 6 Abs. 1 lit. b DSGVO.</p>
+<p>Für die Pflege des Blogs wird ein geschützter Administrationsbereich genutzt. Zugangsdaten und Aktivitäten dort werden nur zur Bereitstellung und Sicherung des Dienstes verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO bzw. bei Vertragsbeziehung mit Mitwirkenden Art. 6 Abs. 1 lit. b DSGVO. Zur Darstellung von Profilbildern siehe Ziffer 6.</p>
 
 <h3>9. Ihre Rechte</h3>
 <p>Sie haben – soweit die gesetzlichen Voraussetzungen erfüllt sind – folgende Rechte:</p>
@@ -150,7 +153,7 @@ E-Mail: <a href="mailto:hallo@kopfsalatblog.de">hallo@kopfsalatblog.de</a></p>
 <li><strong>Server-Logfiles:</strong> werden beim Hosting-Provider nach <strong>14 Tagen</strong> automatisch gelöscht, sofern der Anbieter nichts Abweichendes vorsieht (Stand der Konfiguration zum Zeitpunkt dieser Erklärung).</li>
 <li><strong>Session-Daten (Cookies):</strong> werden nach <strong>120 Minuten</strong> Inaktivität beendet bzw. entfernt (entspricht der eingestellten Session-Lebensdauer der Anwendung).</li>
 <li><strong>Kommentar-IP-Adressen:</strong> automatische Löschung nach <strong>30 Tagen</strong> ab Kommentarzeitpunkt (siehe Ziffer 4).</li>
-<li><strong>Kommentarinhalte</strong> (Nickname, Text, freiwillige E-Mail): werden gespeichert, solange der Kommentar besteht bzw. die Website ihn führt; eine Löschung können Sie anfragen (siehe Ziffer 8). Gesetzliche Aufbewahrungspflichten bleiben unberührt.</li>
+<li><strong>Kommentarinhalte</strong> (Nickname, Text, freiwillige E-Mail): werden gespeichert, solange der Kommentar besteht bzw. die Website ihn führt; eine Löschung können Sie anfragen (siehe Ziffer 9). Gesetzliche Aufbewahrungspflichten bleiben unberührt.</li>
 <li><strong>Newsletter:</strong> E-Mail wird gelöscht bzw. aus der Liste entfernt nach Widerruf der Einwilligung, vorbehaltlich gesetzlicher Aufbewahrung.</li>
 </ul>
 
