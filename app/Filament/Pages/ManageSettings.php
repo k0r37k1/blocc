@@ -19,6 +19,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 /**
  * @property-read Schema $form
@@ -60,9 +61,19 @@ class ManageSettings extends Page
                 ->color('gray')
                 ->requiresConfirmation()
                 ->modalHeading(__('Create Backup'))
-                ->modalDescription(__('This will create a full backup of the database and files. This may take a moment.'))
+                ->modalDescription(__('Creates a database-only backup (Spatie backup with --only-db). Success depends on server configuration; this may take a moment.'))
                 ->action(function (): void {
-                    Artisan::call('backup:run', ['--only-db' => true]);
+                    $exitCode = Artisan::call('backup:run', ['--only-db' => true]);
+
+                    if ($exitCode !== 0) {
+                        Notification::make()
+                            ->title(__('Backup failed'))
+                            ->body(Str::limit(trim(Artisan::output()), 500))
+                            ->danger()
+                            ->send();
+
+                        return;
+                    }
 
                     Notification::make()
                         ->title(__('Backup created'))
@@ -75,16 +86,27 @@ class ManageSettings extends Page
                 ->label(__('Reset Data'))
                 ->icon(Heroicon::ArrowPath)
                 ->color('danger')
+                ->visible(fn (): bool => ! app()->isProduction())
                 ->requiresConfirmation()
                 ->modalHeading(__('Reset all data'))
-                ->modalDescription(__('This will delete ALL posts, pages, categories, tags, and media. Settings and your user account will be kept. This cannot be undone!'))
-                ->modalSubmitActionLabel(__('Yes, delete everything'))
+                ->modalDescription(__('Runs migrate:fresh with seed: all tables are dropped, migrations and every seeder run again. Anything not recreated by seeders (content, DB-backed settings, comments, media metadata, etc.) is lost. This cannot be undone!'))
+                ->modalSubmitActionLabel(__('Yes, reset database'))
                 ->action(function (): void {
-                    Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+                    $exitCode = Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+
+                    if ($exitCode !== 0) {
+                        Notification::make()
+                            ->title(__('Database reset failed'))
+                            ->body(Str::limit(trim(Artisan::output()), 500))
+                            ->danger()
+                            ->send();
+
+                        return;
+                    }
 
                     Notification::make()
                         ->title(__('Data reset'))
-                        ->body(__('All data has been deleted and default seed data was restored.'))
+                        ->body(__('The database was rebuilt from migrations and seeders.'))
                         ->warning()
                         ->send();
 

@@ -25,7 +25,7 @@ Diese Datei beschreibt **nur**, was sich anhand des Repos **verifizieren** läss
 | `GET /archiv` | `archive` | `ArchiveController@index` |
 | `GET /seite/{page}` | `page.show` | `PageController@show` (Slug) |
 | `GET /feed` | `feed` | `FeedController` |
-| `GET /sitemap.xml` | `sitemap` | `SitemapController` (liefert Datei; Generierung: `sitemap:generate`) |
+| `GET /sitemap.xml` | `sitemap` | `SitemapController` rendert XML **dynamisch** aus der DB (kein separater Generate-Schritt). **Hinweis:** Existiert auf dem Server noch eine alte Datei `public/sitemap.xml`, kann der Webserver diese **statisch** ausliefern (stale) – dann Datei löschen oder Deploy ohne statische Sitemap. |
 | `GET /locale/{locale}` | `locale.switch` | Closure; erlaubte Werte: `SetLocale::SUPPORTED_LOCALES` |
 | `GET /newsletter/bestaetigt` | `newsletter.confirmed` | View `newsletter.confirmed` |
 
@@ -68,8 +68,8 @@ Ressourcen werden unter `app/Filament/Resources/` per `AdminPanelProvider` einge
 |---------|--------------|
 | **My Profile** | Navigation-Item → `EditProfile`: Avatar (Spatie `avatar`), Stammdaten, Social-Felder, Passwort-Regeln wie im Formular. |
 | **Blog Settings** | `ManageSettings`, Slug `settings`. Felder und Speichern über `Setting::setMany` – exakt die in `ManageSettings::form()` definierten Eingaben (Blogname, Hero, Farben, Schriften, Code-Theme, Posts pro Seite, Kommentare global, Newsletter + Brevo-IDs, Footer, Head-Scripts). |
-| **Header „Backup“** | Ruft `Artisan::call('backup:run', ['--only-db' => true])` auf (`spatie/laravel-backup` ist in `composer.json`). Erfolg hängt von `config/backup.php` und Serverumgebung ab. |
-| **Header „Reset Data“** | Ruft `migrate:fresh --seed --force` auf. **Technisch:** komplette Datenbank wird verworfen und neu aufgebaut; anschließend laufen alle Seeder aus `DatabaseSeeder` (u. a. `AdminUserSeeder`, `SettingSeeder`, `PageSeeder`, …). Das ist **kein** „alles behalten außer Inhalt“ – angepasste DB-Inhalte und manuelle Settings sind danach nur wieder da, was die Seeder wiederherstellen. Der Dialogtext im UI kann davon abweichen. |
+| **Header „Backup“** | Ruft `Artisan::call('backup:run', ['--only-db' => true])` auf (`spatie/laravel-backup`). Nur **Datenbank**, keine Datei-Backups. Exit-Code steuert Erfolgs- vs. Fehler-Notification im UI. |
+| **Header „Reset Data“** | Nur wenn **`APP_ENV` nicht `production`**: `migrate:fresh --seed --force`. Dialog und Notification entsprechen dem Verhalten (DB leer → Migrationen + alle Seeder). In **Produktion** ist die Aktion ausgeblendet. |
 
 ### 3.4 Dashboard
 
@@ -82,7 +82,7 @@ Ressourcen werden unter `app/Filament/Resources/` per `AdminPanelProvider` einge
 | Klasse | Verwendung (aus Views ersichtlich) |
 |--------|-------------------------------------|
 | `PostList` | Startseite, Pagination |
-| `ArchiveList` | Archiv |
+| `ArchiveList` | Archiv (Jahres-/Monatsfilter per SQL-Aggregation, Postliste gefiltert in der DB) |
 | `Comments` | Post-Detail unter Bedingung „Kommentare aktiv“ |
 | `NewsletterSubscribe` | Footer-Komponente; zusätzlich Karten-Variante wenn Newsletter aktiv (`footer`, Post-Show, `post-list`) |
 
@@ -122,7 +122,6 @@ Ressourcen werden unter `app/Filament/Resources/` per `AdminPanelProvider` einge
 | Signatur | Klasse |
 |----------|--------|
 | `comments:anonymize-ips` | `AnonymizeCommentIps` |
-| `sitemap:generate` | `GenerateSitemap` → `public/sitemap.xml` |
 | `brevo:test` | `TestBrevoApi` |
 
 `backup:run` wird nicht als eigener Abschnitt dupliziert – siehe Filament-Einstellungsseite.

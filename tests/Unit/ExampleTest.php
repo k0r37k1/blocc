@@ -2,15 +2,24 @@
 
 namespace Tests\Unit;
 
+use App\Support\Gravatar;
 use PHPUnit\Framework\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_that_true_is_true(): void
+    public function test_gravatar_url_hashes_email(): void
     {
-        $this->assertTrue(true);
+        $url = Gravatar::url('User@Example.com', 80, 'mp');
+
+        $this->assertStringContainsString(md5('user@example.com'), $url);
+        $this->assertStringContainsString('s=80', $url);
+        $this->assertStringContainsString('d='.urlencode('mp'), $url);
+    }
+
+    public function test_gravatar_url_handles_null_email(): void
+    {
+        $url = Gravatar::url(null);
+
+        $this->assertStringContainsString(md5(''), $url);
     }
 }

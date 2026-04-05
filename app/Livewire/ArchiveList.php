@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
@@ -22,36 +23,66 @@ class ArchiveList extends Component
         $this->month = '';
     }
 
+    /**
+     * SQL expression for calendar year of published_at (driver-specific).
+     */
+    private function yearExpression(): string
+    {
+        return match (Post::query()->getConnection()->getDriverName()) {
+            'mysql', 'mariadb' => 'YEAR(published_at)',
+            'pgsql' => 'EXTRACT(YEAR FROM published_at)',
+            default => "strftime('%Y', published_at)",
+        };
+    }
+
+    /**
+     * SQL expression for calendar month (1–12) of published_at.
+     */
+    private function monthExpression(): string
+    {
+        return match (Post::query()->getConnection()->getDriverName()) {
+            'mysql', 'mariadb' => 'MONTH(published_at)',
+            'pgsql' => 'EXTRACT(MONTH FROM published_at)',
+            default => "CAST(strftime('%m', published_at) AS INTEGER)",
+        };
+    }
+
     /** @return Collection<string, Collection<int, Post>> */
     #[Computed]
     public function postsByYear(): Collection
     {
-        return Post::query()
+        $query = Post::query()
             ->published()
-            ->latest('published_at')
-            ->get(['title', 'slug', 'published_at'])
-            ->when(filled($this->year), fn ($posts) => $posts->filter(
-                fn (Post $post): bool => (string) $post->published_at->year === $this->year
-            ))
-            ->when(filled($this->month), fn ($posts) => $posts->filter(
-                fn (Post $post): bool => (string) $post->published_at->month === $this->month
-            ))
-            ->groupBy(fn (Post $post): int => $post->published_at->year);
+            ->select(['title', 'slug', 'published_at'])
+            ->orderByDesc('published_at');
+
+        if (filled($this->year)) {
+            $query->whereYear('published_at', (int) $this->year);
+        }
+
+        if (filled($this->month)) {
+            $query->whereMonth('published_at', (int) $this->month);
+        }
+
+        return $query->get()->groupBy(fn (Post $post): int => $post->published_at->year);
     }
 
     /** @return Collection<int, array{year: string, count: int}> */
     #[Computed]
     public function availableYears(): Collection
     {
+        $yearExpr = $this->yearExpression();
+
         return Post::query()
             ->published()
-            ->get(['published_at'])
-            ->groupBy(fn (Post $post): string => (string) $post->published_at->year)
-            ->map(fn (Collection $posts, string $year): array => [
-                'year' => $year,
-                'count' => $posts->count(),
+            ->selectRaw("{$yearExpr} as archive_year, COUNT(*) as c")
+            ->groupByRaw($yearExpr)
+            ->orderByDesc('archive_year')
+            ->get()
+            ->map(fn (object $row): array => [
+                'year' => (string) $row->archive_year,
+                'count' => (int) $row->c,
             ])
-            ->sortKeysDesc()
             ->values();
     }
 
@@ -63,18 +94,30 @@ class ArchiveList extends Component
             return collect();
         }
 
-        return Post::query()
+        $monthExpr = $this->monthExpression();
+
+        $rows = Post::query()
             ->published()
-            ->get(['published_at'])
-            ->filter(fn (Post $post): bool => (string) $post->published_at->year === $this->year)
-            ->groupBy(fn (Post $post): string => (string) $post->published_at->month)
-            ->map(fn (Collection $posts, string $month): array => [
-                'month' => $month,
-                'label' => $posts->first()->published_at->translatedFormat('F'),
-                'count' => $posts->count(),
-            ])
-            ->sortKeys()
-            ->values();
+            ->whereYear('published_at', (int) $this->year)
+            ->selectRaw("{$monthExpr} as archive_month, COUNT(*) as c")
+            ->groupByRaw($monthExpr)
+            ->orderBy('archive_month')
+            ->get();
+
+        $locale = app()->getLocale();
+        $year = (int) $this->year;
+
+        return $rows->map(function (object $row) use ($locale, $year): array {
+            $monthNum = (int) $row->archive_month;
+
+            return [
+                'month' => (string) $monthNum,
+                'label' => Carbon::create($year, $monthNum, 1)
+                    ->locale($locale)
+                    ->translatedFormat('F'),
+                'count' => (int) $row->c,
+            ];
+        })->values();
     }
 
     public function render(): View

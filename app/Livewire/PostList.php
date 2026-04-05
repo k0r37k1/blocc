@@ -64,7 +64,7 @@ class PostList extends Component
 
         return Post::query()
             ->published()
-            ->with(['category', 'media', 'author.media'])
+            ->with(['category', 'media'])
             ->withCount('approvedComments')
             ->when(filled($term), function ($query) use ($term): void {
                 $query->where(function ($query) use ($term): void {
