@@ -12,7 +12,8 @@
 
 ## Overview
 
-blocc is an opinionated, single-user blog engine for developers who want full control over their content without managing a database server or a Node.js runtime in production.
+blocc is an opinionated, single-user blog engine for developers who want full control over their content
+without managing a database server or a Node.js runtime in production.
 
 - **SQLite by default** — no database server required
 - **Build output committed** — no Node.js on the server
@@ -22,25 +23,30 @@ blocc is an opinionated, single-user blog engine for developers who want full co
 
 ## Why blocc?
 
-Most self-hosted blog platforms require a VPS, a database server, or a Node.js runtime. blocc is built for developers on shared hosting who want a proper admin panel and a clean writing experience without the overhead — just PHP, Composer, and a SQLite file.
+Most self-hosted blog platforms require a VPS, a database server, or a Node.js runtime. blocc is built for
+developers on shared hosting who want a proper admin panel and a clean writing experience without the
+overhead — just PHP, Composer, and a SQLite file.
 
 ---
 
 ## Features
 
-**Writing**
+### Writing
+
 - Rich text editor with syntax highlighting ([Phiki](https://github.com/phikiphp/phiki)) and auto-generated heading anchors
 - Draft / Published workflow
 - Auto-generated excerpts and reading time
 - Featured images with automatic WebP conversion
 - Categories, tags, and archive view
 
-**Readers**
+### Readers
+
 - Comment system with replies, editing, and Gravatar avatars
 - RSS feed at `/feed`
 - Sitemap at `/sitemap.xml`
 
-**Admin Panel** *(powered by Filament)*
+### Admin Panel *(powered by Filament)*
+
 - Dashboard with post stats, recent drafts, and quick actions
 - Full CRUD for posts, pages, categories, tags, and media
 - Comment moderation
@@ -48,11 +54,13 @@ Most self-hosted blog platforms require a VPS, a database server, or a Node.js r
 - Site settings — name, tagline, social links, custom `<head>` scripts
 - User profile with avatar and social links
 
-**Internationalisation**
+### Internationalisation
+
 - German and English translations included
 - Session-based locale switching in admin and frontend
 
-**Security**
+### Security
+
 - Content Security Policy headers (production)
 - HTML sanitization via HTMLPurifier
 - Rate-limited login (5 attempts / minute)
@@ -89,7 +97,8 @@ cd blocc
 composer run setup
 ```
 
-`composer run setup` installs dependencies, copies `.env.example`, generates an app key, runs migrations, and builds frontend assets.
+`composer run setup` installs dependencies, copies `.env.example`, generates an app key, runs migrations, and
+builds frontend assets.
 
 ### Configure your admin account
 
@@ -131,7 +140,8 @@ Starts the Laravel server, queue worker, Pail log viewer, and Vite dev server co
 
 ## Deployment
 
-blocc is designed for shared hosting. The frontend build output is committed to the repository, so no Node.js runtime is needed on the server.
+blocc is designed for shared hosting. The frontend build output is committed to the repository, so no
+Node.js runtime is needed on the server.
 
 See [INSTALL](INSTALL) for a step-by-step shared hosting guide.
 
@@ -139,7 +149,7 @@ See [INSTALL](INSTALL) for a step-by-step shared hosting guide.
 
 ## Project Structure
 
-```
+```text
 app/
   Filament/           Admin panel — resources, pages, widgets
   Http/Controllers/   Public blog controllers
