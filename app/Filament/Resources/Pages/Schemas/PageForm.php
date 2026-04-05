@@ -43,8 +43,8 @@ class PageForm
             RichEditor::make('body')
                 ->required()
                 ->toolbarButtons([
-                    ['bold', 'italic', 'underline', 'strike', 'link'],
-                    ['h2', 'h3'],
+                    ['bold', 'italic', 'underline', 'strike', 'link', 'textColor'],
+                    ['h1', 'h2', 'h3'],
                     ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
                     ['table', 'horizontalRule', 'details'],
                     ['highlight', 'small', 'lead'],

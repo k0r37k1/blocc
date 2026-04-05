@@ -9,8 +9,8 @@ use Stevebauman\Purify\Definitions\Html5Definition;
 /**
  * HTML element attributes used by Filament v5 RichEditor (TipTap) but not in HTMLPurifier’s stock HTML4 config.
  *
- * Filament also registers textColor (`span` + `data-color`), grid layouts, etc.; extend this if those
- * toolbar tools are enabled — and widen {@see BloccCssDefinition} / `CSS.AllowedProperties` in config as needed.
+ * Filament textColor uses `span` + `data-color` (+ inline `color` in `style`, whitelisted in purify.php).
+ * Grid layouts may need further attributes if enabled in the toolbar.
  *
  * @see config/purify.php
  */
@@ -19,6 +19,9 @@ class BloccHtmlDefinition implements Definition
     public static function apply(HTMLPurifier_HTMLDefinition $definition): void
     {
         Html5Definition::apply($definition);
+
+        // Filament TipTap textColor mark
+        $definition->addAttribute('span', 'data-color', 'Text');
 
         // Accessible links (editor + optional heading anchors in stored HTML)
         $definition->addAttribute('a', 'aria-label', 'Text');

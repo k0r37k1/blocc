@@ -80,4 +80,25 @@ class PostContentProcessorRichEditorHtmlTest extends TestCase
 
         $this->assertMatchesRegularExpression('/width:\s*50%/', $out);
     }
+
+    public function test_preserves_h1_heading(): void
+    {
+        $html = '<h1 class="foo">Titel</h1>';
+
+        $out = app(PostContentProcessor::class)->process($html);
+
+        $this->assertStringContainsString('<h1', $out);
+        $this->assertStringContainsString('Titel', $out);
+    }
+
+    public function test_preserves_filament_text_color_span(): void
+    {
+        $html = '<p><span style="color:#ef4444" data-color="red-600">Rot</span></p>';
+
+        $out = app(PostContentProcessor::class)->process($html);
+
+        $this->assertStringContainsString('data-color="red-600"', $out);
+        $this->assertStringContainsString('Rot', $out);
+        $this->assertMatchesRegularExpression('/color:\s*#ef4444/i', $out);
+    }
 }

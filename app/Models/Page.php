@@ -7,6 +7,7 @@ use App\Services\PostContentProcessor;
 use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
+use Filament\Forms\Components\RichEditor\TextColor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -71,6 +72,9 @@ class Page extends Model implements HasMedia, HasRichContent
     public function setUpRichContent(): void
     {
         $this->registerRichContent('body')
+            ->textColors([
+                ...TextColor::getDefaults(),
+            ])
             ->fileAttachmentProvider(
                 SpatieMediaLibraryFileAttachmentProvider::make()
                     ->collection('body-attachments'),
