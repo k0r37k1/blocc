@@ -229,18 +229,18 @@
         <nav class="mt-14 pt-8 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-2 gap-4" aria-label="{{ __('Post navigation') }}">
             <div>
                 @if ($previousPost)
-                    <a href="{{ route('blog.show', $previousPost->slug) }}" class="group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
-                        <span class="text-xs uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Previous post') }}</span>
-                        <p class="text-accent group-hover:underline underline-offset-2 decoration-1 line-clamp-2">&larr; {{ $previousPost->title }}</p>
+                    <span class="text-xs uppercase tracking-wide text-muted dark:text-muted-dark">&larr; {{ __('Previous post') }}</span>
+                    <a href="{{ route('blog.show', $previousPost->slug) }}" class="group block rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                        <p class="text-accent group-hover:underline underline-offset-2 decoration-1 line-clamp-2">{{ $previousPost->title }}</p>
                     </a>
                 @endif
             </div>
 
             <div class="text-right">
                 @if ($nextPost)
-                    <a href="{{ route('blog.show', $nextPost->slug) }}" class="group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
-                        <span class="text-xs uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Next post') }}</span>
-                        <p class="text-accent group-hover:underline underline-offset-2 decoration-1 line-clamp-2">{{ $nextPost->title }} &rarr;</p>
+                    <span class="text-xs uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Next post') }} &rarr;</span>
+                    <a href="{{ route('blog.show', $nextPost->slug) }}" class="group block rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                        <p class="text-accent group-hover:underline underline-offset-2 decoration-1 line-clamp-2">{{ $nextPost->title }}</p>
                     </a>
                 @endif
             </div>
