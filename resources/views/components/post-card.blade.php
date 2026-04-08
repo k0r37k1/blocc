@@ -11,13 +11,14 @@
         'XL' => 'text-3xl',
         default => 'text-xl',
     };
+    $staggerIndex = min(max($index, 0), 10);
 @endphp
 
 <article
     x-data
     x-intersect.once="$el.classList.add('revealed')"
     class="reveal group"
-    style="transition-delay: {{ $index * 80 }}ms"
+    style="transition-delay: {{ $staggerIndex * 70 }}ms"
 >
     @if ($hasImage)
         <a href="{{ route('blog.show', $post) }}" class="block">

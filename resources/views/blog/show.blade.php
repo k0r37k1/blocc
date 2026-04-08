@@ -45,53 +45,54 @@
         x-data="readingProgress"
         x-on:scroll.window.throttle.50ms="update"
         x-show="progress > 0 && progress < 100"
-        x-transition.opacity
         class="reading-progress"
         :style="'width: ' + progress + '%'"
     ></div>
 
     <article>
-        <h1 class="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
-            {{ $post->title }}
-        </h1>
+        <header class="blog-post-hero">
+            <h1 class="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
+                {{ $post->title }}
+            </h1>
 
-        <div class="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted dark:text-muted-dark">
-            @if ($post->author)
-                <a
-                    href="#post-author"
-                    class="font-medium text-neutral-700 dark:text-neutral-300 hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
-                >
-                    {{ $post->author->name }}
-                </a>
+            <div class="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted dark:text-muted-dark">
+                @if ($post->author)
+                    <a
+                        href="#post-author"
+                        class="font-medium text-neutral-700 dark:text-neutral-300 hover:text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
+                    >
+                        {{ $post->author->name }}
+                    </a>
+                    <span>&middot;</span>
+                @endif
+
+                <time datetime="{{ $post->published_at->toDateString() }}">
+                    {{ $post->published_at->translatedFormat('j. F Y') }}
+                </time>
+
+                @if ($post->category)
+                    <span>&middot;</span>
+                    <a href="{{ route('category.show', $post->category) }}" style="color: {{ $post->category->color }}">
+                        {{ $post->category->name }}
+                    </a>
+                @endif
+
                 <span>&middot;</span>
-            @endif
+                <span>{{ __(':count min read', ['count' => $post->reading_time]) }}</span>
 
-            <time datetime="{{ $post->published_at->toDateString() }}">
-                {{ $post->published_at->translatedFormat('j. F Y') }}
-            </time>
-
-            @if ($post->category)
-                <span>&middot;</span>
-                <a href="{{ route('category.show', $post->category) }}" style="color: {{ $post->category->color }}">
-                    {{ $post->category->name }}
-                </a>
-            @endif
-
-            <span>&middot;</span>
-            <span>{{ __(':count min read', ['count' => $post->reading_time]) }}</span>
-
-            @if (\App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled)
-                @php $commentCount = $post->approved_comments_count ?? 0; @endphp
-                <span>&middot;</span>
-                <a href="#comments" class="hover:text-accent transition-colors">
-                    {{ $commentCount > 0 ? trans_choice('{1} 1 comment|[2,*] :count comments', $commentCount, ['count' => $commentCount]) : __(':count comments', ['count' => 0]) }}
-                </a>
-            @endif
-        </div>
+                @if (\App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled)
+                    @php $commentCount = $post->approved_comments_count ?? 0; @endphp
+                    <span>&middot;</span>
+                    <a href="#comments" class="hover:text-accent transition-colors">
+                        {{ $commentCount > 0 ? trans_choice('{1} 1 comment|[2,*] :count comments', $commentCount, ['count' => $commentCount]) : __(':count comments', ['count' => 0]) }}
+                    </a>
+                @endif
+            </div>
+        </header>
 
         @php $featuredImage = $post->getFirstMedia('featured-image'); @endphp
         @if ($featuredImage)
-            <figure class="mt-6">
+            <figure class="blog-post-hero-media mt-6">
                 <img
                     src="{{ $featuredImage->getAvailableUrl(['medium', 'thumbnail']) }}"
                     alt="{{ $post->featured_image_alt ?? $post->title }}"

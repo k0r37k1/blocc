@@ -89,6 +89,7 @@
             }
         </script>
 
+        {{-- Tailwind → app.css | Alpine plugins + data → app.js (Alpine itself from @livewireScripts) --}}
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         {{-- Dynamic appearance overrides from settings --}}

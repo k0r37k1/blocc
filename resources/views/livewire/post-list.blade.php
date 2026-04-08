@@ -32,7 +32,7 @@
     >
         @forelse ($this->posts as $post)
             <div wire:key="post-{{ $post->id }}" class="py-8 first:pt-0">
-                <x-post-card :post="$post" />
+                <x-post-card :post="$post" :index="$loop->index" />
             </div>
         @empty
             <p wire:key="empty-state" class="py-12 text-center text-neutral-500 dark:text-neutral-400">
