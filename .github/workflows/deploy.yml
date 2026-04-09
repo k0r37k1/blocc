@@ -80,6 +80,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd ${{ secrets.FTP_SERVER_DIR }}
+            rm -f public/sitemap.xml
             /opt/plesk/php/8.4/bin/php artisan down
             /opt/plesk/php/8.4/bin/php composer.phar install --no-dev --optimize-autoloader
             /opt/plesk/php/8.4/bin/php artisan migrate --force

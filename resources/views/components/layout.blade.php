@@ -6,6 +6,7 @@
     'ogImage' => null,
     'ogType' => 'website',
     'canonicalUrl' => null,
+    'robots' => null,
     'editUrl' => null,
 ])
 
@@ -46,11 +47,12 @@
             $excludedPageSlugs = ['datenschutz', 'impressum', 'barrierefreiheit'];
             $isExcludedPage = request()->routeIs('page.show') && in_array(request()->route('page'), $excludedPageSlugs, true);
 
-            $robots = ($isExcludedPage || ($hasNonIndexableQuery && ! $hasIndexableQuery))
+            $defaultRobots = ($isExcludedPage || ($hasNonIndexableQuery && ! $hasIndexableQuery))
                 ? 'noindex, follow'
                 : 'index, follow, max-image-preview:large, max-snippet:-1';
+            $resolvedRobots = $robots ?? $defaultRobots;
         @endphp
-        <meta name="robots" content="{{ $robots }}">
+        <meta name="robots" content="{{ $resolvedRobots }}">
         <link rel="canonical" href="{{ $resolvedCanonicalUrl }}">
 
         {{-- Open Graph --}}

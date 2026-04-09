@@ -1,8 +1,4 @@
-<x-layout :title="'404 - ' . __('Page not found')" :description="__('Page not found')">
-    <x-slot:meta>
-        <meta name="robots" content="noindex, follow">
-    </x-slot:meta>
-
+<x-layout :title="'404 - ' . __('Page not found')" :description="__('Page not found')" robots="noindex, follow">
     <div class="flex min-h-[45vh] flex-col items-center justify-center text-center px-4">
         <p class="select-none text-6xl font-bold tracking-tight text-neutral-500 dark:text-neutral-400" aria-hidden="true">
             404
