@@ -50,6 +50,19 @@ class SitemapTest extends TestCase
         $response->assertSee(route('page.show', $page));
     }
 
+    public function test_sitemap_excludes_legal_and_accessibility_pages(): void
+    {
+        $imprint = Page::factory()->create(['slug' => 'impressum']);
+        $privacy = Page::factory()->create(['slug' => 'datenschutz']);
+        $accessibility = Page::factory()->create(['slug' => 'barrierefreiheit']);
+
+        $response = $this->get('/sitemap.xml');
+
+        $response->assertDontSee(route('page.show', $imprint));
+        $response->assertDontSee(route('page.show', $privacy));
+        $response->assertDontSee(route('page.show', $accessibility));
+    }
+
     public function test_sitemap_excludes_draft_pages(): void
     {
         $page = Page::factory()->draft()->create();

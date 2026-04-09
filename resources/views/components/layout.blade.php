@@ -14,7 +14,10 @@
     $resolvedOgTitle = $ogTitle ?? $title ?? config('app.name');
     $resolvedOgDescription = $ogDescription ?? $description;
     $resolvedOgImage = $ogImage;
-    $resolvedCanonicalUrl = $canonicalUrl ?? url()->current();
+    // Canonical should be stable across tracking/filter params, but must keep pagination.
+    $canonicalBase = $canonicalUrl ?? request()->url();
+    $canonicalPage = request()->query('page');
+    $resolvedCanonicalUrl = $canonicalPage ? $canonicalBase.'?page='.$canonicalPage : $canonicalBase;
     $twitterCard = $ogImage ? 'summary_large_image' : 'summary';
 
     $accentColor = \App\Models\Setting::get('accent_color', '#15803d');
@@ -37,7 +40,17 @@
         <title>{{ $title ?? config('app.name') }}</title>
 
         <meta name="description" content="{{ $description }}">
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+        @php
+            $hasIndexableQuery = request()->has('page');
+            $hasNonIndexableQuery = request()->hasAny(['search', 'sort', 'tag', 'category']);
+            $excludedPageSlugs = ['datenschutz', 'impressum', 'barrierefreiheit'];
+            $isExcludedPage = request()->routeIs('page.show') && in_array(request()->route('page'), $excludedPageSlugs, true);
+
+            $robots = ($isExcludedPage || ($hasNonIndexableQuery && ! $hasIndexableQuery))
+                ? 'noindex, follow'
+                : 'index, follow, max-image-preview:large, max-snippet:-1';
+        @endphp
+        <meta name="robots" content="{{ $robots }}">
         <link rel="canonical" href="{{ $resolvedCanonicalUrl }}">
 
         {{-- Open Graph --}}
