@@ -15,7 +15,7 @@ class TagController extends Controller
             ->with(['category', 'media'])
             ->withCount('approvedComments')
             ->latest('published_at')
-            ->simplePaginate((int) Setting::get('posts_per_page', '10'));
+            ->paginate((int) Setting::get('posts_per_page', '10'));
 
         return view('tag.show', compact('tag', 'posts'));
     }
