@@ -5,12 +5,14 @@ namespace App\Models;
 use App\Enums\PostStatus;
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\CalloutRichContentBlock;
 use App\Filament\Forms\Components\RichEditor\RichContentCustomBlocks\VideoEmbedRichContentBlock;
+use App\Observers\PostObserver;
 use App\Services\PostContentProcessor;
 use Database\Factories\PostFactory;
 use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibraryFileAttachmentProvider;
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Filament\Forms\Components\RichEditor\TextColor;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +31,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property Carbon $published_at
  */
+#[ObservedBy([PostObserver::class])]
 class Post extends Model implements HasMedia, HasRichContent
 {
     /** @use HasFactory<PostFactory> */
