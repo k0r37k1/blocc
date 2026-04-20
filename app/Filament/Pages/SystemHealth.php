@@ -25,7 +25,7 @@ class SystemHealth extends Page
 
     public static function getNavigationGroup(): ?string
     {
-        return __('General');
+        return __('System Monitoring');
     }
 
     public function getViewData(): array

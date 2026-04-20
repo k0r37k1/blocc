@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make(fn (): string => __('Content')),
                 NavigationGroup::make(fn (): string => __('Taxonomy')),
                 NavigationGroup::make(fn (): string => __('General'))->collapsed(),
+                NavigationGroup::make(fn (): string => __('System Monitoring'))->collapsed(),
             ])
             ->navigationItems([
                 NavigationItem::make(fn (): string => __('My Profile'))
@@ -72,7 +73,7 @@ class AdminPanelProvider extends PanelProvider
                     ->icon(Heroicon::OutlinedDocumentText)
                     ->url(fn (): string => url('log-viewer'))
                     ->openUrlInNewTab()
-                    ->group(fn (): string => __('General'))
+                    ->group(fn (): string => __('System Monitoring'))
                     ->sort(11),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
