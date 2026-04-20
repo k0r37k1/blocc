@@ -15,7 +15,7 @@
 
             <select
                 wire:model.live="year"
-                class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-white dark:bg-neutral-900 dark:[color-scheme:dark] text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
                 <option value="">{{ __('All years') }}</option>
                 @foreach ($this->availableYears as $item)
@@ -26,7 +26,7 @@
             @if (filled($year))
                 <select
                     wire:model.live="month"
-                    class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-white dark:bg-neutral-900 dark:[color-scheme:dark] text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                     <option value="">{{ __('All months') }}</option>
                     @foreach ($this->availableMonths as $item)
