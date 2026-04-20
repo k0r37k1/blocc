@@ -68,7 +68,7 @@
             <x-filament::section :heading="__('Checks')">
                 <div style="display: flex; flex-direction: column;">
                     @foreach ($checkResults as $loop_result)
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; border-top-width: 1px; border-top-style: solid;" class="health-divider">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; {{ $loop->first ? '' : 'border-top-width: 1px; border-top-style: solid;' }}" class="{{ $loop->first ? '' : 'health-divider' }}">
                             <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
                                 <x-filament::icon
                                     :icon="$statusIcon($loop_result->status)"
