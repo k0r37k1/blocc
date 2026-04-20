@@ -21,16 +21,9 @@ class PostObserver
         $this->submitToIndexNow($post);
     }
 
-    /**
-     * When a draft becomes published, `status` is dirty on update and appears in `wasChanged`.
-     */
-    public function saved(Post $post): void
+    public function updated(Post $post): void
     {
         if ($post->status !== PostStatus::Published) {
-            return;
-        }
-
-        if (! $post->wasChanged('status')) {
             return;
         }
 

@@ -83,12 +83,13 @@ class IndexNowSubmissionTest extends TestCase
         });
     }
 
-    public function test_index_now_is_not_called_again_when_published_post_is_updated(): void
+    public function test_index_now_is_called_when_published_post_content_is_updated(): void
     {
         Config::set('indexnow.key', null);
 
+        $slug = 'index-now-update-'.uniqid();
         $post = Post::factory()->published()->create([
-            'slug' => 'index-now-stable-'.uniqid(),
+            'slug' => $slug,
             'title' => 'Original',
         ]);
 
@@ -100,7 +101,13 @@ class IndexNowSubmissionTest extends TestCase
 
         $post->update(['title' => 'Updated title']);
 
-        Http::assertNothingSent();
+        Http::assertSentCount(1);
+        Http::assertSent(function ($request) use ($slug): bool {
+            /** @var array<string, mixed> $data */
+            $data = json_decode($request->body(), true) ?? [];
+
+            return ($data['urlList'] ?? null) === ['http://localhost/blog/'.$slug];
+        });
     }
 
     public function test_custom_key_location_is_sent_when_configured(): void
