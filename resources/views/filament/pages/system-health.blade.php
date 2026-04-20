@@ -1,4 +1,8 @@
 <x-filament-panels::page>
+    <style>
+        .health-divider { border-color: rgb(229 231 235); }
+        .dark .health-divider { border-color: rgb(255 255 255 / 0.1); }
+    </style>
     @php
         $failed  = $checkResults->filter(fn ($r) => in_array($r->status, ['failed', 'crashed']))->count();
         $warning = $checkResults->filter(fn ($r) => $r->status === 'warning')->count();
@@ -64,7 +68,7 @@
             <x-filament::section :heading="__('Checks')">
                 <div style="display: flex; flex-direction: column;">
                     @foreach ($checkResults as $loop_result)
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0;" class="border-t border-gray-200 dark:border-white/10">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; border-top-width: 1px; border-top-style: solid;" class="health-divider">
                             <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
                                 <x-filament::icon
                                     :icon="$statusIcon($loop_result->status)"
@@ -109,7 +113,7 @@
                     __('Queue Driver')  => config('queue.default'),
                     __('DB Connection') => config('database.default'),
                 ] as $label => $value)
-                    <div style="display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.875rem; padding: 0.5rem 0;" class="border-b border-gray-200 dark:border-white/10">
+                    <div style="display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.875rem; padding: 0.5rem 0; border-bottom-width: 1px; border-bottom-style: solid;" class="health-divider">
                         <dt style="color: var(--gray-500);">{{ $label }}</dt>
                         <dd style="font-weight: 500;">{{ $value }}</dd>
                     </div>
