@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Enums\PostStatus;
-use App\Jobs\SubmitPostUrlToIndexNowJob;
 use App\Models\Post;
+use App\Services\IndexNowClient;
 
 class PostObserver
 {
@@ -18,7 +18,7 @@ class PostObserver
             return;
         }
 
-        $this->queueIndexNowIfConfigured($post);
+        $this->submitToIndexNow($post);
     }
 
     /**
@@ -34,15 +34,17 @@ class PostObserver
             return;
         }
 
-        $this->queueIndexNowIfConfigured($post);
+        $this->submitToIndexNow($post);
     }
 
-    private function queueIndexNowIfConfigured(Post $post): void
+    private function submitToIndexNow(Post $post): void
     {
         if (! filled(config('indexnow.key'))) {
             return;
         }
 
-        SubmitPostUrlToIndexNowJob::dispatch((int) $post->getKey());
+        app(IndexNowClient::class)->submitUrls([
+            route('blog.show', $post, absolute: true),
+        ]);
     }
 }
