@@ -98,7 +98,7 @@
 
         {{-- Environment info --}}
         <x-filament::section :heading="__('Environment')">
-            <dl style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+            <dl style="display: flex; flex-direction: column;">
                 @foreach ([
                     __('PHP Version')    => PHP_VERSION,
                     __('Laravel')       => app()->version(),
@@ -109,7 +109,7 @@
                     __('Queue Driver')  => config('queue.default'),
                     __('DB Connection') => config('database.default'),
                 ] as $label => $value)
-                    <div style="display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.875rem; padding: 0.625rem 0; border-top: 1px solid var(--gray-200);" class="dark:[border-top-color:var(--gray-800)]">
+                    <div style="display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.875rem; padding: 0.5rem 0; border-bottom: 1px solid var(--gray-200);" class="dark:[border-bottom-color:var(--gray-800)]">
                         <dt style="color: var(--gray-500);">{{ $label }}</dt>
                         <dd style="font-weight: 500;">{{ $value }}</dd>
                     </div>
