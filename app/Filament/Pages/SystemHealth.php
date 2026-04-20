@@ -31,7 +31,7 @@ class SystemHealth extends Page
 
         return [
             'checkResults' => $latestResults?->storedCheckResults ?? collect(),
-            'lastRanAt' => $latestResults?->storedCheckResults->first()?->ended_at,
+            'lastRanAt' => $latestResults?->finishedAt,
         ];
     }
 

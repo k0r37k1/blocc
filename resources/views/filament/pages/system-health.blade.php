@@ -77,11 +77,11 @@
                                 </div>
 
                                 <div class="min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $result->check_name }}</p>
-                                    @if (filled($result->notification_message) && ! $isOk)
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 break-words">{{ $result->notification_message }}</p>
-                                    @elseif (filled($result->short_summary))
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $result->short_summary }}</p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $result->label ?: $result->name }}</p>
+                                    @if (filled($result->notificationMessage) && ! $isOk)
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 break-words">{{ $result->notificationMessage }}</p>
+                                    @elseif (filled($result->shortSummary))
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $result->shortSummary }}</p>
                                     @endif
                                 </div>
                             </div>
