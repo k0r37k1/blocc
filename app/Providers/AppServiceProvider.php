@@ -7,6 +7,7 @@ use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -59,6 +60,8 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
+
+        Gate::define('viewLogViewer', fn ($user) => true);
 
         // Register mb_lower() for case-insensitive Unicode search in SQLite
         if (DB::connection()->getDriverName() === 'sqlite') {

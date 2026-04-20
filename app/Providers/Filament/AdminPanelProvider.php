@@ -68,6 +68,12 @@ class AdminPanelProvider extends PanelProvider
                     ->isActiveWhen(fn (): bool => original_request()->routeIs('filament.admin.auth.profile'))
                     ->group(fn (): string => __('General'))
                     ->sort(-1),
+                NavigationItem::make(fn (): string => __('Log Viewer'))
+                    ->icon(Heroicon::OutlinedDocumentText)
+                    ->url(fn (): string => url('log-viewer'))
+                    ->openUrlInNewTab()
+                    ->group(fn (): string => __('General'))
+                    ->sort(11),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
