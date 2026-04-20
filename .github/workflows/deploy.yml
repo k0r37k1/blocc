@@ -87,6 +87,7 @@ jobs:
             /opt/plesk/php/8.4/bin/php artisan storage:link --force
             /opt/plesk/php/8.4/bin/php artisan filament:upgrade
             /opt/plesk/php/8.4/bin/php artisan optimize:clear
+            /opt/plesk/php/8.4/bin/php artisan optimize
             /opt/plesk/php/8.4/bin/php artisan up
 
       - name: Update deployed tag
