@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
-use Spatie\Health\Checks\Checks\BackupsCheck;
 use Spatie\Health\Checks\Checks\CacheCheck;
 use Spatie\Health\Checks\Checks\DatabaseCheck;
 use Spatie\Health\Checks\Checks\DebugModeCheck;
@@ -82,10 +81,6 @@ class AppServiceProvider extends ServiceProvider
             DebugModeCheck::new(),
             EnvironmentCheck::new()->expectEnvironment('production'),
             OptimizedAppCheck::new(),
-            BackupsCheck::new()
-                ->locatedAt(storage_path('app/backups/*.zip'))
-                ->youngestBackShouldHaveBeenMadeBefore(now()->subHours(25))
-                ->atLeastSizeInMb(1),
         ]);
 
         Livewire::component('app.filament.pages.auth.edit-profile', EditProfile::class);
