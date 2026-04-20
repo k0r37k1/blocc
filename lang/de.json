@@ -294,8 +294,8 @@
     "On": "Ein",
     "Off": "Aus",
     "Timezone": "Zeitzone",
-    "Cache Driver": "Cache-Treiber",
-    "Queue Driver": "Warteschlangen-Treiber",
+    "Cache Driver": "Cache-Typ",
+    "Queue Driver": "Queue-Typ",
     "DB Connection": "Datenbankverbindung",
     "Health checks completed": "Health-Checks abgeschlossen"
 }
