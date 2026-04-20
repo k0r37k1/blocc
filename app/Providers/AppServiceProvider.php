@@ -81,6 +81,10 @@ class AppServiceProvider extends ServiceProvider
             DebugModeCheck::new(),
             EnvironmentCheck::new()->expectEnvironment('production'),
             OptimizedAppCheck::new(),
+            // BackupsCheck::new()
+            //     ->locatedAt(storage_path('app/backups/*.zip'))
+            //     ->youngestBackShouldHaveBeenMadeBefore(now()->subDays(7))
+            //     ->atLeastSizeInMb(1),
         ]);
 
         Livewire::component('app.filament.pages.auth.edit-profile', EditProfile::class);
