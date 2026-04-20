@@ -57,9 +57,9 @@ class AdminPanelProvider extends PanelProvider
             ->unsavedChangesAlerts()
             ->globalSearchKeyBindings(['mod+k'])
             ->navigationGroups([
+                NavigationGroup::make(fn (): string => __('General'))->collapsed(),
                 NavigationGroup::make(fn (): string => __('Content')),
                 NavigationGroup::make(fn (): string => __('Taxonomy')),
-                NavigationGroup::make(fn (): string => __('General'))->collapsed(),
                 NavigationGroup::make(fn (): string => __('System Monitoring'))->collapsed(),
             ])
             ->navigationItems([
