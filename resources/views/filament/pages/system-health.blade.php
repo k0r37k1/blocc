@@ -64,7 +64,7 @@
             <x-filament::section :heading="__('Checks')">
                 <div style="display: flex; flex-direction: column;">
                     @foreach ($checkResults as $loop_result)
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; border-top: 1px solid var(--gray-200);" class="dark:[border-top-color:var(--gray-800)]">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; border-top: 1px solid rgb(var(--primary-200));" class="dark:[border-top-color:rgb(var(--primary-800))]">
                             <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
                                 <x-filament::icon
                                     :icon="$statusIcon($loop_result->status)"
@@ -109,7 +109,7 @@
                     __('Queue Driver')  => config('queue.default'),
                     __('DB Connection') => config('database.default'),
                 ] as $label => $value)
-                    <div style="display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.875rem; padding: 0.5rem 0; border-bottom: 1px solid var(--gray-200);" class="dark:[border-bottom-color:var(--gray-800)]">
+                    <div style="display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.875rem; padding: 0.5rem 0; border-bottom: 1px solid rgb(var(--primary-200));" class="dark:[border-bottom-color:rgb(var(--primary-800))]">
                         <dt style="color: var(--gray-500);">{{ $label }}</dt>
                         <dd style="font-weight: 500;">{{ $value }}</dd>
                     </div>
