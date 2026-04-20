@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Spatie\Health\Checks\Checks\BackupsCheck;
+use Spatie\Health\Checks\Checks\CacheCheck;
+use Spatie\Health\Checks\Checks\DatabaseCheck;
+use Spatie\Health\Checks\Checks\DebugModeCheck;
+use Spatie\Health\Checks\Checks\EnvironmentCheck;
+use Spatie\Health\Checks\Checks\OptimizedAppCheck;
+use Spatie\Health\Checks\Checks\ScheduleCheck;
+use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
+use Spatie\Health\Facades\Health;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
@@ -59,6 +68,22 @@ class AppServiceProvider extends ServiceProvider
                 1
             );
         }
+
+        Health::checks([
+            UsedDiskSpaceCheck::new()
+                ->warnWhenUsedSpaceIsAbovePercentage(70)
+                ->failWhenUsedSpaceIsAbovePercentage(90),
+            DatabaseCheck::new(),
+            CacheCheck::new(),
+            ScheduleCheck::new(),
+            DebugModeCheck::new(),
+            EnvironmentCheck::new()->expectEnvironment('production'),
+            OptimizedAppCheck::new(),
+            BackupsCheck::new()
+                ->locatedAt(storage_path('app/backups/*.zip'))
+                ->youngestBackShouldHaveBeenMadeBefore(now()->subHours(25))
+                ->atLeastSizeInMb(1),
+        ]);
 
         Livewire::component('app.filament.pages.auth.edit-profile', EditProfile::class);
 
