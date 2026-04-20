@@ -54,7 +54,7 @@ return [
          * With this setting, notifications are throttled. By default, you'll
          * only get one notification per hour.
          */
-        'throttle_notifications_for_minutes' => 60,
+        'throttle_notifications_for_minutes' => 720,
         'throttle_notifications_key' => 'health:latestNotificationSentAt:',
 
         /*
@@ -64,7 +64,7 @@ return [
         'only_on_failure' => false,
 
         'mail' => [
-            'to' => 'your@example.com',
+            'to' => 'hallo@kopfsalatblog.de',
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),

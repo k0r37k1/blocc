@@ -277,5 +277,25 @@
     "Title (optional)": "Titel (optional)",
     "Text": "Text",
     "Rich editor: headings menu": "Überschriften",
-    "Rich editor: lists menu": "Listen"
+    "Rich editor: lists menu": "Listen",
+
+    "System Health": "System-Status",
+    "Run checks now": "Checks jetzt ausführen",
+    "No results yet": "Noch keine Ergebnisse",
+    "Click «Run checks now» to run all health checks.": "Klicke auf «Checks jetzt ausführen», um alle Health-Checks auszuführen.",
+    "Last checked": "Zuletzt geprüft",
+    ":count check(s) failed": ":count Check(s) fehlgeschlagen",
+    ":count warning(s)": ":count Warnung(en)",
+    "All :count checks passed": "Alle :count Checks bestanden",
+    "Checks": "Checks",
+    "Environment": "Umgebung",
+    "PHP Version": "PHP-Version",
+    "Debug Mode": "Debug-Modus",
+    "On": "Ein",
+    "Off": "Aus",
+    "Timezone": "Zeitzone",
+    "Cache Driver": "Cache-Treiber",
+    "Queue Driver": "Warteschlangen-Treiber",
+    "DB Connection": "Datenbankverbindung",
+    "Health checks completed": "Health-Checks abgeschlossen"
 }

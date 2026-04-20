@@ -21,9 +21,12 @@ class SystemHealth extends Page
 
     protected static ?string $title = 'System Health';
 
-    protected static string|\UnitEnum|null $navigationGroup = null;
-
     protected static ?int $navigationSort = 10;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('General');
+    }
 
     public function getViewData(): array
     {
