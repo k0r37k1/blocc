@@ -80,7 +80,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentSpatieLaravelBackupPlugin::make()
                     ->navigationGroup(fn (): string => __('System Monitoring'))
-                    ->navigationIcon(Heroicon::OutlinedArchiveBoxArrowDown)
+                    ->navigationIcon(Heroicon::OutlinedArchiveBox)
                     ->navigationSort(12),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
