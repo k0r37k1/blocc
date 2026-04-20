@@ -9,5 +9,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('comments:anonymize-ips')->dailyAt('03:15');
+Schedule::command('backup:run --only-db')->dailyAt('02:00');
+Schedule::command('backup:clean')->dailyAt('02:30');
 Schedule::command('health:queue-check-heartbeat')->everyMinute();
 Schedule::command('health:schedule-check-heartbeat')->everyMinute();
