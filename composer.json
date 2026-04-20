@@ -15,6 +15,7 @@
         "opcodesio/log-viewer": "^3.24",
         "phiki/phiki": "^2.1",
         "sentry/sentry-laravel": "^4.25",
+        "shuvroroy/filament-spatie-laravel-backup": "^3.4",
         "spatie/laravel-backup": "^10.0",
         "spatie/laravel-health": "*",
         "spatie/laravel-medialibrary": "^11.21",

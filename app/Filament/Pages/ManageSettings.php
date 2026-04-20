@@ -19,7 +19,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Str;
 
 /**
  * @property-read Schema $form
@@ -55,33 +54,6 @@ class ManageSettings extends Page
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('backup')
-                ->label(__('Backup'))
-                ->icon(Heroicon::ArrowDownTray)
-                ->color('gray')
-                ->requiresConfirmation()
-                ->modalHeading(__('Create Backup'))
-                ->modalDescription(__('Creates a database-only backup (Spatie backup with --only-db). Success depends on server configuration; this may take a moment.'))
-                ->action(function (): void {
-                    $exitCode = Artisan::call('backup:run', ['--only-db' => true]);
-
-                    if ($exitCode !== 0) {
-                        Notification::make()
-                            ->title(__('Backup failed'))
-                            ->body(Str::limit(trim(Artisan::output()), 500))
-                            ->danger()
-                            ->send();
-
-                        return;
-                    }
-
-                    Notification::make()
-                        ->title(__('Backup created'))
-                        ->body(__('Database backup was created successfully.'))
-                        ->success()
-                        ->send();
-                }),
-
             Action::make('resetData')
                 ->label(__('Reset Data'))
                 ->icon(Heroicon::ArrowPath)

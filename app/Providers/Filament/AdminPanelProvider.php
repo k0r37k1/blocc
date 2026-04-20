@@ -25,6 +25,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 
 use function Filament\Support\original_request;
 
@@ -75,6 +76,12 @@ class AdminPanelProvider extends PanelProvider
                     ->openUrlInNewTab()
                     ->group(fn (): string => __('System Monitoring'))
                     ->sort(11),
+            ])
+            ->plugins([
+                FilamentSpatieLaravelBackupPlugin::make()
+                    ->navigationGroup(fn (): string => __('System Monitoring'))
+                    ->navigationIcon(Heroicon::OutlinedArchiveBox)
+                    ->navigationSort(12),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
