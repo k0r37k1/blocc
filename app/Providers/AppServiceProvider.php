@@ -62,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Gate::define('viewLogViewer', fn ($user) => true);
+        Gate::define('create-backup', fn ($user) => true);
 
         // Register mb_lower() for case-insensitive Unicode search in SQLite
         if (DB::connection()->getDriverName() === 'sqlite') {
