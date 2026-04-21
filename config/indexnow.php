@@ -18,7 +18,9 @@ return [
     | Key file URL
     |--------------------------------------------------------------------------
     |
-    | Full HTTPS URL to the key verification file. Defaults to APP_URL + key + .txt
+    | Full HTTPS URL to the key verification file. When empty, defaults to the
+    | scheme + host of the first submitted URL plus "/{key}.txt" so it stays
+    | consistent with URLs generated from the current request (not only APP_URL).
     |
     */
     'key_location' => env('INDEXNOW_KEY_LOCATION'),

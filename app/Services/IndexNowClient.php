@@ -12,6 +12,8 @@ final class IndexNowClient
      */
     public function submitUrls(array $urls): void
     {
+        $urls = array_values(array_filter($urls, fn (string $url): bool => $url !== ''));
+
         if ($urls === []) {
             return;
         }
@@ -21,19 +23,24 @@ final class IndexNowClient
             return;
         }
 
-        $appUrl = (string) config('app.url');
-        $host = parse_url($appUrl, PHP_URL_HOST);
+        $firstUrl = $urls[0];
+        $host = parse_url($firstUrl, PHP_URL_HOST);
         if (! is_string($host) || $host === '') {
-            Log::warning('IndexNow skipped: app.url has no host.', [
-                'app_url' => $appUrl,
+            Log::warning('IndexNow skipped: submitted URL has no host.', [
+                'url' => $firstUrl,
             ]);
 
             return;
         }
 
+        $scheme = parse_url($firstUrl, PHP_URL_SCHEME);
+        if (! is_string($scheme) || $scheme === '') {
+            $scheme = 'https';
+        }
+
         $keyLocation = config('indexnow.key_location');
         if (! is_string($keyLocation) || $keyLocation === '') {
-            $keyLocation = rtrim($appUrl, '/').'/'.$key.'.txt';
+            $keyLocation = $scheme.'://'.$host.'/'.$key.'.txt';
         }
 
         $endpoint = (string) config('indexnow.endpoint', 'https://api.indexnow.org/indexnow');
