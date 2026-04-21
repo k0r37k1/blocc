@@ -89,8 +89,7 @@ class AppServiceProvider extends ServiceProvider
             BackupsCheck::new()
                 ->onDisk($backupDisk)
                 ->locatedAt($backupName)
-                ->youngestBackShouldHaveBeenMadeBefore(now()->subDays(2))
-                ->atLeastSizeInMb(1),
+                ->youngestBackShouldHaveBeenMadeBefore(now()->subDays(2)),
         ]);
 
         Livewire::component('app.filament.pages.auth.edit-profile', EditProfile::class);
