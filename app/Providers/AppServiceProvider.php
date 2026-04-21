@@ -57,6 +57,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $backupDisk = config('backup.backup.destination.disks.0', 'local');
+        $backupName = (string) config('backup.backup.name', config('app.name'));
+
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
@@ -84,7 +87,8 @@ class AppServiceProvider extends ServiceProvider
             EnvironmentCheck::new()->expectEnvironment('production'),
             OptimizedAppCheck::new(),
             BackupsCheck::new()
-                ->locatedAt(storage_path('app/Kopfsalat/*.zip'))
+                ->onDisk($backupDisk)
+                ->locatedAt($backupName)
                 ->youngestBackShouldHaveBeenMadeBefore(now()->subDays(2))
                 ->atLeastSizeInMb(1),
         ]);
