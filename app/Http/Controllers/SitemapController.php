@@ -25,6 +25,7 @@ class SitemapController extends Controller
         $posts = Post::query()->published()->latest('published_at')->get(['title', 'slug', 'updated_at']);
         $pages = Page::query()
             ->published()
+            ->where('is_system', false)
             ->whereNotIn('slug', self::EXCLUDED_PAGE_SLUGS)
             ->get(['title', 'slug', 'updated_at']);
         $categories = Category::all(['name', 'slug']);

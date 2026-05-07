@@ -72,6 +72,18 @@ class SitemapTest extends TestCase
         $response->assertDontSee(route('page.show', $page));
     }
 
+    public function test_sitemap_excludes_system_pages(): void
+    {
+        $systemPage = Page::factory()->create([
+            'slug' => '__sys_test_blog',
+            'is_system' => true,
+        ]);
+
+        $response = $this->get('/sitemap.xml');
+
+        $response->assertDontSee(route('page.show', $systemPage));
+    }
+
     public function test_sitemap_contains_static_urls(): void
     {
         $response = $this->get('/sitemap.xml');
