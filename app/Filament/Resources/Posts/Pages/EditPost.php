@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Posts\Pages;
 
 use App\Enums\PostStatus;
+use App\Filament\Resources\Posts\Concerns\ManagesPostSiteMedia;
 use App\Filament\Resources\Posts\PostResource;
 use App\Models\Post;
 use Filament\Actions\Action;
@@ -14,7 +15,19 @@ use Illuminate\Support\Str;
 
 class EditPost extends EditRecord
 {
+    use ManagesPostSiteMedia;
+
     protected static string $resource = PostResource::class;
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return $this->stripPostMediaFormFields($data);
+    }
+
+    protected function afterSave(): void
+    {
+        $this->processPostMediaAfterSave();
+    }
 
     protected function getHeaderActions(): array
     {

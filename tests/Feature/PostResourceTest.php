@@ -8,8 +8,11 @@ use App\Filament\Resources\Posts\Pages\EditPost;
 use App\Filament\Resources\Posts\Pages\ListPosts;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Site;
 use App\Models\User;
+use App\Services\SiteMedia;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -228,6 +231,67 @@ class PostResourceTest extends TestCase
             ->assertFormFieldExists('featured_image')
             ->assertFormFieldExists('featured_image_alt')
             ->assertFormFieldExists('status');
+    }
+
+    public function test_can_create_post_with_upload_featured_image(): void
+    {
+        $this->actingAs($this->admin);
+
+        $category = Category::factory()->create();
+        $siteMedia = app(SiteMedia::class);
+
+        $upload = Site::instance()
+            ->addMedia(UploadedFile::fake()->image('cover.jpg', 1200, 675))
+            ->toMediaCollection(SiteMedia::COLLECTION);
+
+        $upload->setCustomProperty('content_hash', $siteMedia->contentHash($upload));
+        $upload->save();
+
+        Livewire::test(CreatePost::class)
+            ->fillForm([
+                'title' => 'Upload Image Post',
+                'slug' => 'upload-image-post',
+                'body' => '<p>Content.</p>',
+                'status' => 'draft',
+                'category_id' => $category->id,
+                'site_media_id' => $upload->id,
+                'featured_image_alt' => 'A reusable upload image',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $post = Post::query()->where('slug', 'upload-image-post')->first();
+
+        $this->assertNotNull($post);
+        $this->assertNotNull($post->getFirstMedia('featured-image'));
+    }
+
+    public function test_can_edit_post_with_site_media_selection(): void
+    {
+        $this->actingAs($this->admin);
+
+        $post = Post::factory()->draft()->create();
+        $siteMedia = app(SiteMedia::class);
+
+        $upload = Site::instance()
+            ->addMedia(UploadedFile::fake()->image('second.jpg', 1200, 675))
+            ->toMediaCollection(SiteMedia::COLLECTION);
+
+        $upload->setCustomProperty('content_hash', $siteMedia->contentHash($upload));
+        $upload->save();
+
+        Livewire::test(EditPost::class, ['record' => $post->getRouteKey()])
+            ->fillForm([
+                'site_media_id' => $upload->id,
+                'featured_image_alt' => 'Updated from uploads',
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $post->refresh();
+
+        $this->assertNotNull($post->getFirstMedia('featured-image'));
+        $this->assertSame('second.jpg', $post->getFirstMedia('featured-image')->file_name);
     }
 
     public function test_table_has_required_columns(): void

@@ -4,7 +4,10 @@ namespace App\Filament\Resources\Posts\Schemas;
 
 use App\Enums\PostStatus;
 use App\Filament\RichEditor\BodyToolbar;
+use App\Services\SiteMedia;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -14,7 +17,10 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Str;
 
 class PostForm
@@ -98,21 +104,76 @@ class PostForm
                 ->content(fn ($record): string => $record?->reading_time
                     ? "{$record->reading_time} ".__('min read')
                     : __('Calculated on save')),
+            Hidden::make('site_media_id')
+                ->live(),
+            View::make('filament.forms.components.site-media-selection')
+                ->visible(fn (Get $get): bool => filled($get('site_media_id')))
+                ->viewData(fn (Get $get): array => [
+                    'media' => filled($get('site_media_id'))
+                        ? app(SiteMedia::class)->find((int) $get('site_media_id'))
+                        : null,
+                ]),
             SpatieMediaLibraryFileUpload::make('featured_image')
                 ->collection('featured-image')
                 ->image()
                 ->maxSize(5120)
                 ->columnSpanFull()
                 ->live()
-                ->preserveFilenames(),
+                ->preserveFilenames()
+                ->visible(fn (Get $get): bool => blank($get('site_media_id')))
+                ->belowContent(
+                    Action::make('chooseSiteMedia')
+                        ->label(__('Choose from media'))
+                        ->link()
+                        ->icon(Heroicon::OutlinedPhoto)
+                        ->modalHeading(__('Choose featured image'))
+                        ->modalSubmitActionLabel(__('Use selected image'))
+                        ->modalWidth(Width::ThreeExtraLarge)
+                        ->extraModalWindowAttributes([
+                            'class' => 'mx-3 w-full max-w-[min(48rem,calc(100vw-1.5rem))] sm:mx-auto',
+                        ])
+                        ->schema(function (): array {
+                            $items = app(SiteMedia::class)->items();
+
+                            if ($items->isEmpty()) {
+                                return [
+                                    View::make('filament.forms.components.site-media-picker')
+                                        ->viewData(fn (): array => [
+                                            'items' => $items,
+                                        ]),
+                                ];
+                            }
+
+                            return [
+                                Hidden::make('media_id')
+                                    ->live()
+                                    ->required(),
+                                View::make('filament.forms.components.site-media-picker')
+                                    ->viewData(fn (): array => [
+                                        'items' => $items,
+                                    ]),
+                            ];
+                        })
+                        ->modalSubmitAction(fn (): bool => app(SiteMedia::class)->items()->isNotEmpty())
+                        ->action(function (array $data, Set $set): void {
+                            $set('site_media_id', $data['media_id']);
+                        }),
+                )
+                ->afterStateUpdated(function ($state, Set $set): void {
+                    if (filled($state)) {
+                        $set('site_media_id', null);
+                    }
+                }),
             Checkbox::make('use_placeholder_image')
                 ->label(__('Use random placeholder image if no image uploaded'))
                 ->default(false)
-                ->visibleOn('create')
+                ->visible(fn (Get $get, string $operation): bool => $operation === 'create'
+                    && blank($get('site_media_id')))
                 ->columnSpanFull(),
             TextInput::make('featured_image_alt')
                 ->label(__('Featured Image Alt Text'))
-                ->required(fn (Get $get): bool => filled($get('featured_image')))
+                ->required(fn (Get $get): bool => filled($get('featured_image'))
+                    || filled($get('site_media_id')))
                 ->maxLength(255)
                 ->helperText(__('Describe the image for accessibility. Required when a featured image is set.'))
                 ->columnSpanFull(),

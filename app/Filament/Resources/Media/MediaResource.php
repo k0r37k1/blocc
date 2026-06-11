@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Media;
 
 use App\Filament\Resources\Media\Pages\ListMedia;
+use App\Models\Site;
+use App\Services\SiteMedia;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -13,6 +15,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MediaResource extends Resource
@@ -39,6 +42,17 @@ class MediaResource extends Resource
         return false;
     }
 
+    /**
+     * @return Builder<Media>
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('model_type', Site::class)
+            ->where('model_id', Site::instance()->getKey())
+            ->where('collection_name', SiteMedia::COLLECTION);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -52,13 +66,10 @@ class MediaResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->wrap(),
-                TextColumn::make('collection_name')
-                    ->label(__('Collection'))
+                TextColumn::make('mime_type')
+                    ->label(__('Type'))
+                    ->formatStateUsing(fn (string $state): string => strtoupper(str_replace('image/', '', $state)))
                     ->badge()
-                    ->sortable(),
-                TextColumn::make('model_type')
-                    ->label(__('Used by'))
-                    ->formatStateUsing(fn (string $state): string => class_basename($state))
                     ->sortable(),
                 TextColumn::make('size')
                     ->label(__('Size'))

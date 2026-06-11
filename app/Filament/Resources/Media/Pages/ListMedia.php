@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Media\Pages;
 
 use App\Filament\Resources\Media\MediaResource;
 use App\Models\Site;
+use App\Services\SiteMedia;
 use Filament\Actions\Action;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Notifications\Notification;
@@ -24,8 +25,8 @@ class ListMedia extends ListRecords
                 ->schema([
                     SpatieMediaLibraryFileUpload::make('files')
                         ->hiddenLabel()
-                        ->helperText(__('For logo and favicon, use the filenames logo_light, logo_dark, or favicon.'))
-                        ->collection('uploads')
+                        ->helperText(__('Shared site media: logos, favicon, and images for posts. Use filenames logo_light, logo_dark, or favicon for branding assets.'))
+                        ->collection(SiteMedia::COLLECTION)
                         ->model(Site::instance())
                         ->multiple()
                         ->preserveFilenames()
@@ -36,7 +37,9 @@ class ListMedia extends ListRecords
                         ->panelAspectRatio('2:1')
                         ->reorderable(),
                 ])
-                ->action(function (): void {
+                ->action(function (SiteMedia $siteMedia): void {
+                    $siteMedia->stampMissingContentHashes();
+
                     Notification::make()
                         ->title(__('Files uploaded'))
                         ->success()

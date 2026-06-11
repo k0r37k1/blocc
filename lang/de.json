@@ -298,5 +298,12 @@
     "Cache Driver": "Cache-Typ",
     "Queue Driver": "Queue-Typ",
     "DB Connection": "Datenbankverbindung",
-    "Health checks completed": "Health-Checks abgeschlossen"
+    "Health checks completed": "Health-Checks abgeschlossen",
+    "Empty": "Leer",
+    "Choose from media": "Aus Medien wählen",
+    "Selected from media": "Aus Medien ausgewählt",
+    "Search media": "Medien durchsuchen",
+    "No images uploaded yet. Add JPEG, PNG, or WebP files under Media → Upload — they can be used for posts and site assets.": "Noch keine Bilder hochgeladen. Lade JPEG-, PNG- oder WebP-Dateien unter Medien → Upload hoch — für Beiträge und Site-Assets.",
+    "Shared site media: logos, favicon, and images for posts. Use filenames logo_light, logo_dark, or favicon for branding assets.": "Gemeinsame Site-Medien: Logos, Favicon und Bilder für Beiträge. Für Branding logo_light, logo_dark oder favicon als Dateiname verwenden.",
+    "Type": "Typ"
 }
