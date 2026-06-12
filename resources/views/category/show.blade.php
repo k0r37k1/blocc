@@ -1,4 +1,4 @@
-<x-layout :title="__('Category: :name', ['name' => $category->name]) . ' - ' . config('app.name')" :description="$category->description ?? __('All posts in category :name', ['name' => $category->name])">
+<x-layout :title="__('Category: :name', ['name' => $category->name]) . ' - ' . config('app.name')" :description="$category->description ?? __('All posts in category :name', ['name' => $category->name])" :robots="$posts->isEmpty() ? 'noindex, follow' : null">
     <h1 class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 mb-8">{{ __('Category: :name', ['name' => $category->name]) }}</h1>
 
     @if($category->description)

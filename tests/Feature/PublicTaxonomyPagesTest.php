@@ -17,7 +17,8 @@ class PublicTaxonomyPagesTest extends TestCase
         $tag = Tag::factory()->create(['slug' => 'empty-tag']);
 
         $this->get(route('tag.show', $tag))
-            ->assertOk();
+            ->assertOk()
+            ->assertSee('<meta name="robots" content="noindex, follow">', false);
     }
 
     public function test_tag_show_returns_ok_when_pagination_renders(): void
@@ -37,5 +38,14 @@ class PublicTaxonomyPagesTest extends TestCase
 
         $this->get(route('category.show', $category))
             ->assertOk();
+    }
+
+    public function test_empty_category_page_is_noindex(): void
+    {
+        $category = Category::factory()->create();
+
+        $this->get(route('category.show', $category))
+            ->assertOk()
+            ->assertSee('<meta name="robots" content="noindex, follow">', false);
     }
 }

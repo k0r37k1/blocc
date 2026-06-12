@@ -28,8 +28,8 @@ class SitemapController extends Controller
             ->where('is_system', false)
             ->whereNotIn('slug', self::EXCLUDED_PAGE_SLUGS)
             ->get(['title', 'slug', 'updated_at']);
-        $categories = Category::all(['name', 'slug']);
-        $tags = Tag::all(['name', 'slug']);
+        $categories = Category::query()->withPublishedPosts()->get(['name', 'slug']);
+        $tags = Tag::query()->withPublishedPosts()->get(['name', 'slug']);
 
         return response()
             ->view('sitemap', compact('posts', 'pages', 'categories', 'tags'))

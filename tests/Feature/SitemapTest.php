@@ -92,15 +92,28 @@ class SitemapTest extends TestCase
         $response->assertSee(route('archive'));
     }
 
-    public function test_sitemap_contains_categories_and_tags(): void
+    public function test_sitemap_contains_categories_and_tags_with_published_posts(): void
     {
         $category = Category::factory()->create();
         $tag = Tag::factory()->create();
+        $post = Post::factory()->published()->create(['category_id' => $category->id]);
+        $post->tags()->attach($tag);
 
         $response = $this->get('/sitemap.xml');
 
         $response->assertSee(route('category.show', $category));
         $response->assertSee(route('tag.show', $tag));
+    }
+
+    public function test_sitemap_excludes_empty_categories_and_tags(): void
+    {
+        $emptyCategory = Category::factory()->create(['slug' => 'empty-category']);
+        $emptyTag = Tag::factory()->create(['slug' => 'empty-tag']);
+
+        $response = $this->get('/sitemap.xml');
+
+        $response->assertDontSee(route('category.show', $emptyCategory));
+        $response->assertDontSee(route('tag.show', $emptyTag));
     }
 
     public function test_sitemap_contains_lastmod_for_posts(): void
