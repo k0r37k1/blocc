@@ -3,14 +3,14 @@
     <div class="flex justify-end mb-8">
         <div class="relative w-1/2 sm:w-1/3">
             <input
-                wire:model.live.debounce.250ms="search"
+                wire:model.live.debounce.250ms.preserve-scroll="search"
                 type="search"
                 placeholder="{{ __('Search…') }}"
                 class="w-full border border-neutral-200 dark:border-neutral-800 rounded-md bg-transparent text-sm pl-3 pr-9 py-2 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 aria-label="{{ __('Search posts') }}"
             >
             <button
-                wire:click="$set('sort', '{{ $sort === 'newest' ? 'oldest' : 'newest' }}')"
+                wire:click.preserve-scroll="$set('sort', '{{ $sort === 'newest' ? 'oldest' : 'newest' }}')"
                 type="button"
                 class="absolute inset-y-0 right-0 flex items-center px-2.5 text-neutral-400 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors focus-visible:outline-none"
                 aria-label="{{ $sort === 'newest' ? __('Sorted: newest first') : __('Sorted: oldest first') }}"

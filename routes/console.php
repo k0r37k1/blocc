@@ -11,5 +11,8 @@ Artisan::command('inspire', function () {
 Schedule::command('comments:anonymize-ips')->dailyAt('03:15');
 Schedule::command('backup:run --only-db')->dailyAt('02:00');
 Schedule::command('backup:clean')->dailyAt('02:30');
+Schedule::command('queue:work --stop-when-empty --max-time=55')
+    ->everyMinute()
+    ->withoutOverlapping();
 Schedule::command('health:queue-check-heartbeat')->everyMinute();
 Schedule::command('health:schedule-check-heartbeat')->everyMinute();

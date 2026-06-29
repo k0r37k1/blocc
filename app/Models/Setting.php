@@ -18,7 +18,7 @@ class Setting extends Model
      */
     public static function get(string $key, ?string $default = null): ?string
     {
-        $settings = Cache::rememberForever('settings', function (): array {
+        $settings = Cache::memo()->rememberForever('settings', function (): array {
             return self::pluck('value', 'key')->all();
         });
 

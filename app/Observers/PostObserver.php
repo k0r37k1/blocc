@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Enums\PostStatus;
+use App\Jobs\SubmitIndexNowUrls;
 use App\Models\Post;
-use App\Services\IndexNowClient;
 
 class PostObserver
 {
@@ -36,7 +36,7 @@ class PostObserver
             return;
         }
 
-        app(IndexNowClient::class)->submitUrls([
+        SubmitIndexNowUrls::dispatch([
             route('blog.show', $post, absolute: true),
         ]);
     }

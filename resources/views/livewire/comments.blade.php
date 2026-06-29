@@ -381,8 +381,8 @@
             <p class="text-xs text-muted dark:text-muted-dark">{{ __('Comments are moderated before appearing.') }}</p>
             <button
                 type="submit"
-                wire:loading.attr="disabled"
-                class="rounded-lg bg-accent-bg px-5 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+                wire:target="submitComment"
+                class="rounded-lg bg-accent-bg px-5 py-2 text-sm font-medium text-white hover:opacity-90 data-loading:opacity-50 data-loading:pointer-events-none transition-opacity"
             >
                 <span wire:loading.remove wire:target="submitComment">{{ $replyingTo ? __('Reply') : __('Send') }}</span>
                 <span wire:loading wire:target="submitComment">{{ __('Sending...') }}</span>

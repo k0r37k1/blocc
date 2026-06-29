@@ -37,9 +37,7 @@
 
                     <button
                         type="submit"
-                        wire:loading.attr="disabled"
-                        wire:loading.attr="aria-busy"
-                        class="group shrink-0 p-2.5 rounded-md text-white bg-neutral-500 hover:bg-neutral-600 dark:bg-neutral-600 dark:hover:bg-neutral-500 disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        class="group shrink-0 p-2.5 rounded-md text-white bg-neutral-500 hover:bg-neutral-600 dark:bg-neutral-600 dark:hover:bg-neutral-500 data-loading:opacity-50 data-loading:pointer-events-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                         aria-label="{{ __('Subscribe') }}"
                     >
                         <span wire:loading.remove aria-hidden="true">
@@ -71,8 +69,7 @@
                     >
                     <button
                         type="submit"
-                        wire:loading.attr="disabled"
-                        class="shrink-0 text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
+                        class="shrink-0 text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 data-loading:opacity-50 data-loading:pointer-events-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
                     >
                         <span wire:loading.remove>{{ __('Subscribe') }}</span>
                         <span wire:loading>{{ __('Sending…') }}</span>

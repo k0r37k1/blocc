@@ -4,7 +4,7 @@
         <div class="flex justify-end items-center gap-3 mb-8">
             @if (filled($year) || filled($month))
                 <button
-                    wire:click="$set('year', ''); $set('month', '')"
+                    wire:click.preserve-scroll="$set('year', ''); $set('month', '')"
                     type="button"
                     class="text-neutral-400 dark:text-neutral-500 hover:text-red-500 dark:hover:text-red-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
                     aria-label="{{ __('Clear filter') }}"
