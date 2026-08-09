@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Filament\Pages\Auth\EditProfile;
+use App\Listeners\StoreMediaDominantColor;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +22,7 @@ use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\ScheduleCheck;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
 use Spatie\Health\Facades\Health;
+use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
@@ -71,11 +74,15 @@ class AppServiceProvider extends ServiceProvider
 
         // Register mb_lower() for case-insensitive Unicode search in SQLite
         if (DB::connection()->getDriverName() === 'sqlite') {
-            DB::connection()->getPdo()->sqliteCreateFunction(
-                'mb_lower',
-                fn (?string $value): string => mb_strtolower($value ?? '', 'UTF-8'),
-                1
-            );
+            try {
+                DB::connection()->getPdo()->sqliteCreateFunction(
+                    'mb_lower',
+                    fn (?string $value): string => mb_strtolower($value ?? '', 'UTF-8'),
+                    1
+                );
+            } catch (\Throwable) {
+                // Ignore when the connection is unavailable during early boot.
+            }
         }
 
         Health::checks([
@@ -95,6 +102,8 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         Livewire::component('app.filament.pages.auth.edit-profile', EditProfile::class);
+
+        Event::listen(MediaHasBeenAddedEvent::class, StoreMediaDominantColor::class);
 
         FilamentView::registerRenderHook(
             PanelsRenderHook::TOPBAR_LOGO_AFTER,

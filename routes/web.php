@@ -10,6 +10,7 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TagController;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
+use Spatie\ResponseCache\Middlewares\CacheResponse;
 
 Route::get('/locale/{locale}', function (string $locale) {
     if (in_array($locale, SetLocale::SUPPORTED_LOCALES, true)) {
@@ -21,12 +22,16 @@ Route::get('/locale/{locale}', function (string $locale) {
 
 Route::get('/', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post}', [BlogController::class, 'show'])->name('blog.show');
-Route::get('/kategorie/{category}', [CategoryController::class, 'show'])->name('category.show');
-Route::get('/tag/{tag}', [TagController::class, 'show'])->name('tag.show');
+
+Route::middleware([CacheResponse::class])->group(function (): void {
+    Route::get('/kategorie/{category}', [CategoryController::class, 'show'])->name('category.show');
+    Route::get('/tag/{tag}', [TagController::class, 'show'])->name('tag.show');
+    Route::get('/seite/{page}', [PageController::class, 'show'])->name('page.show');
+    Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+    Route::get('/feed', FeedController::class)->name('feed');
+});
+
 Route::get('/archiv', [ArchiveController::class, 'index'])->name('archive');
-Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
-Route::get('/feed', FeedController::class)->name('feed');
-Route::get('/seite/{page}', [PageController::class, 'show'])->name('page.show');
 Route::get('/newsletter/bestaetigt', fn () => view('newsletter.confirmed'))->name('newsletter.confirmed');
 
 Route::get('/{slug}', LegacyPostRedirectController::class)

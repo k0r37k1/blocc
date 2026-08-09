@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Services\PostCache;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -14,13 +15,17 @@ class BlogController extends Controller
 
     public function show(string $post): View
     {
-        $post = Post::query()
-            ->published()
-            ->where('slug', $post)
-            ->firstOrFail();
+        $post = PostCache::rememberShow($post, function () use ($post): Post {
+            $model = Post::query()
+                ->published()
+                ->where('slug', $post)
+                ->firstOrFail();
 
-        $post->load(['category', 'tags', 'media', 'author.media'])
-            ->loadCount('approvedComments');
+            $model->load(['category', 'tags', 'media', 'author.media'])
+                ->loadCount('approvedComments');
+
+            return $model;
+        });
 
         $previousPost = Post::query()
             ->published()
@@ -34,7 +39,10 @@ class BlogController extends Controller
             ->oldest('published_at')
             ->first(['title', 'slug']);
 
-        $relatedPosts = Post::relatedFor($post, 5);
+        $relatedPosts = PostCache::rememberRelated(
+            $post,
+            fn () => Post::relatedFor($post, 5)->load(['media']),
+        );
 
         return view('blog.show', compact('post', 'previousPost', 'nextPost', 'relatedPosts'));
     }

@@ -1,11 +1,50 @@
+@php
+    $featuredImage = $post->getFirstMedia('featured-image');
+    $ogImage = $featuredImage
+        ? ($featuredImage->hasGeneratedConversion('medium') ? $featuredImage->getUrl('medium') : $featuredImage->getUrl())
+        : null;
+    $wordCount = str_word_count(strip_tags((string) ($post->body_raw ?? $post->body ?? '')));
+    $jsonLd = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BlogPosting',
+        'headline' => $post->title,
+        'description' => $post->excerpt,
+        'datePublished' => $post->published_at->toW3cString(),
+        'dateModified' => $post->updated_at->toW3cString(),
+        'wordCount' => $wordCount,
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => url()->current(),
+        ],
+    ];
+    if ($post->author) {
+        $jsonLd['author'] = [
+            '@type' => 'Person',
+            'name' => $post->author->name,
+            'image' => $post->author->publicAvatarUrl(400),
+        ];
+    }
+    if ($ogImage) {
+        $jsonLd['image'] = [
+            '@type' => 'ImageObject',
+            'url' => $ogImage,
+            'width' => 800,
+            'height' => 450,
+        ];
+    }
+    if ($post->category) {
+        $jsonLd['articleSection'] = $post->category->name;
+    }
+@endphp
 <x-layout
     :title="$post->title . ' - ' . config('app.name')"
     :description="$post->excerpt"
     :og-title="$post->title"
     :og-description="$post->excerpt"
-    :og-image="$post->getFirstMediaUrl('featured-image') ?: null"
+    :og-image="$ogImage"
     og-type="article"
     :edit-url="url('/admin/posts/' . $post->slug . '/edit')"
+    :preload-image-url="$ogImage"
 >
     <x-slot:meta>
         <meta property="article:published_time" content="{{ $post->published_at->toW3cString() }}">
@@ -13,30 +52,6 @@
         @foreach ($post->tags as $tag)
             <meta property="article:tag" content="{{ $tag->name }}">
         @endforeach
-        @php
-            $jsonLd = [
-                '@context' => 'https://schema.org',
-                '@type' => 'BlogPosting',
-                'headline' => $post->title,
-                'description' => $post->excerpt,
-                'datePublished' => $post->published_at->toW3cString(),
-                'dateModified' => $post->updated_at->toW3cString(),
-                'mainEntityOfPage' => [
-                    '@type' => 'WebPage',
-                    '@id' => url()->current(),
-                ],
-            ];
-            if ($post->author) {
-                $jsonLd['author'] = [
-                    '@type' => 'Person',
-                    'name' => $post->author->name,
-                    'image' => $post->author->publicAvatarUrl(400),
-                ];
-            }
-            if ($post->getFirstMediaUrl('featured-image')) {
-                $jsonLd['image'] = $post->getFirstMediaUrl('featured-image');
-            }
-        @endphp
         <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     </x-slot:meta>
 
@@ -90,17 +105,18 @@
             </div>
         </header>
 
-        @php $featuredImage = $post->getFirstMedia('featured-image'); @endphp
         @if ($featuredImage)
             <figure class="blog-post-hero-media mt-6">
-                <img
-                    src="{{ $featuredImage->getAvailableUrl(['medium', 'thumbnail']) }}"
-                    alt="{{ $post->featured_image_alt ?? $post->title }}"
+                <x-featured-image
+                    :media="$featuredImage"
+                    :alt="$post->featured_image_alt ?? $post->title"
                     class="w-full aspect-video object-cover rounded-lg bg-neutral-100 dark:bg-neutral-800"
-                    loading="lazy"
-                    width="800"
-                    height="450"
-                >
+                    :priority="true"
+                    :lazy="false"
+                    conversion="medium"
+                    :width="800"
+                    :height="450"
+                />
             </figure>
         @endif
 

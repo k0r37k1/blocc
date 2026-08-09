@@ -22,14 +22,15 @@
 >
     @if ($hasImage)
         <a href="{{ route('blog.show', $post) }}" class="block">
-            <img
-                src="{{ $featuredImage->getAvailableUrl(['medium', 'thumbnail']) }}"
-                alt="{{ $post->featured_image_alt ?? $post->title }}"
+            <x-featured-image
+                :media="$featuredImage"
+                :alt="$post->featured_image_alt ?? $post->title"
                 class="w-full aspect-[2/1] object-cover rounded-lg bg-neutral-100 dark:bg-neutral-800"
-                loading="lazy"
-                width="800"
-                height="400"
-            >
+                :lazy="true"
+                conversion="medium"
+                :width="800"
+                :height="400"
+            />
         </a>
     @endif
 

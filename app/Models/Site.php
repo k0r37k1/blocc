@@ -22,8 +22,8 @@ class Site extends Model implements HasMedia
         $this->addMediaConversion('thumbnail')
             ->fit(Fit::Crop, 400, 300)
             ->format('webp')
-            ->quality(90)
-            ->nonQueued();
+            ->quality(85)
+            ->withResponsiveImages();
     }
 
     private static ?self $cached = null;

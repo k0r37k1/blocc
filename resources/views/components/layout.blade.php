@@ -8,6 +8,7 @@
     'canonicalUrl' => null,
     'robots' => null,
     'editUrl' => null,
+    'preloadImageUrl' => null,
 ])
 
 @php
@@ -86,6 +87,10 @@
         <link rel="alternate" type="application/rss+xml" title="{{ config('app.name') }}" href="{{ url('/feed') }}">
 
         {{ $meta ?? '' }}
+
+        @if ($preloadImageUrl ?? false)
+            <link rel="preload" as="image" href="{{ $preloadImageUrl }}" fetchpriority="high">
+        @endif
 
         @if ($headScripts = \App\Models\Setting::get('head_scripts'))
             {!! $headScripts !!}

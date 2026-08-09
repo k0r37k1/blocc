@@ -32,6 +32,7 @@ class PostForm
                 ->required()
                 ->maxLength(255)
                 ->live(onBlur: true)
+                ->partiallyRenderAfterStateUpdated()
                 ->hint(fn (?string $state): string => strlen($state ?? '').' / 255')
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state): void {
                     if (
@@ -60,6 +61,7 @@ class PostForm
                         ->required()
                         ->maxLength(255)
                         ->live(onBlur: true)
+                        ->partiallyRenderAfterStateUpdated()
                         ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? '', '-', 'de'))),
                     TextInput::make('slug')
                         ->required()
@@ -77,6 +79,7 @@ class PostForm
                         ->required()
                         ->maxLength(255)
                         ->live(onBlur: true)
+                        ->partiallyRenderAfterStateUpdated()
                         ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state ?? '', '-', 'de'))),
                     TextInput::make('slug')
                         ->required()
@@ -88,6 +91,7 @@ class PostForm
                 ->rows(3)
                 ->maxLength(160)
                 ->live(onBlur: true)
+                ->partiallyRenderAfterStateUpdated()
                 ->hint(fn (?string $state): string => strlen($state ?? '').' / 160')
                 ->helperText(__('Leave blank to auto-generate from the body (max. 160 characters, adds … when truncated).'))
                 ->columnSpanFull(),
