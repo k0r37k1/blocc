@@ -3,6 +3,7 @@ name: Deploy to Production
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,13 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
           cache: npm
@@ -73,7 +74,7 @@ jobs:
           "
 
       - name: Run post-deploy commands via SSH
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
@@ -81,15 +82,17 @@ jobs:
           script: |
             cd ${{ secrets.FTP_SERVER_DIR }}
             rm -f public/sitemap.xml
-            /opt/plesk/php/8.4/bin/php artisan down
-            /opt/plesk/php/8.4/bin/php composer.phar install --no-dev --optimize-autoloader
-            /opt/plesk/php/8.4/bin/php artisan migrate --force
-            /opt/plesk/php/8.4/bin/php artisan storage:link --force
-            /opt/plesk/php/8.4/bin/php artisan filament:upgrade
-            /opt/plesk/php/8.4/bin/php artisan view:cache
-            /opt/plesk/php/8.4/bin/php artisan optimize:clear
-            /opt/plesk/php/8.4/bin/php artisan optimize
-            /opt/plesk/php/8.4/bin/php artisan up
+            /opt/plesk/php/8.4/bin/php artisan down || true
+            /opt/plesk/php/8.4/bin/php composer.phar install --no-dev --optimize-autoloader --no-interaction
+            /opt/plesk/php/8.4/bin/php composer.phar dump-autoload -o --no-interaction
+            /opt/plesk/php/8.4/bin/php artisan migrate --force --no-interaction || true
+            /opt/plesk/php/8.4/bin/php artisan storage:link --force --no-interaction || true
+            /opt/plesk/php/8.4/bin/php artisan filament:upgrade --no-interaction || true
+            /opt/plesk/php/8.4/bin/php artisan optimize:clear --no-interaction
+            /opt/plesk/php/8.4/bin/php artisan view:cache --no-interaction || true
+            /opt/plesk/php/8.4/bin/php artisan optimize --no-interaction
+            /opt/plesk/php/8.4/bin/php -r 'require "vendor/autoload.php"; echo "PageObserver=". (class_exists("App\\Observers\\PageObserver") ? "yes" : "no") . PHP_EOL;'
+            /opt/plesk/php/8.4/bin/php artisan up || true
 
       - name: Update deployed tag
         run: |

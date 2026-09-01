@@ -15,14 +15,40 @@ return new class extends Migration
 
         DB::statement('DROP TABLE IF EXISTS posts_fts');
 
-        DB::statement(<<<'SQL'
-            CREATE VIRTUAL TABLE posts_fts USING fts5(
+        $created = false;
+
+        foreach ([
+            "CREATE VIRTUAL TABLE posts_fts USING fts5(
                 title,
                 excerpt,
                 body,
                 tokenize = 'unicode61 remove_diacritics 2'
-            )
-            SQL);
+            )",
+            "CREATE VIRTUAL TABLE posts_fts USING fts5(
+                title,
+                excerpt,
+                body,
+                tokenize = 'unicode61 remove_diacritics 1'
+            )",
+            "CREATE VIRTUAL TABLE posts_fts USING fts5(
+                title,
+                excerpt,
+                body,
+                tokenize = 'unicode61'
+            )",
+        ] as $sql) {
+            try {
+                DB::statement($sql);
+                $created = true;
+                break;
+            } catch (Throwable) {
+                DB::statement('DROP TABLE IF EXISTS posts_fts');
+            }
+        }
+
+        if (! $created) {
+            throw new RuntimeException('Unable to create posts_fts virtual table on this SQLite build.');
+        }
 
         $search = app(PostSearch::class);
 
