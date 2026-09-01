@@ -11,12 +11,14 @@ use Filament\Support\Icons\Heroicon;
 enum PostStatus: string implements HasColor, HasIcon, HasLabel
 {
     case Draft = 'draft';
+    case Scheduled = 'scheduled';
     case Published = 'published';
 
     public function getLabel(): string
     {
         return match ($this) {
             self::Draft => __('Draft'),
+            self::Scheduled => __('Scheduled'),
             self::Published => __('Published'),
         };
     }
@@ -25,6 +27,7 @@ enum PostStatus: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::Draft => 'gray',
+            self::Scheduled => 'warning',
             self::Published => 'success',
         };
     }
@@ -33,6 +36,7 @@ enum PostStatus: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::Draft => Heroicon::Pencil,
+            self::Scheduled => Heroicon::Clock,
             self::Published => Heroicon::Check,
         };
     }

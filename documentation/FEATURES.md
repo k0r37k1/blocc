@@ -6,17 +6,10 @@ Geplante und gewünschte Features für zukünftige Versionen.
 
 ## Geplante Veröffentlichung
 
-**Status:** Offen
+**Status:** Erledigt
 **Priorität:** Hoch
 
-Ermöglicht es, einen Post für einen zukünftigen Zeitpunkt einzuplanen. Aktuell wird `published_at` automatisch auf `now()` gesetzt sobald der Status auf "Published" gewechselt wird — ein manuelles Datum ist im Formular nicht setzbar.
-
-**Was geändert werden müsste:**
-
-- `published_at` DateTimePicker im `PostForm` einblenden wenn Status = Published
-- Neuen Status `Scheduled` im `PostStatus`-Enum ergänzen
-- Einen Scheduler-Job (z.B. `schedule:run` stündlich) der geplante Posts automatisch veröffentlicht
-- Admin-Tabelle: geplante Posts erkennbar machen (Badge "Scheduled")
+Ermöglicht es, einen Post für einen zukünftigen Zeitpunkt einzuplanen. `PostStatus::Scheduled`, `published_at` DateTimePicker im Post-Formular, Artisan-Command `posts:publish-scheduled` (hourly via Scheduler).
 
 ---
 

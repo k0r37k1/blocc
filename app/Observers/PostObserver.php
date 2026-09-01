@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Enums\PostStatus;
 use App\Jobs\SubmitIndexNowUrls;
 use App\Models\Post;
 use App\Services\PostCache;
@@ -18,10 +17,10 @@ class PostObserver
      */
     public function created(Post $post): void
     {
-        $this->postSearch->sync($post);
+        $this->syncSearchIndex($post);
         PostCache::forgetFor($post);
 
-        if ($post->status !== PostStatus::Published) {
+        if (! $post->isPubliclyVisible()) {
             return;
         }
 
@@ -30,10 +29,10 @@ class PostObserver
 
     public function updated(Post $post): void
     {
-        $this->postSearch->sync($post);
+        $this->syncSearchIndex($post);
         PostCache::forgetFor($post);
 
-        if ($post->status !== PostStatus::Published) {
+        if (! $post->isPubliclyVisible()) {
             return;
         }
 
@@ -44,6 +43,15 @@ class PostObserver
     {
         $this->postSearch->remove($post);
         PostCache::forgetFor($post);
+    }
+
+    private function syncSearchIndex(Post $post): void
+    {
+        if ($post->isPubliclyVisible()) {
+            $this->postSearch->sync($post);
+        } else {
+            $this->postSearch->remove($post);
+        }
     }
 
     private function submitToIndexNow(Post $post): void

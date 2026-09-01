@@ -57,8 +57,18 @@ class Post extends Model implements HasMedia, HasRichContent
                 $post->body = app(PostContentProcessor::class)->process($post->body, $post);
             }
 
-            if ($post->status === PostStatus::Published && $post->published_at === null) {
-                $post->published_at = now();
+            if ($post->status === PostStatus::Scheduled) {
+                if ($post->published_at !== null && $post->published_at->lte(now())) {
+                    $post->status = PostStatus::Published;
+                }
+            }
+
+            if ($post->status === PostStatus::Published) {
+                if ($post->published_at === null) {
+                    $post->published_at = now();
+                } elseif ($post->published_at->isFuture()) {
+                    $post->status = PostStatus::Scheduled;
+                }
             }
 
             // Calculate reading time from raw body (200 wpm, minimum 1 minute)
@@ -193,7 +203,14 @@ class Post extends Model implements HasMedia, HasRichContent
      */
     public function getIsPublishedAttribute(): bool
     {
-        return $this->status === PostStatus::Published;
+        return $this->isPubliclyVisible();
+    }
+
+    public function isPubliclyVisible(): bool
+    {
+        return $this->status === PostStatus::Published
+            && $this->published_at !== null
+            && $this->published_at->lte(now());
     }
 
     /**
@@ -204,7 +221,21 @@ class Post extends Model implements HasMedia, HasRichContent
      */
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where('status', PostStatus::Published);
+        return $query
+            ->where('status', PostStatus::Published)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
+
+    /**
+     * Scope: posts waiting for a future publish date.
+     *
+     * @param  Builder<Post>  $query
+     * @return Builder<Post>
+     */
+    public function scopeScheduled(Builder $query): Builder
+    {
+        return $query->where('status', PostStatus::Scheduled);
     }
 
     /**

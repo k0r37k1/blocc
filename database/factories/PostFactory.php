@@ -4,11 +4,12 @@ namespace Database\Factories;
 
 use App\Enums\PostStatus;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends Factory<Post>
  */
 class PostFactory extends Factory
 {
@@ -29,7 +30,9 @@ class PostFactory extends Factory
                 ->map(fn (string $paragraph) => "<p>{$paragraph}</p>")
                 ->implode(''),
             'status' => $status,
-            'published_at' => $status === PostStatus::Published ? now() : null,
+            'published_at' => $status === PostStatus::Published ? now() : (
+                $status === PostStatus::Scheduled ? fake()->dateTimeBetween('+1 day', '+1 month') : null
+            ),
             'category_id' => Category::factory(),
             'excerpt' => null,
             'reading_time' => 1,
@@ -45,6 +48,17 @@ class PostFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'status' => PostStatus::Published,
             'published_at' => fake()->dateTimeBetween('-3 months'),
+        ]);
+    }
+
+    /**
+     * Set the post as scheduled for a future publish date.
+     */
+    public function scheduled(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => PostStatus::Scheduled,
+            'published_at' => fake()->dateTimeBetween('+1 day', '+1 month'),
         ]);
     }
 

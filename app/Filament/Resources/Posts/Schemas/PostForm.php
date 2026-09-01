@@ -7,6 +7,7 @@ use App\Filament\RichEditor\BodyToolbar;
 use App\Services\SiteMedia;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
@@ -35,8 +36,11 @@ class PostForm
                 ->partiallyRenderAfterStateUpdated()
                 ->hint(fn (?string $state): string => strlen($state ?? '').' / 255')
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state): void {
+                    $status = $get('status');
+                    $slugLocked = in_array($status, [PostStatus::Published->value, PostStatus::Scheduled->value], true);
+
                     if (
-                        ($get('status') !== PostStatus::Published->value) ||
+                        ! $slugLocked ||
                         (($get('slug') ?? '') === Str::slug($old ?? '', '-', 'de'))
                     ) {
                         $set('slug', Str::slug($state ?? '', '-', 'de'));
@@ -47,9 +51,9 @@ class PostForm
                 ->maxLength(255)
                 ->unique(ignoreRecord: true)
                 ->rules(['alpha_dash'])
-                ->helperText(fn (Get $get): string => $get('status') === PostStatus::Published->value
-                    ? __('Slug is locked after publishing. Edit manually if needed.')
-                    : __('Auto-generated from title. Will lock after publishing.')
+                ->helperText(fn (Get $get): string => in_array($get('status'), [PostStatus::Published->value, PostStatus::Scheduled->value], true)
+                    ? __('Slug is locked after publishing or scheduling. Edit manually if needed.')
+                    : __('Auto-generated from title. Will lock after publishing or scheduling.')
                 ),
             Select::make('category_id')
                 ->relationship(name: 'category', titleAttribute: 'name')
@@ -193,7 +197,17 @@ class PostForm
                 ->options(PostStatus::class)
                 ->default(PostStatus::Draft)
                 ->required()
+                ->live()
                 ->native(false),
+            DateTimePicker::make('published_at')
+                ->label(__('Publish date'))
+                ->visible(fn (Get $get): bool => in_array($get('status'), [PostStatus::Published->value, PostStatus::Scheduled->value], true))
+                ->required(fn (Get $get): bool => $get('status') === PostStatus::Scheduled->value)
+                ->minDate(fn (Get $get): ?\Illuminate\Support\Carbon => $get('status') === PostStatus::Scheduled->value ? now() : null)
+                ->helperText(fn (Get $get): string => $get('status') === PostStatus::Scheduled->value
+                    ? __('Required for scheduled posts. The post will go live automatically at this time.')
+                    : __('Optional. Leave empty to publish immediately, or pick a future date to schedule.')
+                ),
             Placeholder::make('created_at')
                 ->label(__('Created'))
                 ->content(fn ($record): string => $record?->created_at?->diffForHumans() ?? '-')
