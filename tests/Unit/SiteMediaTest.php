@@ -13,6 +13,13 @@ class SiteMediaTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        SiteMedia::resetLibrarySyncState();
+    }
+
     public function test_items_returns_selectable_site_uploads(): void
     {
         $siteMedia = app(SiteMedia::class);
@@ -110,6 +117,18 @@ class SiteMediaTest extends TestCase
             'collection_name' => SiteMedia::LEGACY_COLLECTION,
         ]);
         $this->assertSame('Legacy cover', $siteMedia->items()->first()->getCustomProperty('label'));
+    }
+
+    public function test_items_imports_post_featured_images_when_library_is_empty(): void
+    {
+        $siteMedia = app(SiteMedia::class);
+
+        $post = Post::factory()->create();
+        $post->addMedia(UploadedFile::fake()->image('existing.jpg', 1200, 675))
+            ->toMediaCollection('featured-image');
+
+        $this->assertCount(1, $siteMedia->items());
+        $this->assertSame('existing.jpg', $siteMedia->items()->first()->file_name);
     }
 
     public function test_migrate_legacy_preserves_library_label(): void

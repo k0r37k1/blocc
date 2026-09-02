@@ -47,10 +47,14 @@ class MediaResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
+        $siteMedia = app(SiteMedia::class);
+        $siteMedia->syncLibraryFromPostsAndLegacy();
+
         return parent::getEloquentQuery()
             ->where('model_type', Site::class)
-            ->where('model_id', Site::instance()->getKey())
-            ->where('collection_name', SiteMedia::COLLECTION);
+            ->where('model_id', $siteMedia->site()->getKey())
+            ->whereIn('collection_name', SiteMedia::SELECTABLE_COLLECTIONS)
+            ->whereIn('mime_type', SiteMedia::SELECTABLE_MIME_TYPES);
     }
 
     public static function table(Table $table): Table

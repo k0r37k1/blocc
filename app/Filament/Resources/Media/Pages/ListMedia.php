@@ -15,6 +15,13 @@ class ListMedia extends ListRecords
 {
     protected static string $resource = MediaResource::class;
 
+    public function mount(): void
+    {
+        parent::mount();
+
+        app(SiteMedia::class)->syncLibraryFromPostsAndLegacy();
+    }
+
     protected function getHeaderActions(): array
     {
         return [

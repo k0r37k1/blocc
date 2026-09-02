@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\Site;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -12,6 +13,14 @@ class SiteMedia
     public const COLLECTION = 'uploads';
 
     public const LEGACY_COLLECTION = 'featured-library';
+
+    /** @var list<string> */
+    public const SELECTABLE_COLLECTIONS = [
+        self::COLLECTION,
+        self::LEGACY_COLLECTION,
+    ];
+
+    private static bool $librarySynced = false;
 
     /** @var list<string> */
     public const SELECTABLE_MIME_TYPES = [
@@ -25,36 +34,73 @@ class SiteMedia
         return Site::instance();
     }
 
+    public static function resetLibrarySyncState(): void
+    {
+        self::$librarySynced = false;
+    }
+
+    public function syncLibraryFromPostsAndLegacy(): void
+    {
+        if (self::$librarySynced) {
+            return;
+        }
+
+        $this->migrateLegacy();
+        $this->importFromPosts();
+
+        self::$librarySynced = true;
+    }
+
     /**
-     * @return Collection<int, Media>
+     * @return Builder<Media>
      */
-    public function items(): Collection
+    public function uploadsQuery(): Builder
     {
         return Media::query()
             ->where('model_type', Site::class)
             ->where('model_id', $this->site()->getKey())
             ->where('collection_name', self::COLLECTION)
-            ->whereIn('mime_type', self::SELECTABLE_MIME_TYPES)
+            ->whereIn('mime_type', self::SELECTABLE_MIME_TYPES);
+    }
+
+    /**
+     * @return Builder<Media>
+     */
+    public function libraryQuery(): Builder
+    {
+        return Media::query()
+            ->where('model_type', Site::class)
+            ->where('model_id', $this->site()->getKey())
+            ->whereIn('collection_name', self::SELECTABLE_COLLECTIONS)
+            ->whereIn('mime_type', self::SELECTABLE_MIME_TYPES);
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function items(): Collection
+    {
+        $this->syncLibraryFromPostsAndLegacy();
+
+        return $this->libraryQuery()
             ->orderByDesc('created_at')
             ->get();
     }
 
     public function find(int $id): ?Media
     {
-        $media = Media::query()->find($id);
+        $this->syncLibraryFromPostsAndLegacy();
 
-        if (! $media instanceof Media) {
-            return null;
-        }
+        $media = $this->libraryQuery()->whereKey($id)->first();
 
-        return $this->isSelectableMedia($media) ? $media : null;
+        return $media instanceof Media ? $media : null;
     }
 
     public function isSelectableMedia(Media $media): bool
     {
         return $media->model_type === Site::class
             && (int) $media->model_id === (int) $this->site()->getKey()
-            && $media->collection_name === self::COLLECTION
+            && in_array($media->collection_name, self::SELECTABLE_COLLECTIONS, true)
             && in_array($media->mime_type, self::SELECTABLE_MIME_TYPES, true);
     }
 
@@ -81,9 +127,9 @@ class SiteMedia
 
     public function findByContentHash(string $hash): ?Media
     {
-        return $this->items()->first(
-            fn (Media $media): bool => $this->contentHash($media) === $hash,
-        );
+        return $this->uploadsQuery()
+            ->get()
+            ->first(fn (Media $media): bool => $this->contentHash($media) === $hash);
     }
 
     public function displayLabel(Media $media): string

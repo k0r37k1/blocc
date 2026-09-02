@@ -22,6 +22,7 @@ class MediaResourceTest extends TestCase
     {
         parent::setUp();
 
+        SiteMedia::resetLibrarySyncState();
         $this->admin = User::factory()->create();
     }
 
@@ -33,20 +34,25 @@ class MediaResourceTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function test_list_page_only_shows_site_uploads(): void
+    public function test_list_page_imports_post_featured_images_into_uploads(): void
     {
         $this->actingAs($this->admin);
 
-        $siteUpload = Site::instance()
+        Site::instance()
             ->addMedia(UploadedFile::fake()->image('site.jpg', 1200, 675))
             ->toMediaCollection(SiteMedia::COLLECTION);
 
         $post = Post::factory()->create();
-        $post->addMedia(UploadedFile::fake()->image('post.jpg', 1200, 675))
+        $post->addMedia(UploadedFile::fake()->image('post.jpg', 900, 500))
             ->toMediaCollection('featured-image');
 
         Livewire::test(ListMedia::class)
-            ->assertCanSeeTableRecords([$siteUpload])
-            ->assertCanNotSeeTableRecords([$post->getFirstMedia('featured-image')]);
+            ->assertSuccessful();
+
+        $uploads = app(SiteMedia::class)->items();
+
+        $this->assertCount(2, $uploads);
+        $this->assertTrue($uploads->contains('file_name', 'site.jpg'));
+        $this->assertTrue($uploads->contains('file_name', 'post.jpg'));
     }
 }
