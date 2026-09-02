@@ -28,8 +28,21 @@ class SettingCacheTest extends TestCase
     {
         Setting::query()->create(['key' => 'site_name', 'value' => 'Blocc']);
 
+        $this->assertSame('Blocc', Setting::get('site_name'));
+
         Setting::set('site_name', 'Updated');
 
         $this->assertSame('Updated', Setting::get('site_name'));
+    }
+
+    public function test_set_many_clears_memoized_settings_cache(): void
+    {
+        Setting::query()->create(['key' => 'blog_name', 'value' => 'Old']);
+
+        $this->assertSame('Old', Setting::get('blog_name'));
+
+        Setting::setMany(['blog_name' => 'New']);
+
+        $this->assertSame('New', Setting::get('blog_name'));
     }
 }

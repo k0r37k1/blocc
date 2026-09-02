@@ -31,7 +31,7 @@ class Setting extends Model
     public static function set(string $key, ?string $value): void
     {
         self::updateOrCreate(['key' => $key], ['value' => $value]);
-        Cache::forget('settings');
+        self::forgetCache();
     }
 
     /**
@@ -47,6 +47,12 @@ class Setting extends Model
             }
         });
 
+        self::forgetCache();
+    }
+
+    private static function forgetCache(): void
+    {
         Cache::forget('settings');
+        Cache::memo()->forget('settings');
     }
 }
