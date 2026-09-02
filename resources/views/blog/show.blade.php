@@ -1,4 +1,6 @@
 @php
+    $isPreview = $isPreview ?? false;
+    $displayDate = $post->published_at ?? $post->created_at ?? now();
     $featuredImage = $post->getFirstMedia('featured-image');
     $ogImage = $featuredImage
         ? ($featuredImage->hasGeneratedConversion('medium') ? $featuredImage->getUrl('medium') : $featuredImage->getUrl())
@@ -9,7 +11,7 @@
         '@type' => 'BlogPosting',
         'headline' => $post->title,
         'description' => $post->excerpt,
-        'datePublished' => $post->published_at->toW3cString(),
+        'datePublished' => $displayDate->toW3cString(),
         'dateModified' => $post->updated_at->toW3cString(),
         'wordCount' => $wordCount,
         'mainEntityOfPage' => [
@@ -45,9 +47,16 @@
     og-type="article"
     :edit-url="url('/admin/posts/' . $post->slug . '/edit')"
     :preload-image-url="$ogImage"
+    :robots="$isPreview ? 'noindex, nofollow' : null"
 >
+    @if ($isPreview)
+        <div class="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-100" role="status">
+            {{ __('Preview — this post is not published yet.') }}
+        </div>
+    @endif
+
     <x-slot:meta>
-        <meta property="article:published_time" content="{{ $post->published_at->toW3cString() }}">
+        <meta property="article:published_time" content="{{ $displayDate->toW3cString() }}">
         <meta property="article:modified_time" content="{{ $post->updated_at->toW3cString() }}">
         @foreach ($post->tags as $tag)
             <meta property="article:tag" content="{{ $tag->name }}">
@@ -81,13 +90,13 @@
                     <span>&middot;</span>
                 @endif
 
-                <time datetime="{{ $post->published_at->toDateString() }}">
-                    {{ $post->published_at->translatedFormat('j. F Y') }}
+                <time datetime="{{ $displayDate->toDateString() }}">
+                    {{ $displayDate->translatedFormat('j. F Y') }}
                 </time>
 
                 @if ($post->category)
                     <span>&middot;</span>
-                    <a href="{{ route('category.show', $post->category) }}" style="color: {{ $post->category->color }}">
+                    <a href="{{ route('category.show', $post->category) }}" class="font-medium transition-opacity hover:opacity-80" style="color: {{ $post->category->color }}">
                         {{ $post->category->name }}
                     </a>
                 @endif
@@ -101,6 +110,11 @@
                     <a href="#comments" class="hover:text-accent transition-colors">
                         {{ $commentCount > 0 ? trans_choice('{1} 1 comment|[2,*] :count comments', $commentCount, ['count' => $commentCount]) : __(':count comments', ['count' => 0]) }}
                     </a>
+                @endif
+
+                @if (! $isPreview)
+                    <span>&middot;</span>
+                    <x-copy-link />
                 @endif
             </div>
         </header>
@@ -123,12 +137,18 @@
         <div x-data="tableOfContents" data-toc-enabled="{{ $post->toc_enabled ? 'true' : 'false' }}">
             <template x-if="visible">
                 <nav class="toc mt-8" :aria-label="'{{ __('Table of contents') }}'" x-auto-animate>
-                    <div class="toc-header" @click="toggle()">
-                        <p class="toc-title">{{ __('Table of contents') }}</p>
-                        <svg class="toc-chevron" :class="open ? 'open' : ''" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                    </div>
+                    <button
+                        type="button"
+                        class="toc-header"
+                        x-on:click="toggle()"
+                        :aria-expanded="open"
+                        aria-controls="toc-list"
+                    >
+                        <span class="toc-title">{{ __('Table of contents') }}</span>
+                        <svg class="toc-chevron" :class="open ? 'open' : ''" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
                     <template x-if="open">
-                        <ol>
+                        <ol id="toc-list">
                             <template x-for="(item, index) in items" :key="item.id">
                                 <li :class="item.level === 3 ? 'toc-item toc-h3' : 'toc-item'">
                                     <a
@@ -165,7 +185,7 @@
     </article>
 
     @if ($relatedPosts->isNotEmpty())
-        <details class="related-posts mt-14 border-t border-neutral-200 pt-8 dark:border-neutral-800">
+        <details class="related-posts group/related mt-14 border-t border-neutral-200 pt-8 open:pb-1 dark:border-neutral-800" open>
             <summary class="related-posts-summary">
                 <span class="related-posts-title">{{ __('Related posts (:count)', ['count' => $relatedPosts->count()]) }}</span>
                 <svg class="related-posts-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -187,10 +207,8 @@
         </details>
     @endif
 
-    @php $newsletterEnabled = \App\Models\Setting::get('newsletter_enabled', '0') === '1'; @endphp
-
     @if ($post->author)
-        <div id="post-author" class="mt-14 scroll-mt-8 rounded-xl p-6" style="background-color: var(--color-card)">
+        <div id="post-author" class="surface-card mt-14 scroll-mt-8 rounded-xl p-6 sm:p-7">
             <div class="flex flex-row items-start gap-4">
                 <img
                     src="{{ $post->author->publicAvatarUrl(160) }}"
@@ -231,14 +249,14 @@
         </div>
     @endif
 
-    @if ($newsletterEnabled)
-        <div class="mt-6 rounded-xl p-6" style="background-color: var(--color-card)">
+    @if (! $isPreview && \App\Support\NewsletterSettings::showOnArticles())
+        <div id="article-newsletter" class="surface-card mt-6 rounded-xl p-6 sm:p-7">
             <livewire:newsletter-subscribe variant="card" />
         </div>
     @endif
 
     {{-- Comments --}}
-    @if (\App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled)
+    @if (! $isPreview && \App\Models\Setting::get('comments_enabled', '1') === '1' && $post->comments_enabled)
         <livewire:comments :post="$post" />
     @endif
 

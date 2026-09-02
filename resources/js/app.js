@@ -34,6 +34,31 @@ document.addEventListener('alpine:init', () => {
     registerMotionStore()
     registerAutoAnimateDirective()
 
+    Alpine.data('copyToClipboard', () => ({
+        copied: false,
+        url: '',
+        copyLabel: '',
+        copiedLabel: '',
+
+        init() {
+            this.url = this.$el.dataset.url || window.location.href
+            this.copyLabel = this.$el.dataset.copyLabel || ''
+            this.copiedLabel = this.$el.dataset.copiedLabel || ''
+        },
+
+        async copy() {
+            try {
+                await navigator.clipboard.writeText(this.url)
+                this.copied = true
+                setTimeout(() => {
+                    this.copied = false
+                }, 2000)
+            } catch {
+                // Clipboard API unavailable or denied.
+            }
+        },
+    }))
+
     Alpine.data('codeBlocks', () => ({
         init() {
             const copyLabel = this.$el.dataset.copyLabel || 'Copy'
@@ -90,7 +115,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('tableOfContents', () => ({
         items: [],
         activeId: null,
-        open: false,
+        open: window.matchMedia('(min-width: 640px)').matches,
 
         init() {
             if (this.$el.dataset.tocEnabled === 'false') {

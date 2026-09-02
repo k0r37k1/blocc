@@ -9,8 +9,8 @@
             x-data="{ open: true }"
             x-show="open"
             x-transition.opacity
-            class="fixed right-4 z-50 flex items-center gap-2 rounded-full bg-neutral-900 px-4 py-2 text-sm text-white shadow-lg dark:bg-neutral-100 dark:text-neutral-900"
-            style="top: 5rem"
+            class="fixed z-[60] flex max-w-[calc(100vw-3rem)] items-center gap-2 rounded-full bg-neutral-900 px-4 py-2 text-sm text-white shadow-lg sm:max-w-none sm:[left:2rem] dark:bg-neutral-100 dark:text-neutral-900"
+            style="top: 5.5rem; left: 1.5rem"
             role="toolbar"
             aria-label="Admin"
         >

@@ -114,6 +114,10 @@
 
         {{-- Dynamic appearance overrides from settings --}}
         <style>
+            [x-cloak] {
+                display: none !important;
+            }
+
             :root {
                 --color-accent: {{ $accentColor }};
                 --font-sans: {!! $bodyFontStack !!};
@@ -132,6 +136,8 @@
 
         <x-header />
 
+        <x-admin-bar :editUrl="$editUrl ?? null" />
+
         <main id="main-content" class="max-w-3xl mx-auto px-4 py-10 sm:px-6 sm:py-12">
             {{ $slot }}
         </main>
@@ -139,7 +145,6 @@
         <x-footer />
 
         <x-back-to-top />
-        <x-admin-bar :editUrl="$editUrl ?? null" />
 
         @livewireScripts
         @stack('scripts')

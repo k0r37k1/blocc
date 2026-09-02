@@ -68,8 +68,7 @@ Ressourcen werden unter `app/Filament/Resources/` per `AdminPanelProvider` einge
 |---------|--------------|
 | **My Profile** | Navigation-Item → `EditProfile`: Avatar (Spatie `avatar`), Stammdaten, Social-Felder, Passwort-Regeln wie im Formular. |
 | **Blog Settings** | `ManageSettings`, Slug `settings`. Felder und Speichern über `Setting::setMany` – exakt die in `ManageSettings::form()` definierten Eingaben (Blogname, Hero, Farben, Schriften, Code-Theme, Posts pro Seite, Kommentare global, Newsletter + Brevo-IDs, Footer, Head-Scripts). |
-| **Header „Backup“** | Ruft `Artisan::call('backup:run', ['--only-db' => true])` auf (`spatie/laravel-backup`). Nur **Datenbank**, keine Datei-Backups. Exit-Code steuert Erfolgs- vs. Fehler-Notification im UI. |
-| **Header „Reset Data“** | Nur wenn **`APP_ENV` nicht `production`**: `migrate:fresh --seed --force`. Dialog und Notification entsprechen dem Verhalten (DB leer → Migrationen + alle Seeder). In **Produktion** ist die Aktion ausgeblendet. |
+| **Header „Backup“** | Ruft `Artisan::call('backup:run', ['--only-db' => true])` auf (`spatie/laravel-backup`). Nur **Datenbank**, keine Datei-Backups. Exit-Code steuert Erfolgs- vs. Fehler-Notification im UI. Wiederherstellung: `php artisan backup:restore-sqlite {zip} --force` (nur Nicht-Produktion, siehe Command-Hilfe). |
 
 ### 3.4 Dashboard
 

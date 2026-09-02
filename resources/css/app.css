@@ -39,6 +39,10 @@
     --color-card-hover: #171717;
 }
 
+.surface-card {
+    background-color: var(--color-card);
+}
+
 /* Headings use the configurable heading font */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
@@ -102,6 +106,28 @@ h3[id] {
     user-select: none;
 }
 
+/* ---- Shared copy tooltip ---- */
+.copy-tooltip {
+    position: absolute;
+    bottom: calc(100% + 0.4rem);
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background: #1f2937;
+    color: #f9fafb;
+    font-size: 0.7rem;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.dark .copy-tooltip {
+    background: #f9fafb;
+    color: #1f2937;
+}
+
 /* ---- Copy button (top-right inside code block) ---- */
 .code-copy-btn {
     position: absolute;
@@ -131,25 +157,53 @@ h3[id] {
     color: var(--color-accent);
 }
 
-/* Copy tooltip */
 .code-copy-btn .copy-tooltip {
-    position: absolute;
-    bottom: calc(100% + 0.4rem);
-    right: 0;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    background: #1f2937;
-    color: #f9fafb;
-    font-size: 0.7rem;
     font-family: var(--font-mono);
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s;
 }
 
 .code-copy-btn:hover .copy-tooltip,
 .code-copy-btn.copied .copy-tooltip {
+    opacity: 1;
+}
+
+/* ---- Copy link button (inline, e.g. article meta) ---- */
+.copy-link-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--color-muted);
+    transition: color 0.15s;
+    vertical-align: middle;
+}
+
+.copy-link-btn:hover {
+    color: var(--color-accent);
+}
+
+.dark .copy-link-btn {
+    color: var(--color-muted-dark);
+}
+
+.dark .copy-link-btn:hover {
+    color: var(--color-accent);
+}
+
+.copy-link-btn.copied {
+    color: var(--color-accent);
+}
+
+.copy-link-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 0.125rem;
+}
+
+.copy-link-btn.copied .copy-tooltip {
     opacity: 1;
 }
 
@@ -185,7 +239,7 @@ h3:hover .heading-anchor,
 
 @media (hover: none) {
     .heading-anchor {
-        display: none;
+        opacity: 0.35;
     }
 }
 
@@ -307,6 +361,7 @@ input[type="checkbox"].appearance-none:checked {
 
 .post-card-hover:hover {
     transform: translateY(-2px);
+    background-color: var(--color-card-hover);
     box-shadow: 0 4px 20px rgb(0 0 0 / 0.06);
 }
 
@@ -340,8 +395,21 @@ input[type="checkbox"].appearance-none:checked {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
     cursor: pointer;
     user-select: none;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+}
+
+.toc-header:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
 }
 
 .toc-title {
@@ -635,7 +703,8 @@ input[type="checkbox"].appearance-none:checked {
     }
 
     .code-copy-btn,
-    .code-copy-btn .copy-tooltip,
+    .copy-link-btn,
+    .copy-tooltip,
     .heading-anchor {
         transition: none;
     }

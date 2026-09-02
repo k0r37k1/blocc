@@ -20,9 +20,9 @@
         />
     @else
         <div class="w-full min-w-0">
-            <label for="site-media-modal-search" class="sr-only">{{ __('Search media') }}</label>
+            <label for="site-media-library-search" class="sr-only">{{ __('Search media') }}</label>
             <input
-                id="site-media-modal-search"
+                id="site-media-library-search"
                 type="search"
                 x-model="search"
                 placeholder="{{ __('Search by filename…') }}"
@@ -30,19 +30,19 @@
             />
         </div>
 
-        <div class="grid max-h-[min(28rem,55dvh)] grid-cols-1 gap-3 overflow-y-auto overscroll-contain min-[480px]:grid-cols-2 md:max-h-[28rem] md:grid-cols-3 lg:grid-cols-4">
+        <div class="grid max-h-[min(28rem,55dvh)] grid-cols-1 gap-3 overflow-y-auto overscroll-contain min-[480px]:grid-cols-2 md:max-h-[28rem] md:grid-cols-3">
             @foreach ($items as $item)
                 @php
                     $label = app(\App\Services\SiteMedia::class)->displayLabel($item);
                     $previewUrl = $item->hasGeneratedConversion('thumbnail')
                         ? $item->getUrl('thumbnail')
                         : $item->getUrl();
-                    $isSelected = (int) ($get('media_id') ?? 0) === $item->id;
+                    $isSelected = (int) ($selectedMediaId ?? 0) === $item->id;
                 @endphp
 
                 <button
                     type="button"
-                    wire:click="$set('media_id', {{ $item->id }})"
+                    wire:click="$set('data.site_media_id', {{ $item->id }})"
                     x-show="matches(@js($label))"
                     @class([
                         'group overflow-hidden rounded-xl border text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600',
@@ -68,5 +68,15 @@
                 </button>
             @endforeach
         </div>
+
+        @if (filled($selectedMediaId))
+            <button
+                type="button"
+                wire:click="$set('data.site_media_id', null)"
+                class="text-sm font-medium text-gray-600 underline underline-offset-2 hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
+            >
+                {{ __('Clear selection') }}
+            </button>
+        @endif
     @endif
 </div>

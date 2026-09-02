@@ -3,9 +3,12 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Services\BrevoService;
+use App\Support\NewsletterSettings;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -15,10 +18,11 @@ use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property-read Schema $form
@@ -51,42 +55,6 @@ class ManageSettings extends Page
     /** @var array<string, mixed>|null */
     public ?array $data = [];
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Action::make('resetData')
-                ->label(__('Reset Data'))
-                ->icon(Heroicon::ArrowPath)
-                ->color('danger')
-                ->visible(fn (): bool => ! app()->isProduction())
-                ->requiresConfirmation()
-                ->modalHeading(__('Reset all data'))
-                ->modalDescription(__('Runs migrate:fresh with seed: all tables are dropped, migrations and every seeder run again. Anything not recreated by seeders (content, DB-backed settings, comments, media metadata, etc.) is lost. This cannot be undone!'))
-                ->modalSubmitActionLabel(__('Yes, reset database'))
-                ->action(function (): void {
-                    $exitCode = Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
-
-                    if ($exitCode !== 0) {
-                        Notification::make()
-                            ->title(__('Database reset failed'))
-                            ->body(Str::limit(trim(Artisan::output()), 500))
-                            ->danger()
-                            ->send();
-
-                        return;
-                    }
-
-                    Notification::make()
-                        ->title(__('Data reset'))
-                        ->body(__('The database was rebuilt from migrations and seeders.'))
-                        ->warning()
-                        ->send();
-
-                    $this->redirect(static::getUrl());
-                }),
-        ];
-    }
-
     public function mount(): void
     {
         $this->form->fill([
@@ -106,6 +74,7 @@ class ManageSettings extends Page
             'footer_text' => Setting::get('footer_text', ''),
             'head_scripts' => Setting::get('head_scripts', ''),
             'newsletter_enabled' => Setting::get('newsletter_enabled', '0') === '1',
+            'newsletter_placement' => Setting::get('newsletter_placement', 'article'),
             'brevo_list_id' => Setting::get('brevo_list_id', ''),
             'brevo_doi_template_id' => Setting::get('brevo_doi_template_id', ''),
         ]);
@@ -221,21 +190,95 @@ class ManageSettings extends Page
                                 ->helperText(__('When disabled, the comment section is hidden on all blog posts. Individual posts can also disable comments.')),
                         ]),
                     Section::make(__('Newsletter'))
-                        ->description(__('Show a newsletter subscription form in the footer.'))
+                        ->description(__('Optional newsletter subscription via Brevo double opt-in.'))
                         ->schema([
                             Toggle::make('newsletter_enabled')
                                 ->label(__('Enable Newsletter'))
-                                ->helperText(__('When enabled, a subscription form appears in the footer.')),
+                                ->helperText(__('When enabled, a subscription form appears in one chosen location.'))
+                                ->live(),
+                            Select::make('newsletter_placement')
+                                ->label(__('Placement'))
+                                ->options([
+                                    'article' => __('At end of blog posts'),
+                                    'footer' => __('In site footer'),
+                                ])
+                                ->default('article')
+                                ->native(false)
+                                ->visible(fn (Get $get): bool => (bool) $get('newsletter_enabled'))
+                                ->required(fn (Get $get): bool => (bool) $get('newsletter_enabled')),
+                            Placeholder::make('brevo_status')
+                                ->label(__('Brevo status'))
+                                ->content(function (): string {
+                                    $status = NewsletterSettings::brevoStatus();
+
+                                    return collect([
+                                        __('API key: :state', ['state' => $status['api_key'] ? __('configured') : __('missing')]),
+                                        __('List ID: :state', ['state' => $status['list_id'] ? __('configured') : __('missing')]),
+                                        __('Template ID: :state', ['state' => $status['template_id'] ? __('configured') : __('missing')]),
+                                    ])->implode(' · ');
+                                })
+                                ->visible(fn (Get $get): bool => (bool) $get('newsletter_enabled')),
                             TextInput::make('brevo_list_id')
                                 ->label(__('Brevo List ID'))
                                 ->helperText(__('The ID of the Brevo contact list subscribers are added to.'))
                                 ->numeric()
-                                ->placeholder('3'),
+                                ->placeholder('3')
+                                ->visible(fn (Get $get): bool => (bool) $get('newsletter_enabled')),
                             TextInput::make('brevo_doi_template_id')
                                 ->label(__('Brevo DOI Template ID'))
                                 ->helperText(__('The ID of the double opt-in confirmation email template in Brevo.'))
                                 ->numeric()
-                                ->placeholder('2'),
+                                ->placeholder('2')
+                                ->visible(fn (Get $get): bool => (bool) $get('newsletter_enabled')),
+                            Action::make('sendTestNewsletter')
+                                ->label(__('Send test email'))
+                                ->icon(Heroicon::PaperAirplane)
+                                ->iconSize(IconSize::Small)
+                                ->color('gray')
+                                ->visible(fn (Get $get): bool => (bool) $get('newsletter_enabled'))
+                                ->requiresConfirmation()
+                                ->modalHeading(__('Send test newsletter email'))
+                                ->modalDescription(__('Sends a double opt-in test email to your admin account.'))
+                                ->action(function (): void {
+                                    $email = Auth::user()?->email;
+
+                                    if (blank($email)) {
+                                        Notification::make()
+                                            ->title(__('No admin email found'))
+                                            ->danger()
+                                            ->send();
+
+                                        return;
+                                    }
+
+                                    if (! NewsletterSettings::brevoConfigured()) {
+                                        Notification::make()
+                                            ->title(__('Brevo is not fully configured'))
+                                            ->body(__('Set the API key, list ID, and template ID first.'))
+                                            ->warning()
+                                            ->send();
+
+                                        return;
+                                    }
+
+                                    $response = app(BrevoService::class)->sendDoubleOptIn($email);
+
+                                    if (app(BrevoService::class)->isSuccessfulResponse($response)) {
+                                        Notification::make()
+                                            ->title(__('Test email sent'))
+                                            ->body(__('Check :email for the confirmation message.', ['email' => $email]))
+                                            ->success()
+                                            ->send();
+
+                                        return;
+                                    }
+
+                                    Notification::make()
+                                        ->title(__('Test email failed'))
+                                        ->body(__('Brevo returned HTTP :status.', ['status' => $response->status()]))
+                                        ->danger()
+                                        ->send();
+                                }),
                             Action::make('openBrevo')
                                 ->label(__('Open Brevo Dashboard'))
                                 ->icon(Heroicon::ArrowTopRightOnSquare)

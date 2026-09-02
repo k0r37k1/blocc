@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -211,6 +212,17 @@ class Post extends Model implements HasMedia, HasRichContent
         return $this->status === PostStatus::Published
             && $this->published_at !== null
             && $this->published_at->lte(now());
+    }
+
+    public function previewUrl(?\DateTimeInterface $expiresAt = null): string
+    {
+        $expiresAt ??= now()->addDay();
+
+        return URL::temporarySignedRoute(
+            'blog.preview',
+            $expiresAt,
+            ['post' => $this->getKey()],
+        );
     }
 
     /**

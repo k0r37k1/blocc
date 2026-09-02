@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\LegacyPostRedirectController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PostPreviewController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TagController;
 use App\Http\Middleware\SetLocale;
@@ -21,6 +22,9 @@ Route::get('/locale/{locale}', function (string $locale) {
 })->name('locale.switch');
 
 Route::get('/', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/preview/{post:id}', [PostPreviewController::class, 'show'])
+    ->middleware('signed')
+    ->name('blog.preview');
 Route::get('/blog/{post}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::middleware([CacheResponse::class])->group(function (): void {

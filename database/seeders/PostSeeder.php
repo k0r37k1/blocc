@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PostStatus;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -16,23 +17,29 @@ class PostSeeder extends Seeder
     {
         $category = Category::where('slug', 'allgemein')->first() ?? Category::first();
 
-        $post = Post::create([
-            'title' => 'Willkommen auf meinem Blog',
-            'slug' => 'willkommen-auf-meinem-blog',
-            'body' => '<p>Dies ist mein erster Blogbeitrag. Hier werde ich über Themen wie Webentwicklung, Design und Technologie schreiben.</p><p>Dieser Blog wurde mit <strong>Laravel</strong>, <strong>Filament</strong> und <strong>Tailwind CSS</strong> gebaut — ein moderner Stack für schnelle und elegante Webanwendungen.</p><p>Schau gerne öfter vorbei, es wird sich hier einiges tun!</p>',
-            'excerpt' => 'Mein erster Blogbeitrag — über Webentwicklung, Design und den Tech-Stack hinter diesem Blog.',
-            'status' => \App\Enums\PostStatus::Published,
-            'published_at' => now(),
-            'category_id' => $category?->id,
-            'reading_time' => 1,
-            'user_id' => 1,
-        ]);
+        $post = Post::updateOrCreate(
+            ['slug' => 'demo-beitrag-willkommen-auf-dem-blog'],
+            [
+                'title' => 'Demo-Beitrag: Willkommen auf dem Blog',
+                'body' => '<p>Willkommen auf meinem Blog! Dies ist ein Demo-Beitrag, um das Layout, die Typografie und die Leserfahrung zu zeigen.</p><p>Hier schreibe ich über <strong>Webentwicklung</strong>, <strong>Design</strong> und die Tools, mit denen ich arbeite — darunter <strong>Laravel</strong>, <strong>Filament</strong> und <strong>Tailwind CSS</strong>.</p><h2>Was dich hier erwartet</h2><p>Kurze, prägnante Artikel mit Fokus auf Qualität statt Quantität. Neue Beiträge erscheinen, wenn es etwas Wertvolles zu teilen gibt.</p><p>Schau gerne öfter vorbei — und wenn du magst, abonniere den Newsletter unten auf der Startseite.</p>',
+                'excerpt' => 'Ein Demo-Beitrag: Willkommen auf dem Blog — Webentwicklung, Design und der Stack hinter dieser Seite.',
+                'status' => PostStatus::Published,
+                'published_at' => now(),
+                'category_id' => $category?->id,
+                'reading_time' => 1,
+                'user_id' => 1,
+                'comments_enabled' => true,
+                'toc_enabled' => true,
+            ],
+        );
 
-        $post->tags()->attach(
+        $post->tags()->sync(
             Tag::whereIn('slug', ['demo'])->pluck('id')
         );
 
-        $this->attachFeaturedImage($post);
+        if (! $post->hasMedia('featured-image')) {
+            $this->attachFeaturedImage($post);
+        }
     }
 
     /**

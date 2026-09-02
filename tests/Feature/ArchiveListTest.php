@@ -105,4 +105,39 @@ class ArchiveListTest extends TestCase
             ->assertSee('Post B')
             ->assertSee('Post C');
     }
+
+    public function test_archive_uses_chronological_list_layout(): void
+    {
+        Post::factory()->published()->create([
+            'title' => 'Archive List Post',
+            'published_at' => Carbon::parse('2024-06-15'),
+        ]);
+
+        Livewire::test(ArchiveList::class)
+            ->assertSee('<time datetime="2024-06-15"', false)
+            ->assertSee('Archive List Post')
+            ->assertDontSee('class="post-card-hover', false);
+    }
+
+    public function test_active_filter_badges_render_when_year_selected(): void
+    {
+        Post::factory()->published()->create(['published_at' => Carbon::parse('2024-06-15')]);
+
+        Livewire::test(ArchiveList::class)
+            ->set('year', '2024')
+            ->assertSee(__('Year: :year', ['year' => '2024']), false)
+            ->assertSee('wire:click="clearYear"', false);
+    }
+
+    public function test_clear_year_resets_month(): void
+    {
+        Post::factory()->published()->create(['published_at' => Carbon::parse('2024-06-15')]);
+
+        Livewire::test(ArchiveList::class)
+            ->set('year', '2024')
+            ->set('month', '6')
+            ->call('clearYear')
+            ->assertSet('year', '')
+            ->assertSet('month', '');
+    }
 }

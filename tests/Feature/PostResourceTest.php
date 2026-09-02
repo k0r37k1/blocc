@@ -6,6 +6,7 @@ use App\Enums\PostStatus;
 use App\Filament\Resources\Posts\Pages\CreatePost;
 use App\Filament\Resources\Posts\Pages\EditPost;
 use App\Filament\Resources\Posts\Pages\ListPosts;
+use App\Filament\Resources\Posts\PostResource;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Site;
@@ -70,7 +71,8 @@ class PostResourceTest extends TestCase
                 'category_id' => $category->id,
             ])
             ->call('create')
-            ->assertHasNoFormErrors();
+            ->assertHasNoFormErrors()
+            ->assertRedirect(PostResource::getUrl('edit', ['record' => Post::query()->where('slug', 'my-test-post')->first()]));
 
         $this->assertDatabaseHas('posts', [
             'title' => 'My Test Post',
@@ -165,6 +167,23 @@ class PostResourceTest extends TestCase
             'id' => $post->id,
             'title' => 'Updated Title',
         ]);
+    }
+
+    public function test_save_redirects_back_to_edit_page(): void
+    {
+        $this->actingAs($this->admin);
+
+        $post = Post::factory()->draft()->create([
+            'slug' => 'fixed-slug-for-redirect',
+        ]);
+
+        Livewire::test(EditPost::class, ['record' => $post->getRouteKey()])
+            ->fillForm([
+                'excerpt' => 'Updated excerpt for redirect test.',
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors()
+            ->assertRedirect(PostResource::getUrl('edit', ['record' => $post]));
     }
 
     public function test_can_delete_post(): void

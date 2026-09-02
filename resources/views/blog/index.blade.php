@@ -25,7 +25,7 @@
         <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     </x-slot:meta>
 
-    <div class="mb-10">
+    <div class="mb-10 sm:mb-12">
         <h1 class="{{ $heroTitleClass }} font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
             {{ \App\Models\Setting::get('hero_title') ?: $blogName }}
         </h1>

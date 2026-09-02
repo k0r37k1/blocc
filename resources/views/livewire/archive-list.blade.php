@@ -1,21 +1,28 @@
 <div>
-    {{-- Filter dropdowns --}}
-    @if ($this->availableYears->isNotEmpty())
-        <div class="flex justify-end items-center gap-3 mb-8">
-            @if (filled($year) || filled($month))
-                <button
-                    wire:click.preserve-scroll="$set('year', ''); $set('month', '')"
-                    type="button"
-                    class="text-neutral-400 dark:text-neutral-500 hover:text-red-500 dark:hover:text-red-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm"
-                    aria-label="{{ __('Clear filter') }}"
-                >
-                    <x-heroicon-o-x-mark class="w-4 h-4" aria-hidden="true" />
-                </button>
+    @if ($this->hasActiveFilters)
+        <div class="mb-4 flex flex-wrap items-center gap-2">
+            @if (filled($year))
+                <x-active-filter
+                    :label="__('Year: :year', ['year' => $year])"
+                    wire:click="clearYear"
+                />
             @endif
 
+            @if ($monthLabel = $this->activeMonthLabel)
+                <x-active-filter
+                    :label="$monthLabel"
+                    wire:click="clearMonth"
+                />
+            @endif
+        </div>
+    @endif
+
+    {{-- Filter dropdowns --}}
+    @if ($this->availableYears->isNotEmpty())
+        <div class="mb-8 flex flex-wrap items-center justify-stretch gap-3 sm:justify-end">
             <select
-                wire:model.live="year"
-                class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-white dark:bg-neutral-900 dark:[color-scheme:dark] text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                wire:model.live.preserve-scroll="year"
+                class="w-full min-w-0 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:[color-scheme:dark]"
             >
                 <option value="">{{ __('All years') }}</option>
                 @foreach ($this->availableYears as $item)
@@ -25,8 +32,8 @@
 
             @if (filled($year))
                 <select
-                    wire:model.live="month"
-                    class="border border-neutral-200 dark:border-neutral-800 rounded-md bg-white dark:bg-neutral-900 dark:[color-scheme:dark] text-sm px-3 py-2 text-neutral-900 dark:text-neutral-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    wire:model.live.preserve-scroll="month"
+                    class="w-full min-w-0 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:[color-scheme:dark]"
                 >
                     <option value="">{{ __('All months') }}</option>
                     @foreach ($this->availableMonths as $item)
@@ -48,10 +55,10 @@
                 <ul class="mt-3 space-y-2">
                     @foreach ($posts as $post)
                         <li wire:key="post-{{ $post->slug }}" class="flex items-baseline gap-3">
-                            <time datetime="{{ $post->published_at->toDateString() }}" class="text-sm text-neutral-500 dark:text-neutral-400 tabular-nums shrink-0">
+                            <time datetime="{{ $post->published_at->toDateString() }}" class="shrink-0 text-sm tabular-nums text-neutral-500 dark:text-neutral-400">
                                 {{ $post->published_at->translatedFormat('j. M') }}
                             </time>
-                            <a href="{{ route('blog.show', $post) }}" class="text-neutral-900 dark:text-neutral-100 hover:text-accent dark:hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
+                            <a href="{{ route('blog.show', $post) }}" class="rounded-sm text-neutral-900 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:text-neutral-100 dark:hover:text-accent">
                                 {{ $post->title }}
                             </a>
                         </li>
@@ -59,7 +66,13 @@
                 </ul>
             </section>
         @empty
-            <p class="text-neutral-500 dark:text-neutral-400">{{ __('No posts yet.') }}</p>
+            <p class="text-neutral-500 dark:text-neutral-400">
+                @if ($this->hasActiveFilters)
+                    {{ __('No posts match your filters.') }}
+                @else
+                    {{ __('No posts yet.') }}
+                @endif
+            </p>
         @endforelse
     </div>
 </div>

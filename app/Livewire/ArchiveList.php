@@ -23,6 +23,35 @@ class ArchiveList extends Component
         $this->month = '';
     }
 
+    public function clearYear(): void
+    {
+        $this->year = '';
+        $this->month = '';
+    }
+
+    public function clearMonth(): void
+    {
+        $this->month = '';
+    }
+
+    #[Computed]
+    public function hasActiveFilters(): bool
+    {
+        return filled($this->year) || filled($this->month);
+    }
+
+    #[Computed]
+    public function activeMonthLabel(): ?string
+    {
+        if (blank($this->year) || blank($this->month)) {
+            return null;
+        }
+
+        return Carbon::create((int) $this->year, (int) $this->month, 1)
+            ->locale(app()->getLocale())
+            ->translatedFormat('F Y');
+    }
+
     /**
      * SQL expression for calendar year of published_at (driver-specific).
      */

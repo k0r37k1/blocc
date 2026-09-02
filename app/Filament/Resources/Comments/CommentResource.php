@@ -12,11 +12,13 @@ use Filament\Tables\Table;
 
 class CommentResource extends Resource
 {
+    private static ?int $pendingCountCache = null;
+
     protected static ?string $model = Comment::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
 
     public static function getNavigationGroup(): ?string
     {
@@ -35,7 +37,7 @@ class CommentResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $pendingCount = Comment::pending()->count();
+        $pendingCount = self::pendingCount();
 
         return $pendingCount > 0 ? (string) $pendingCount : null;
     }
@@ -45,9 +47,27 @@ class CommentResource extends Resource
         return 'warning';
     }
 
+    public static function getNavigationUrl(): string
+    {
+        if (self::pendingCount() > 0) {
+            return static::getUrl(name: null, parameters: ['pending' => 1]);
+        }
+
+        return static::getUrl();
+    }
+
     public static function getNavigationBadgeTooltip(): ?string
     {
-        return __('Pending comments');
+        if (self::pendingCount() > 0) {
+            return __('Pending comments — click to review');
+        }
+
+        return null;
+    }
+
+    private static function pendingCount(): int
+    {
+        return self::$pendingCountCache ??= Comment::pending()->count();
     }
 
     public static function table(Table $table): Table

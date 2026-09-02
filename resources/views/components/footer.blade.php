@@ -1,7 +1,7 @@
 @php
     $blogName = \App\Models\Setting::get('blog_name', config('app.name'));
     $footerText = \App\Models\Setting::get('footer_text');
-    $newsletterEnabled = \App\Models\Setting::get('newsletter_enabled', '0') === '1';
+    $showNewsletter = \App\Support\NewsletterSettings::showInFooter();
 
     $footerPages = \App\Models\Page::query()->published()->where('show_in_footer', true)->orderBy('sort_order')->get();
     $owner = \App\Models\User::first();
@@ -50,6 +50,12 @@
                 </div>
             </div>
         </div>
+
+        @if ($showNewsletter)
+            <div id="footer-newsletter" class="border-t border-neutral-100 py-6 dark:border-neutral-900">
+                <livewire:newsletter-subscribe variant="footer" />
+            </div>
+        @endif
 
     </div>
 </footer>

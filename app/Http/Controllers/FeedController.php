@@ -3,24 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Services\RssFeedBuilder;
 use Illuminate\Http\Response;
 
 class FeedController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(): Response
+    public function __invoke(RssFeedBuilder $feed): Response
     {
         $posts = Post::query()
             ->published()
-            ->with('tags')
+            ->with(['tags', 'author', 'media'])
             ->latest('published_at')
             ->limit(20)
             ->get();
 
         return response()
-            ->view('feed.rss', compact('posts'))
+            ->view('feed.rss', [
+                'posts' => $posts,
+                'feed' => $feed,
+            ])
             ->header('Content-Type', 'application/rss+xml; charset=UTF-8');
     }
 }

@@ -1,12 +1,23 @@
 <x-layout :title="__('Tag: :name', ['name' => $tag->name]) . ' - ' . config('app.name')" :description="__('All posts tagged :name', ['name' => $tag->name])" :robots="$posts->isEmpty() ? 'noindex, follow' : null">
-    <h1 class="flex items-baseline gap-2 text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100 mb-8">
-        {{ __('Tag') }}
-        <span class="text-sm font-semibold px-2.5 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">{{ $tag->name }}</span>
-    </h1>
+    <header class="mb-10">
+        <p class="text-sm font-semibold uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Tag') }}</p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl dark:text-neutral-100">
+            #{{ $tag->name }}
+        </h1>
+        <p class="mt-3 text-sm text-muted dark:text-muted-dark">
+            {{ trans_choice('{0} No posts|{1} :count post|[2,*] :count posts', $posts->total(), ['count' => $posts->total()]) }}
+        </p>
 
-    <div class="space-y-2">
+        <a href="{{ route('blog.index', ['tag' => $tag->slug]) }}" class="mt-3 inline-block text-sm text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
+            {{ __('Filter on homepage') }} &rarr;
+        </a>
+    </header>
+
+    <div class="divide-y divide-neutral-200 dark:divide-neutral-800">
         @forelse($posts as $post)
-            <x-post-card :post="$post" :index="$loop->index" />
+            <div class="py-8 first:pt-0">
+                <x-post-card :post="$post" :index="$loop->index" />
+            </div>
         @empty
             <div class="py-12 text-center">
                 <p class="text-neutral-500 dark:text-neutral-400">{{ __('No posts with this tag.') }}</p>

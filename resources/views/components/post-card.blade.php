@@ -17,15 +17,15 @@
 <article
     x-data
     x-intersect.once="$el.classList.add('revealed')"
-    class="reveal group"
+    class="post-card-hover reveal group -mx-2 rounded-xl px-2 py-2 sm:-mx-3 sm:px-3"
     style="transition-delay: {{ $staggerIndex * 70 }}ms"
 >
     @if ($hasImage)
-        <a href="{{ route('blog.show', $post) }}" class="block">
+        <a href="{{ route('blog.show', $post) }}" class="block overflow-hidden rounded-lg">
             <x-featured-image
                 :media="$featuredImage"
                 :alt="$post->featured_image_alt ?? $post->title"
-                class="w-full aspect-[2/1] object-cover rounded-lg bg-neutral-100 dark:bg-neutral-800"
+                class="aspect-[2/1] w-full bg-neutral-100 object-cover transition-transform duration-300 group-hover:scale-[1.02] dark:bg-neutral-800"
                 :lazy="true"
                 conversion="medium"
                 :width="800"
@@ -50,7 +50,7 @@
                 <span>&middot;</span>
                 <a
                     href="{{ route('category.show', $post->category) }}"
-                    class="font-medium"
+                    class="font-medium transition-opacity hover:opacity-80"
                     style="color: {{ $post->category->color }}"
                 >
                     {{ $post->category->name }}

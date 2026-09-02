@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Setting;
-use Illuminate\Support\Facades\Http;
+use App\Services\BrevoService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
@@ -61,25 +61,17 @@ class NewsletterSubscribe extends Component
 
         $listId = (int) Setting::get('brevo_list_id');
         $templateId = (int) Setting::get('brevo_doi_template_id');
-        $redirectionUrl = route('newsletter.confirmed');
 
         if (! $listId || ! $templateId) {
-            Log::error('Newsletter: brevo_list_id or brevo_doi_template_id not configured.');
+            Log::warning('Newsletter: brevo_list_id or brevo_doi_template_id not configured.');
             $this->errorMessage = __('Newsletter is temporarily unavailable. Please try again later.');
 
             return;
         }
 
         try {
-            $response = Http::withHeaders([
-                'api-key' => config('brevo.api_key'),
-                'Accept' => 'application/json',
-            ])->post('https://api.brevo.com/v3/contacts/doubleOptinConfirmation', [
-                'email' => $this->email,
-                'includeListIds' => [$listId],
-                'templateId' => $templateId,
-                'redirectionUrl' => $redirectionUrl,
-            ]);
+            $brevo = app(BrevoService::class);
+            $response = $brevo->sendDoubleOptIn($this->email);
 
             if ($response->successful()) {
                 $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
@@ -96,8 +88,7 @@ class NewsletterSubscribe extends Component
                 'response' => $body,
             ]);
 
-            // 400 — treat as success to avoid enumeration (e.g. contact already exists)
-            if ($response->status() === 400) {
+            if ($brevo->isSuccessfulResponse($response)) {
                 $this->successMessage = __('Thank you! Please check your inbox to confirm your subscription.');
                 $this->reset('email', 'website');
 

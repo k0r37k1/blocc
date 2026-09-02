@@ -16,8 +16,8 @@
     };
 @endphp
 
-<header class="border-b border-neutral-100 dark:border-neutral-900">
-    <nav x-data="{ open: false }" class="max-w-3xl mx-auto px-4 sm:px-6" aria-label="{{ __('Main navigation') }}">
+<header class="sticky top-0 z-40 border-b border-neutral-100 bg-[var(--color-bg)]/90 backdrop-blur-sm dark:border-neutral-900">
+    <nav x-data="{ open: false }" class="mx-auto max-w-3xl px-4 sm:px-6" aria-label="{{ __('Main navigation') }}">
         <div class="flex items-center h-16">
             {{-- Brand --}}
             <a href="{{ route('blog.index') }}" class="mr-auto text-lg font-bold text-neutral-900 dark:text-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">
@@ -74,8 +74,9 @@
                     {{-- Language switcher --}}
                     <a
                         href="{{ route('locale.switch', $currentLocale === 'de' ? 'en' : 'de') }}"
-                        class="flex items-center gap-1 p-2 rounded-md text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        class="flex items-center gap-1 rounded-md p-2 text-neutral-500 transition-colors hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:text-neutral-400 dark:hover:text-neutral-100"
                         title="{{ __('Language') }}"
+                        aria-label="{{ $currentLocale === 'de' ? __('Switch to English') : __('Switch to German') }}"
                     >
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z" />
@@ -127,7 +128,7 @@
         </div>
 
         {{-- Mobile menu --}}
-        <div x-show="open" x-transition id="mobile-menu" class="sm:hidden pb-4">
+        <div x-show="open" x-cloak x-transition.opacity.duration.200ms id="mobile-menu" class="sm:hidden pb-4">
             @foreach ($navPages as $navPage)
                 <a href="{{ $navUrl($navPage) }}" class="block py-2 {{ $isNavActive($navPage) ? 'text-neutral-900 dark:text-neutral-100 font-medium' : 'text-neutral-600 dark:text-neutral-400' }} hover:text-accent dark:hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-sm">{{ $navPage->title }}</a>
             @endforeach

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Resources\Comments\CommentResource;
 use App\Filament\Resources\Comments\Pages\ListComments;
 use App\Livewire\Comments;
 use App\Models\Comment;
@@ -315,9 +316,62 @@ class CommentTest extends TestCase
             'post_id' => $this->post->id,
         ]);
 
-        $badge = \App\Filament\Resources\Comments\CommentResource::getNavigationBadge();
+        $badge = CommentResource::getNavigationBadge();
 
         $this->assertEquals('3', $badge);
+    }
+
+    public function test_filament_pending_navigation_url_includes_filter(): void
+    {
+        Comment::factory()->pending()->create([
+            'post_id' => $this->post->id,
+        ]);
+
+        $url = CommentResource::getNavigationUrl();
+
+        $this->assertStringContainsString('pending=1', $url);
+    }
+
+    public function test_filament_list_applies_pending_filter_from_query_string(): void
+    {
+        $this->actingAs($this->admin);
+
+        Comment::factory()->pending()->create([
+            'post_id' => $this->post->id,
+            'nickname' => 'Pending Person',
+        ]);
+
+        Comment::factory()->create([
+            'post_id' => $this->post->id,
+            'nickname' => 'Approved Person',
+            'is_approved' => true,
+        ]);
+
+        Livewire::withQueryParams(['pending' => '1'])
+            ->test(ListComments::class)
+            ->assertCanSeeTableRecords(Comment::pending()->get())
+            ->assertCanNotSeeTableRecords(Comment::query()->where('is_approved', true)->get());
+    }
+
+    public function test_comment_form_uses_visible_labels(): void
+    {
+        Livewire::test(Comments::class, ['post' => $this->post])
+            ->assertSee('for="comment-nickname"', false)
+            ->assertSee('for="comment-email"', false)
+            ->assertSee('for="comment-content"', false);
+    }
+
+    public function test_comment_pagination_uses_branded_component(): void
+    {
+        Comment::factory()->count(11)->create([
+            'post_id' => $this->post->id,
+            'is_approved' => true,
+        ]);
+
+        Livewire::test(Comments::class, ['post' => $this->post])
+            ->assertSee(__('Page navigation'), false)
+            ->assertSee(__('Older comments'), false)
+            ->assertSee('wire:click="nextPage', false);
     }
 
     public function test_comment_model_is_editable_within_60_minutes(): void

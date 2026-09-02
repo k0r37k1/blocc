@@ -37,7 +37,7 @@
 
                     <button
                         type="submit"
-                        class="group shrink-0 p-2.5 rounded-md text-white bg-neutral-500 hover:bg-neutral-600 dark:bg-neutral-600 dark:hover:bg-neutral-500 data-loading:opacity-50 data-loading:pointer-events-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        class="group shrink-0 rounded-md bg-accent-bg p-2.5 text-white transition-colors hover:opacity-90 data-loading:pointer-events-none data-loading:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                         aria-label="{{ __('Subscribe') }}"
                     >
                         <span wire:loading.remove aria-hidden="true">

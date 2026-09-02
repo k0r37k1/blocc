@@ -71,7 +71,11 @@
                     {{-- Content or Edit Form --}}
                     @if ($editingCommentId === $comment->id)
                         <div class="mt-2">
+                            <label for="edit-comment-{{ $comment->id }}" class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                {{ __('Edit comment') }}
+                            </label>
                             <textarea
+                                id="edit-comment-{{ $comment->id }}"
                                 wire:model="editContent"
                                 rows="3"
                                 class="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-transparent px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-none"
@@ -149,7 +153,11 @@
 
                                         @if ($editingCommentId === $reply->id)
                                             <div class="mt-2">
+                                                <label for="edit-comment-{{ $reply->id }}" class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                                                    {{ __('Edit comment') }}
+                                                </label>
                                                 <textarea
+                                                    id="edit-comment-{{ $reply->id }}"
                                                     wire:model="editContent"
                                                     rows="2"
                                                     class="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-transparent px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-none"
@@ -210,7 +218,11 @@
     {{-- Pagination --}}
     @if ($comments->hasPages())
         <div class="mt-6">
-            {{ $comments->links() }}
+            {{ $comments->links('components.pagination', [
+                'previousLabel' => __('Newer comments'),
+                'nextLabel' => __('Older comments'),
+                'wirePagination' => true,
+            ]) }}
         </div>
     @endif
 
@@ -231,22 +243,30 @@
 
         <div class="grid grid-cols-2 gap-3">
             <div>
+                <label for="comment-nickname" class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                    {{ __('Nickname') }}
+                </label>
                 <input
+                    id="comment-nickname"
                     type="text"
                     wire:model="nickname"
-                    placeholder="{{ __('Nickname') }}"
+                    autocomplete="nickname"
                     @auth disabled @endauth
-                    class="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-transparent px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="w-full rounded-lg border border-neutral-200 bg-transparent px-3 py-2 text-sm text-neutral-900 dark:border-neutral-800 dark:text-neutral-100 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:cursor-not-allowed disabled:opacity-50"
                 >
                 @error('nickname') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
             </div>
             <div>
+                <label for="comment-email" class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                    {{ __('Email (optional)') }}
+                </label>
                 <input
+                    id="comment-email"
                     type="email"
                     wire:model="email"
-                    placeholder="{{ __('Email (optional)') }}"
+                    autocomplete="email"
                     @auth disabled @endauth
-                    class="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-transparent px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="w-full rounded-lg border border-neutral-200 bg-transparent px-3 py-2 text-sm text-neutral-900 dark:border-neutral-800 dark:text-neutral-100 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:cursor-not-allowed disabled:opacity-50"
                 >
                 @error('email') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
             </div>
@@ -305,7 +325,11 @@
             x-on:keydown.escape.window="if (showEmojis) closePicker()"
             style="position: relative;"
         >
+            <label for="comment-content" class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {{ $replyingTo ? __('Your reply') : __('Your comment') }}
+            </label>
             <textarea
+                id="comment-content"
                 x-ref="content"
                 wire:model="content"
                 placeholder="{{ $replyingTo ? __('Your reply...') : __('Write a comment...') }}"

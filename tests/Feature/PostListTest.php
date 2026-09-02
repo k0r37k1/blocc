@@ -167,4 +167,66 @@ class PostListTest extends TestCase
             ->set('sort', 'newest')
             ->assertSet('sort', 'newest');
     }
+
+    public function test_filter_chips_hidden_for_small_blog(): void
+    {
+        $category = Category::factory()->create();
+        Post::factory()->published()->count(3)->create(['category_id' => $category->id]);
+
+        $this->assertFalse(Livewire::test(PostList::class)->instance()->showFilterChips);
+    }
+
+    public function test_filter_chips_visible_when_enough_posts(): void
+    {
+        Post::factory()->published()->count(8)->create();
+
+        $this->assertTrue(Livewire::test(PostList::class)->instance()->showFilterChips);
+    }
+
+    public function test_filter_chips_visible_when_enough_categories(): void
+    {
+        Post::factory()->published()->count(2)->create();
+
+        foreach (['alpha', 'beta', 'gamma'] as $slug) {
+            $category = Category::factory()->create(['slug' => $slug]);
+            Post::factory()->published()->create(['category_id' => $category->id]);
+        }
+
+        $this->assertTrue(Livewire::test(PostList::class)->instance()->showFilterChips);
+    }
+
+    public function test_select_category_toggles(): void
+    {
+        $category = Category::factory()->create(['slug' => 'tips']);
+        Post::factory()->published()->create(['category_id' => $category->id]);
+
+        Livewire::test(PostList::class)
+            ->call('selectCategory', 'tips')
+            ->assertSet('category', 'tips')
+            ->call('selectCategory', 'tips')
+            ->assertSet('category', '');
+    }
+
+    public function test_clear_filters_resets_all(): void
+    {
+        Livewire::test(PostList::class)
+            ->set('search', 'foo')
+            ->set('category', 'bar')
+            ->set('tag', 'baz')
+            ->call('clearFilters')
+            ->assertSet('search', '')
+            ->assertSet('category', '')
+            ->assertSet('tag', '');
+    }
+
+    public function test_active_filter_badges_render_when_category_selected(): void
+    {
+        $category = Category::factory()->create(['name' => 'Laravel', 'slug' => 'laravel']);
+        Post::factory()->published()->create(['category_id' => $category->id]);
+
+        Livewire::test(PostList::class)
+            ->set('category', 'laravel')
+            ->assertSee(__('Category: :name', ['name' => 'Laravel']), false)
+            ->assertSee('wire:click="clearCategory"', false);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Posts\Pages;
 
 use App\Enums\PostStatus;
+use App\Filament\Resources\Posts\Concerns\AutosavesPostRecord;
 use App\Filament\Resources\Posts\Concerns\ManagesPostSiteMedia;
 use App\Filament\Resources\Posts\PostResource;
 use App\Models\Post;
@@ -15,9 +16,19 @@ use Illuminate\Support\Str;
 
 class EditPost extends EditRecord
 {
+    use AutosavesPostRecord;
     use ManagesPostSiteMedia;
 
     protected static string $resource = PostResource::class;
+
+    protected string $view = 'filament.resources.posts.edit-post';
+
+    public function mount(int|string $record): void
+    {
+        parent::mount($record);
+
+        $this->mountAutosavesPostRecord();
+    }
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
@@ -35,6 +46,13 @@ class EditPost extends EditRecord
         $record = $this->record;
 
         return [
+            Action::make('preview')
+                ->label(__('Preview'))
+                ->icon(Heroicon::OutlinedEye)
+                ->url(fn (): string => $record->previewUrl())
+                ->openUrlInNewTab()
+                ->color('gray')
+                ->visible(fn (): bool => ! $record->isPubliclyVisible()),
             Action::make('duplicate')
                 ->label(__('Duplicate'))
                 ->icon(Heroicon::OutlinedDocumentDuplicate)
@@ -56,7 +74,9 @@ class EditPost extends EditRecord
                         ->success()
                         ->send();
 
-                    $this->redirect(PostResource::getUrl('edit', ['record' => $newPost]));
+                    $this->redirectRoute('filament.admin.resources.posts.edit', [
+                        'record' => $newPost,
+                    ]);
                 }),
             Action::make('view-on-site')
                 ->label(__('View on website'))

@@ -15,7 +15,7 @@
         },
         "Sentry": {
             "type": "http",
-            "url": "https://mcp.sentry.dev/mcp"
+            "url": "https://mcp.sentry.dev/mcp/4510014666899456/4511249894604880"
         }
     }
 }

@@ -48,4 +48,24 @@ class PublicTaxonomyPagesTest extends TestCase
             ->assertOk()
             ->assertSee('<meta name="robots" content="noindex, follow">', false);
     }
+
+    public function test_category_page_links_to_homepage_filter(): void
+    {
+        $category = Category::factory()->create(['slug' => 'dev-notes']);
+        Post::factory()->published()->create(['category_id' => $category->id]);
+
+        $this->get(route('category.show', $category))
+            ->assertOk()
+            ->assertSee(route('blog.index', ['category' => 'dev-notes']), false)
+            ->assertSee(__('Filter on homepage'), false);
+    }
+
+    public function test_archive_page_shows_enhanced_header(): void
+    {
+        Post::factory()->published()->count(2)->create();
+
+        $this->get(route('archive'))
+            ->assertOk()
+            ->assertSee(__('Chronological list'), false);
+    }
 }

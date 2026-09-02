@@ -3,8 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Post;
+use App\Models\Setting;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class FeedTest extends TestCase
@@ -21,8 +24,8 @@ class FeedTest extends TestCase
 
     public function test_feed_contains_published_posts(): void
     {
-        $postA = Post::factory()->published()->create(['title' => 'Alpha Post Title']);
-        $postB = Post::factory()->published()->create(['title' => 'Beta Post Title']);
+        Post::factory()->published()->create(['title' => 'Alpha Post Title']);
+        Post::factory()->published()->create(['title' => 'Beta Post Title']);
 
         $response = $this->get('/feed');
 
@@ -32,7 +35,7 @@ class FeedTest extends TestCase
 
     public function test_feed_excludes_draft_posts(): void
     {
-        $draft = Post::factory()->draft()->create(['title' => 'Secret Draft Post']);
+        Post::factory()->draft()->create(['title' => 'Secret Draft Post']);
 
         $response = $this->get('/feed');
 
@@ -48,7 +51,7 @@ class FeedTest extends TestCase
         $this->assertEquals(20, substr_count($response->getContent(), '<item>'));
     }
 
-    public function test_feed_contains_full_text_content(): void
+    public function test_feed_contains_full_text_in_content_encoded(): void
     {
         $post = Post::factory()->published()->create([
             'body' => '<p>Unique paragraph content for testing CDATA.</p>',
@@ -56,8 +59,62 @@ class FeedTest extends TestCase
 
         $response = $this->get('/feed');
 
-        $response->assertSee('<![CDATA[', false);
+        $response->assertSee('<content:encoded>', false);
         $response->assertSee('Unique paragraph content for testing CDATA.', false);
+    }
+
+    public function test_feed_uses_blog_settings_for_channel_metadata(): void
+    {
+        Setting::setMany([
+            'blog_name' => 'My Custom Feed',
+            'blog_description' => 'Custom feed description',
+        ]);
+
+        Post::factory()->published()->create();
+
+        $response = $this->get('/feed');
+
+        $response->assertSee('<title>My Custom Feed</title>', false);
+        $response->assertSee('<description>Custom feed description</description>', false);
+    }
+
+    public function test_feed_includes_author_when_present(): void
+    {
+        $author = User::factory()->create([
+            'email' => 'author@example.com',
+            'name' => 'Jane Author',
+        ]);
+
+        Post::factory()->published()->create([
+            'user_id' => $author->id,
+            'title' => 'Authored Post',
+        ]);
+
+        $response = $this->get('/feed');
+
+        $response->assertSee('<author>author@example.com (Jane Author)</author>', false);
+    }
+
+    public function test_feed_includes_featured_image_enclosure(): void
+    {
+        $post = Post::factory()->published()->create(['title' => 'Image Post']);
+        $post->addMedia(UploadedFile::fake()->image('feed.jpg'))
+            ->toMediaCollection('featured-image');
+
+        $response = $this->get('/feed');
+
+        $response->assertSee('<enclosure url=', false);
+        $response->assertSee('type="image/', false);
+    }
+
+    public function test_feed_absolutizes_relative_image_urls(): void
+    {
+        Post::factory()->published()->create([
+            'body' => '<p><img src="/storage/test.jpg" alt="Test"></p>',
+        ]);
+
+        $this->get('/feed')
+            ->assertSee('src="'.url('/storage/test.jpg').'"', false);
     }
 
     public function test_feed_contains_post_tags(): void
@@ -73,11 +130,11 @@ class FeedTest extends TestCase
 
     public function test_feed_posts_are_chronologically_descending(): void
     {
-        $olderPost = Post::factory()->published()->create([
+        Post::factory()->published()->create([
             'title' => 'Older Post',
             'published_at' => now()->subDays(5),
         ]);
-        $newerPost = Post::factory()->published()->create([
+        Post::factory()->published()->create([
             'title' => 'Newer Post',
             'published_at' => now()->subDay(),
         ]);

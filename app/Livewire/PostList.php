@@ -19,6 +19,10 @@ class PostList extends Component
 {
     use WithPagination;
 
+    private const FILTER_CHIPS_MIN_POSTS = 8;
+
+    private const FILTER_CHIPS_MIN_CATEGORIES = 3;
+
     #[Url(except: '', history: true)]
     public string $search = '';
 
@@ -55,6 +59,75 @@ class PostList extends Component
     {
         $this->tag = $this->tag === $slug ? '' : $slug;
         $this->resetPage();
+    }
+
+    public function selectCategory(string $slug): void
+    {
+        $this->category = $this->category === $slug ? '' : $slug;
+        $this->resetPage();
+    }
+
+    public function clearSearch(): void
+    {
+        $this->search = '';
+        $this->resetPage();
+    }
+
+    public function clearCategory(): void
+    {
+        $this->category = '';
+        $this->resetPage();
+    }
+
+    public function clearTag(): void
+    {
+        $this->tag = '';
+        $this->resetPage();
+    }
+
+    public function clearFilters(): void
+    {
+        $this->search = '';
+        $this->category = '';
+        $this->tag = '';
+        $this->resetPage();
+    }
+
+    #[Computed]
+    public function showFilterChips(): bool
+    {
+        $postCount = Post::query()->published()->count();
+
+        return $postCount >= self::FILTER_CHIPS_MIN_POSTS
+            || $this->categories->count() >= self::FILTER_CHIPS_MIN_CATEGORIES;
+    }
+
+    #[Computed]
+    public function hasActiveFilters(): bool
+    {
+        return filled(trim($this->search))
+            || filled($this->category)
+            || filled($this->tag);
+    }
+
+    #[Computed]
+    public function activeCategory(): ?Category
+    {
+        if (blank($this->category)) {
+            return null;
+        }
+
+        return $this->categories->firstWhere('slug', $this->category);
+    }
+
+    #[Computed]
+    public function activeTag(): ?Tag
+    {
+        if (blank($this->tag)) {
+            return null;
+        }
+
+        return $this->tags->firstWhere('slug', $this->tag);
     }
 
     /** @return LengthAwarePaginator<Post> */
