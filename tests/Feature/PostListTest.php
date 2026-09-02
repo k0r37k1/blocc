@@ -229,4 +229,22 @@ class PostListTest extends TestCase
             ->assertSee(__('Category: :name', ['name' => 'Laravel']), false)
             ->assertSee('wire:click="clearCategory"', false);
     }
+
+    public function test_filter_controls_use_select_dropdowns(): void
+    {
+        Post::factory()->published()->count(8)->create();
+
+        $category = Category::factory()->create(['name' => 'Frameworks', 'slug' => 'frameworks']);
+        $tag = Tag::factory()->create(['name' => 'Laravel', 'slug' => 'laravel']);
+        $post = Post::factory()->published()->create(['category_id' => $category->id]);
+        $post->tags()->attach($tag);
+
+        Livewire::test(PostList::class)
+            ->assertSee('id="post-list-category"', false)
+            ->assertSee('id="post-list-tag"', false)
+            ->assertSee(__('All categories'), false)
+            ->assertSee(__('All tags'), false)
+            ->assertDontSee('wire:click="selectCategory', false)
+            ->assertDontSee('wire:click="toggleTag', false);
+    }
 }

@@ -175,6 +175,7 @@ class PostList extends Component
         return Tag::query()
             ->whereHas('posts', fn ($query) => $query->published())
             ->withCount(['posts' => fn ($query) => $query->published()])
+            ->orderByDesc('posts_count')
             ->orderBy('name')
             ->get();
     }

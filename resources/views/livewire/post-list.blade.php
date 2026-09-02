@@ -1,7 +1,58 @@
+@php
+    $filterSelectClass = 'w-full min-w-0 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto sm:min-w-[11rem] dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:[color-scheme:dark]';
+@endphp
+
 <div class="post-list-livewire">
-    {{-- Search bar --}}
-    <div class="mb-6 flex justify-end">
-        <div class="relative w-full sm:w-1/3">
+    <div @class([
+        'mb-6 flex flex-col gap-3',
+        'sm:flex-row sm:items-center sm:justify-between' => $this->showFilterChips,
+        'sm:justify-end' => ! $this->showFilterChips,
+    ])>
+        @if ($this->showFilterChips)
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                @if ($this->categories->isNotEmpty())
+                    <div class="w-full sm:w-auto">
+                        <label for="post-list-category" class="sr-only">{{ __('Category') }}</label>
+                        <select
+                            id="post-list-category"
+                            wire:model.live.preserve-scroll="category"
+                            class="{{ $filterSelectClass }}"
+                        >
+                            <option value="">{{ __('All categories') }}</option>
+                            @foreach ($this->categories as $categoryOption)
+                                <option wire:key="category-option-{{ $categoryOption->slug }}" value="{{ $categoryOption->slug }}">
+                                    {{ $categoryOption->name }} ({{ $categoryOption->posts_count }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+
+                @if ($this->tags->isNotEmpty())
+                    <div class="w-full sm:w-auto">
+                        <label for="post-list-tag" class="sr-only">{{ __('Tag') }}</label>
+                        <select
+                            id="post-list-tag"
+                            wire:model.live.preserve-scroll="tag"
+                            class="{{ $filterSelectClass }}"
+                        >
+                            <option value="">{{ __('All tags') }}</option>
+                            @foreach ($this->tags as $tagOption)
+                                <option wire:key="tag-option-{{ $tagOption->slug }}" value="{{ $tagOption->slug }}">
+                                    #{{ $tagOption->name }} ({{ $tagOption->posts_count }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+            </div>
+        @endif
+
+        <div @class([
+            'relative w-full',
+            'sm:w-1/3 sm:shrink-0' => $this->showFilterChips,
+            'sm:w-1/3' => ! $this->showFilterChips,
+        ])>
             <input
                 wire:model.live.debounce.250ms.preserve-scroll="search"
                 type="search"
@@ -69,58 +120,6 @@
                 >
                     {{ __('Clear all filters') }}
                 </button>
-            @endif
-        </div>
-    @endif
-
-    @if ($this->showFilterChips)
-        <div class="mb-8 space-y-4">
-            @if ($this->categories->isNotEmpty())
-                <div>
-                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Categories') }}</p>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach ($this->categories as $categoryOption)
-                            <button
-                                type="button"
-                                wire:key="category-chip-{{ $categoryOption->slug }}"
-                                wire:click.preserve-scroll="selectCategory('{{ $categoryOption->slug }}')"
-                                @class([
-                                    'rounded-full border px-3 py-1 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-                                    'border-accent bg-accent text-white' => $category === $categoryOption->slug,
-                                    'border-neutral-200 bg-transparent text-neutral-700 hover:border-neutral-300 hover:text-accent dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:text-accent' => $category !== $categoryOption->slug,
-                                ])
-                                aria-pressed="{{ $category === $categoryOption->slug ? 'true' : 'false' }}"
-                            >
-                                {{ $categoryOption->name }}
-                                <span class="text-xs opacity-75">({{ $categoryOption->posts_count }})</span>
-                            </button>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
-            @if ($this->tags->isNotEmpty())
-                <div>
-                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted dark:text-muted-dark">{{ __('Tags') }}</p>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach ($this->tags as $tagOption)
-                            <button
-                                type="button"
-                                wire:key="tag-chip-{{ $tagOption->slug }}"
-                                wire:click.preserve-scroll="toggleTag('{{ $tagOption->slug }}')"
-                                @class([
-                                    'rounded-full border px-3 py-1 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-                                    'border-accent bg-accent text-white' => $tag === $tagOption->slug,
-                                    'border-neutral-200 bg-transparent text-neutral-700 hover:border-neutral-300 hover:text-accent dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:text-accent' => $tag !== $tagOption->slug,
-                                ])
-                                aria-pressed="{{ $tag === $tagOption->slug ? 'true' : 'false' }}"
-                            >
-                                #{{ $tagOption->name }}
-                                <span class="text-xs opacity-75">({{ $tagOption->posts_count }})</span>
-                            </button>
-                        @endforeach
-                    </div>
-                </div>
             @endif
         </div>
     @endif
