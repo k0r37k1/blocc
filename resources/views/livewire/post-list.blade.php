@@ -1,5 +1,5 @@
 @php
-    $filterSelectClass = 'w-full min-w-0 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto sm:min-w-[11rem] dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:[color-scheme:dark]';
+    $filterSelectClass = 'w-full min-w-0 rounded-md border border-neutral-200 bg-transparent px-3 py-2 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto sm:min-w-[11rem] dark:border-neutral-800 dark:text-neutral-100 dark:[color-scheme:dark]';
 @endphp
 
 <div class="post-list-livewire">

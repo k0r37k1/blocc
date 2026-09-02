@@ -244,6 +244,7 @@ class PostListTest extends TestCase
             ->assertSee('id="post-list-tag"', false)
             ->assertSee(__('All categories'), false)
             ->assertSee(__('All tags'), false)
+            ->assertSee('rounded-md border border-neutral-200 bg-transparent', false)
             ->assertDontSee('wire:click="selectCategory', false)
             ->assertDontSee('wire:click="toggleTag', false);
     }

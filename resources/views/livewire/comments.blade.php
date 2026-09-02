@@ -323,76 +323,74 @@
                 }
             }"
             x-on:keydown.escape.window="if (showEmojis) closePicker()"
-            style="position: relative;"
         >
             <label for="comment-content" class="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {{ $replyingTo ? __('Your reply') : __('Your comment') }}
             </label>
-            <textarea
-                id="comment-content"
-                x-ref="content"
-                wire:model="content"
-                placeholder="{{ $replyingTo ? __('Your reply...') : __('Write a comment...') }}"
-                rows="3"
-                class="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-transparent px-3 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-none"
-                style="padding-right: 2.5rem;"
-            ></textarea>
-            {{-- Emoji toggle --}}
-            <button
-                type="button"
-                x-ref="emojiToggle"
-                x-on:click="showEmojis ? closePicker() : openPicker()"
-                style="position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.25rem; color: var(--color-muted); transition: color 0.15s;"
-                x-on:mouseenter="$el.style.color='var(--color-accent)'"
-                x-on:mouseleave="$el.style.color='var(--color-muted)'"
-                title="{{ __('Emojis') }}"
-                aria-label="{{ __('Emojis') }}"
-                aria-haspopup="true"
-                x-bind:aria-expanded="showEmojis.toString()"
-            >
-                <svg style="width: 1.25rem; height: 1.25rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
-                </svg>
-            </button>
-            {{-- Emoji picker --}}
-            <div
-                x-show="showEmojis"
-                x-on:click.outside="closePicker()"
-                x-transition.opacity
-                style="position: fixed; bottom: auto; right: auto; z-index: 50;"
-                x-init="
-                    $watch('showEmojis', val => {
-                        if (val) {
-                            $nextTick(() => {
-                                const btn = $refs.emojiToggle;
-                                const picker = $el;
-                                const rect = btn.getBoundingClientRect();
-                                const pickerW = 320;
-                                const left = Math.min(rect.right - pickerW, window.innerWidth - pickerW - 8);
-                                picker.style.left = Math.max(8, left) + 'px';
-                                picker.style.top = (rect.top - picker.offsetHeight - 4) + 'px';
-                            });
-                        }
-                    })
-                "
-            >
-                <div
-                    x-ref="emojiGrid"
-                    x-on:keydown="navigate($event)"
-                    x-bind:style="'display:grid;width:min(20rem,90vw);grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
-                    role="group"
-                    aria-label="{{ __('Emoji picker') }}"
+            <div class="relative">
+                <textarea
+                    id="comment-content"
+                    x-ref="content"
+                    wire:model="content"
+                    placeholder="{{ $replyingTo ? __('Your reply...') : __('Write a comment...') }}"
+                    rows="3"
+                    class="w-full resize-none rounded-lg border border-neutral-200 bg-transparent py-2 pl-3 pr-10 text-sm text-neutral-900 placeholder-neutral-400 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent dark:border-neutral-800 dark:text-neutral-100 dark:placeholder-neutral-500"
+                ></textarea>
+                {{-- Emoji toggle sits inside the textarea field --}}
+                <button
+                    type="button"
+                    x-ref="emojiToggle"
+                    x-on:click="showEmojis ? closePicker() : openPicker()"
+                    class="absolute top-2 right-2 rounded-sm p-0.5 text-muted transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:text-muted-dark"
+                    title="{{ __('Emojis') }}"
+                    aria-label="{{ __('Emojis') }}"
+                    aria-haspopup="true"
+                    x-bind:aria-expanded="showEmojis.toString()"
                 >
-                    @foreach (config('emojis.picker') as $emoji)
-                        <button
-                            type="button"
-                            style="padding: 0.375rem; font-size: 1.25rem; line-height: 1; border-radius: 0.25rem; cursor: pointer; border: none; background: transparent; transition: background 0.1s;"
-                            x-on:mouseenter="$el.style.background = hoverBg"
-                            x-on:mouseleave="$el.style.background = 'transparent'"
-                            x-on:click="insertEmoji('{{ $emoji }}')"
-                            aria-label="{{ $emoji }}"
-                        >{{ $emoji }}</button>
-                    @endforeach
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
+                    </svg>
+                </button>
+                {{-- Emoji picker --}}
+                <div
+                    x-show="showEmojis"
+                    x-on:click.outside="closePicker()"
+                    x-transition.opacity
+                    class="fixed z-50"
+                    x-init="
+                        $watch('showEmojis', val => {
+                            if (val) {
+                                $nextTick(() => {
+                                    const btn = $refs.emojiToggle;
+                                    const picker = $el;
+                                    const rect = btn.getBoundingClientRect();
+                                    const pickerW = 320;
+                                    const left = Math.min(rect.right - pickerW, window.innerWidth - pickerW - 8);
+                                    picker.style.left = Math.max(8, left) + 'px';
+                                    picker.style.top = (rect.top - picker.offsetHeight - 4) + 'px';
+                                });
+                            }
+                        })
+                    "
+                >
+                    <div
+                        x-ref="emojiGrid"
+                        x-on:keydown="navigate($event)"
+                        x-bind:style="'display:grid;width:min(20rem,90vw);grid-template-columns:repeat(8,1fr);gap:0.125rem;padding:0.5rem;border-radius:0.5rem;border:1px solid '+pickerBorder+';background:'+pickerBg+';box-shadow:0 4px 12px rgba(0,0,0,0.15);'"
+                        role="group"
+                        aria-label="{{ __('Emoji picker') }}"
+                    >
+                        @foreach (config('emojis.picker') as $emoji)
+                            <button
+                                type="button"
+                                class="cursor-pointer rounded border-0 bg-transparent p-1.5 text-xl leading-none transition-colors"
+                                x-on:mouseenter="$el.style.background = hoverBg"
+                                x-on:mouseleave="$el.style.background = 'transparent'"
+                                x-on:click="insertEmoji('{{ $emoji }}')"
+                                aria-label="{{ $emoji }}"
+                            >{{ $emoji }}</button>
+                        @endforeach
+                    </div>
                 </div>
             </div>
             @error('content') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror

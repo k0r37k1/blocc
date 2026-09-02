@@ -22,7 +22,7 @@
         <div class="mb-8 flex flex-wrap items-center justify-stretch gap-3 sm:justify-end">
             <select
                 wire:model.live.preserve-scroll="year"
-                class="w-full min-w-0 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:[color-scheme:dark]"
+                class="w-full min-w-0 rounded-md border border-neutral-200 bg-transparent px-3 py-2 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto dark:border-neutral-800 dark:text-neutral-100 dark:[color-scheme:dark]"
             >
                 <option value="">{{ __('All years') }}</option>
                 @foreach ($this->availableYears as $item)
@@ -33,7 +33,7 @@
             @if (filled($year))
                 <select
                     wire:model.live.preserve-scroll="month"
-                    class="w-full min-w-0 rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:[color-scheme:dark]"
+                    class="w-full min-w-0 rounded-md border border-neutral-200 bg-transparent px-3 py-2 text-sm text-neutral-900 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-auto dark:border-neutral-800 dark:text-neutral-100 dark:[color-scheme:dark]"
                 >
                     <option value="">{{ __('All months') }}</option>
                     @foreach ($this->availableMonths as $item)

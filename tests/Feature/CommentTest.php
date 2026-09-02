@@ -361,6 +361,20 @@ class CommentTest extends TestCase
             ->assertSee('for="comment-content"', false);
     }
 
+    public function test_comment_form_keeps_emoji_toggle_inside_textarea_field(): void
+    {
+        $html = Livewire::test(Comments::class, ['post' => $this->post])->html();
+
+        $this->assertMatchesRegularExpression(
+            '/<div class="relative">\s*<textarea[^>]*id="comment-content"/s',
+            $html,
+        );
+        $this->assertMatchesRegularExpression(
+            '/id="comment-content"[^>]*>.*?x-ref="emojiToggle"/s',
+            $html,
+        );
+    }
+
     public function test_comment_pagination_uses_branded_component(): void
     {
         Comment::factory()->count(11)->create([
